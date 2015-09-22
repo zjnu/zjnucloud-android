@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.ddmax.zjnucloud.ui.custom.ScrimInsetsFrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="300dp"
+	android:layout_height="match_parent"
+	android:layout_gravity="start"
+	android:clickable="true"
+	android:fitsSystemWindows="true"
+	>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/white"
+		android:orientation="vertical"
+		>
+
+		<!-- 用户信息 -->
+		<RelativeLayout
+			android:id="@+id/user_account_view"
+			android:layout_width="match_parent"
+			android:layout_height="220dp"
+			android:background="@color/blue"
+			>
+
+			<ImageView
+				android:id="@+id/profile_image"
+				android:layout_width="72dp"
+				android:layout_height="72dp"
+				android:layout_centerHorizontal="true"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp"
+				android:layout_marginTop="72dp"
+				android:scaleType="centerCrop"
+				android:src="@mipmap/person_image_empty"
+				/>
+
+			<LinearLayout
+				android:id="@+id/buttons"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/profile_image"
+				android:layout_centerHorizontal="true"
+				android:layout_marginTop="20dp">
+
+				<Button
+					android:id="@+id/user_login_button"
+					android:layout_width="wrap_content"
+					android:layout_height="28dp"
+					android:layout_marginRight="5dp"
+					android:background="@drawable/button_drawer_user_bar"
+					android:minWidth="72dp"
+					android:text="@string/login"
+					android:textColor="@color/white"
+					android:textSize="14sp"/>
+
+				<Button
+					android:id="@+id/user_register_button"
+					android:layout_width="wrap_content"
+					android:layout_height="28dp"
+					android:layout_marginLeft="5dp"
+					android:background="@drawable/button_drawer_user_bar"
+					android:minWidth="72dp"
+					android:text="@string/register"
+					android:textColor="@color/white"
+					android:textSize="14sp"/>
+
+			</LinearLayout>
+
+		</RelativeLayout>
+
+
+		<!-- 抽屉菜单列表 -->
+		<LinearLayout
+			android:id="@+id/navdrawer_items"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/user_account_view"
+			android:layout_marginTop="8dp"
+			android:orientation="vertical"
+			/>
+
+		<!-- 底部按钮 -->
+		<LinearLayout
+			android:id="@+id/bottom_items"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/navdrawer_items"
+			android:layout_gravity="bottom"
+			android:layout_marginBottom="8dp"
+			android:layout_marginTop="8dp"
+			android:orientation="horizontal"/>
+	</RelativeLayout>
+
+</com.ddmax.zjnucloud.ui.custom.ScrimInsetsFrameLayout>

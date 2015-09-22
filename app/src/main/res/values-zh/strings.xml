@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">云上浙师</string>
+    <string name="title_activity_news">校园新闻</string>
+    <string name="action_search">搜索</string>
+    <string name="action_settings">设置</string>
+    <string name="detail">详情</string>
+    <string name="content_loading">正在玩命加载中。。。</string>
+	<string name="exit_hint">再按一次退出</string>
+	<string name="placeholder_for_navdrawer_item">item</string>
+
+	<!-- 用户模块相关 -->
+	<string name="login">登录</string>
+	<string name="register">注册</string>
+	<string name="login_register">注册新帐号</string>
+	<string name="title_activity_login">登录</string>
+	<string name="title_activity_register">注册新帐号</string>
+	<string name="title_activity_bus">校园公交</string>
+	<string name="prompt_username">用户名</string>
+	<string name="prompt_email">邮箱</string>
+	<string name="prompt_password">密码</string>
+	<string name="action_sign_in">登录</string>
+	<string name="action_sign_in_short">登录</string>
+
+	<string name="register_success">注册成功！</string>
+	<string name="register_fail">注册失败！</string>
+	<string name="login_success">登录成功！</string>
+	<string name="login_fail">登录失败！</string>
+	<string name="forgot_password">忘记密码？</string>
+	<string name="error_invalid_username">用户名不能为空</string>
+	<string name="error_invalid_email">邮箱地址格式不正确</string>
+	<string name="error_incorrect_password">密码长度不能小于6位</string>
+
+    <string-array name="left_drawer_items">
+        <item>模块1</item>
+        <item>模块2</item>
+        <item>模块3</item>
+        <item>模块4</item>
+        <item>模块5</item>
+    </string-array>
+
+    <string-array name="module_titles">
+        <item>新闻聚合</item>
+        <item>校历</item>
+        <item>校园公交</item>
+        <item>讲座预告</item>
+        <item>内网资源</item>
+    </string-array>
+
+</resources>

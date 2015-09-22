@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- App基础样式 -->
+    <style name="AppTheme" parent="AppTheme.Base">
+
+    </style>
+
+    <!-- App主样式，需继承NoActionBar -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/lightskyblue</item>
+        <item name="colorPrimaryDark">@color/lightskyblue</item>
+	    <item name="theme">@style/ThemeOverlay.AppCompat.Light</item>
+
+    </style>
+
+    <!-- Toolbar 字体颜色样式 -->
+    <style name="mToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+       <item name="android:textColor">@color/white</item>
+    </style>
+
+</resources>
