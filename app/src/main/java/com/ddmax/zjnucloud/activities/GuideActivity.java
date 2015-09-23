@@ -37,7 +37,7 @@ public class GuideActivity extends Activity {
 
         // 判断向导是否已经运行过
 		if (value_on.getGuidePosition(this) == false) {
-			startActivity(new Intent(this, MainActivity.class));
+			startActivity(new Intent(this, SplashActivity.class));
 			finish();
 		} else {
 			setContentView(R.layout.activity_guide);
