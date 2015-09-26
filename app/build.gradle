@@ -11,6 +11,20 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        debug {
+            storeFile file("../signedkey.jks")
+            storePassword "{ddmax}"
+            keyAlias "ddmax"
+            keyPassword "{ddmax}"
+        }
+        release {
+            storeFile file("../signedkey.jks")
+            storePassword "{ddmax}"
+            keyAlias "ddmax"
+            keyPassword "{ddmax}"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
