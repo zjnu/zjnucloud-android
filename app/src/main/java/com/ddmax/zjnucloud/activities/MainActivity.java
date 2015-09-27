@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -53,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements
 	// 导航抽屉DrawerLayout, ListView及String[]
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private ScrimInsetsFrameLayout mDrawerList;
+	private NavigationView mDrawerList;
 	private String[] mDrawerListContent;
 	// 用于返回键退出计时
 	private long exitTime = 0;
@@ -113,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements
 		mGridView.setAdapter(new ModulesViewAdapter(this));
 		mGridView.setOnItemClickListener(this);
 		// 导航抽屉相关设置
-		mDrawerListContent = getResources().getStringArray(R.array.left_drawer_items);
+//		mDrawerListContent = getResources().getStringArray(R.array.left_drawer_items);
 //		mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mDrawerListContent));
 		// 设置左边抽屉图标
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
@@ -134,7 +135,7 @@ public class MainActivity extends ActionBarActivity implements
 		mToolbar = (Toolbar) findViewById(R.id.mToolbar);
 		mGridView = (GridView) findViewById(R.id.gridView);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
-		mDrawerList = (ScrimInsetsFrameLayout) findViewById(R.id.mLeftDrawer);
+		mDrawerList = (NavigationView) findViewById(R.id.mLeftDrawer);
 		mImageDisplay = (ViewPager) findViewById(R.id.image_display);
 	}
 

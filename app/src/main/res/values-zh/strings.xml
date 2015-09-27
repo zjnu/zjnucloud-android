@@ -32,14 +32,6 @@
 	<string name="error_invalid_email">邮箱地址格式不正确</string>
 	<string name="error_incorrect_password">密码长度不能小于6位</string>
 
-    <string-array name="left_drawer_items">
-        <item>模块1</item>
-        <item>模块2</item>
-        <item>模块3</item>
-        <item>模块4</item>
-        <item>模块5</item>
-    </string-array>
-
     <string-array name="module_titles">
         <item>新闻聚合</item>
         <item>校历</item>
@@ -47,5 +39,13 @@
         <item>讲座预告</item>
         <item>内网资源</item>
     </string-array>
+
+	<string name="drawer_followers">我的关注</string>
+	<string name="drawer_notification">消息通知</string>
+	<string name="drawer_profile">个人资料</string>
+	<string name="drawer_setting">设置</string>
+	<string name="drawer_footer_exit">退出</string>
+	<string name="drawer_footer_about">关于</string>
+	<string name="drawer_footer_feedback">反馈</string>
 
 </resources>

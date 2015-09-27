@@ -32,14 +32,6 @@
 	<string name="error_invalid_email">Invalid email address</string>
 	<string name="error_incorrect_password">Password is too short, at least 6 words.</string>
 
-    <string-array name="left_drawer_items">
-        <item>Module 1</item>
-        <item>Module 2</item>
-        <item>Module 3</item>
-        <item>Module 4</item>
-        <item>Module 5</item>
-    </string-array>
-
     <string-array name="module_titles">
         <item>新闻聚合</item>
         <item>校历</item>
@@ -48,4 +40,11 @@
         <item>内网资源</item>
     </string-array>
 
+    <string name="drawer_profile">Profile</string>
+    <string name="drawer_followers">My Followers</string>
+    <string name="drawer_notification">Notification</string>
+    <string name="drawer_setting">Settings</string>
+    <string name="drawer_footer_exit">Exit</string>
+    <string name="drawer_footer_about">About</string>
+    <string name="drawer_footer_feedback">Feedback</string>
 </resources>
