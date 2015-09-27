@@ -2,6 +2,7 @@ package com.ddmax.zjnucloud.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -24,9 +25,10 @@ import cn.bmob.v3.listener.SaveListener;
  * @since 2015/03/15 18:30
  * 说明：用户注册界面
  */
-public class RegisterActivity extends ActionBarActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-	private static final String emailRegex = "/^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)$/";
+	// 邮箱格式匹配正则
+	private static final String emailRegex = "[\\w\\-]+@[\\w\\-]+(\\.[\\w\\-]+)*(\\.[a-zA-Z]+)";
 
 	private Toolbar mToolbar;
 	private EditText mUsername;
