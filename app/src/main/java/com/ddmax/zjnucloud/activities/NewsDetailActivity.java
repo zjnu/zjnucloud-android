@@ -2,7 +2,7 @@ package com.ddmax.zjnucloud.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -15,7 +15,7 @@ import com.ddmax.zjnucloud.ui.fragments.NewsDetailFragment;
  * @since 2015/02/13
  * 说明：新闻详情页Activity
  */
-public class NewsDetailActivity extends ActionBarActivity {
+public class NewsDetailActivity extends AppCompatActivity {
 
 	private static final String NEWS_ID = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_id";
 	private static final String NEWS_DETAIL_MODEL = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_detail_model";

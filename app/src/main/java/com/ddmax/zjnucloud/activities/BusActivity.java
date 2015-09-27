@@ -1,7 +1,7 @@
 package com.ddmax.zjnucloud.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 
-public class BusActivity extends ActionBarActivity {
+public class BusActivity extends AppCompatActivity {
 
 	private MapView mMapView = null;
 	private BaiduMap mBaiduMap = null;

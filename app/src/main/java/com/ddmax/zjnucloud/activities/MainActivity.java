@@ -8,8 +8,8 @@ import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +23,6 @@ import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.helpers.adapters.BasePagerAdapter;
 import com.ddmax.zjnucloud.helpers.adapters.ModulesViewAdapter;
-import com.ddmax.zjnucloud.ui.custom.ScrimInsetsFrameLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ import java.util.List;
  * @since 2014/12/05.
  * 说明：主界面
  */
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends AppCompatActivity implements
 		Toolbar.OnMenuItemClickListener, GridView.OnItemClickListener {
 
 	// Toolbar

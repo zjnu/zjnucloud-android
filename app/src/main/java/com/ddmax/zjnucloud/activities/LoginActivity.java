@@ -2,7 +2,7 @@ package com.ddmax.zjnucloud.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,7 @@ import cn.bmob.v3.listener.SaveListener;
  * @since 2015/03/15 16:20
  * 说明：用户登录界面
  */
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends AppCompatActivity {
 
 	private EditText mUsername;
 	private EditText mPassword;
