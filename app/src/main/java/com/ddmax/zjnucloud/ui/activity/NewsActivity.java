@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.activities;
+package com.ddmax.zjnucloud.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +15,9 @@ import android.widget.RelativeLayout;
 
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.helpers.adapters.BaseFragmentPagerAdapter;
-import com.ddmax.zjnucloud.ui.custom.SlidingTabLayout;
-import com.ddmax.zjnucloud.ui.fragments.NewsFragment;
+import com.ddmax.zjnucloud.adapter.BaseFragmentPagerAdapter;
+import com.ddmax.zjnucloud.ui.view.SlidingTabLayout;
+import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

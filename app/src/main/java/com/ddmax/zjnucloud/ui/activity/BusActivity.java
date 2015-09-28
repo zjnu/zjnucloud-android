@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.activities;
+package com.ddmax.zjnucloud.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

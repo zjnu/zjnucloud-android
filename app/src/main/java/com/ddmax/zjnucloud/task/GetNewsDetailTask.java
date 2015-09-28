@@ -3,7 +3,7 @@ package com.ddmax.zjnucloud.task;
 import android.content.Context;
 
 import com.ddmax.zjnucloud.Constants;
-import com.ddmax.zjnucloud.helpers.utils.GsonUtils;
+import com.ddmax.zjnucloud.utils.GsonUtils;
 import com.ddmax.zjnucloud.model.NewsDetailModel;
 
 import java.io.IOException;

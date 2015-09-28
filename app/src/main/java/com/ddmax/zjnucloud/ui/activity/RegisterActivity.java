@@ -1,7 +1,6 @@
-package com.ddmax.zjnucloud.activities;
+package com.ddmax.zjnucloud.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.model.User;
+import com.ddmax.zjnucloud.utils.RegexUtils;
 
 import java.util.regex.Pattern;
 
@@ -26,9 +26,6 @@ import cn.bmob.v3.listener.SaveListener;
  * 说明：用户注册界面
  */
 public class RegisterActivity extends AppCompatActivity {
-
-	// 邮箱格式匹配正则
-	private static final String emailRegex = "[\\w\\-]+@[\\w\\-]+(\\.[\\w\\-]+)*(\\.[a-zA-Z]+)";
 
 	private Toolbar mToolbar;
 	private EditText mUsername;
@@ -69,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
 			Toast.makeText(this, R.string.error_invalid_username, Toast.LENGTH_LONG).show();
 			return;
 		}
-		if (!Pattern.matches(emailRegex, email)) {
+		if (RegexUtils.matchEmail(email)) {
 			Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_LONG).show();
 			return;
 		}

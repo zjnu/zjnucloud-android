@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.ui.fragments;
+package com.ddmax.zjnucloud.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.helpers.utils.AssetsUtils;
+import com.ddmax.zjnucloud.utils.AssetsUtils;
 import com.ddmax.zjnucloud.model.NewsDetailModel;
 import com.ddmax.zjnucloud.task.GetNewsDetailTask;
 import com.ddmax.zjnucloud.task.ResponseListener;

@@ -11,7 +11,7 @@
 		layout="@layout/top_toolbar"
 		/>
 
-	<com.ddmax.zjnucloud.ui.custom.SlidingTabLayout
+	<com.ddmax.zjnucloud.ui.view.SlidingTabLayout
 		android:id="@+id/top_tabs"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

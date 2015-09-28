@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.activities;
+package com.ddmax.zjnucloud.ui.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.helpers.adapters.BasePagerAdapter;
-import com.ddmax.zjnucloud.helpers.utils.ValuePreference;
+import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
+import com.ddmax.zjnucloud.utils.ValuePreference;
 
 /**
  * @author ddMax

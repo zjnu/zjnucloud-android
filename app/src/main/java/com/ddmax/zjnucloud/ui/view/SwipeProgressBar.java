@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.ui.custom;
+package com.ddmax.zjnucloud.ui.view;
 
 /*
  * Copyright (C) 2013 The Android Open Source Project

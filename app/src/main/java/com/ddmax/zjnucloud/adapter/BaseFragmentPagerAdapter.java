@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.helpers.adapters;
+package com.ddmax.zjnucloud.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

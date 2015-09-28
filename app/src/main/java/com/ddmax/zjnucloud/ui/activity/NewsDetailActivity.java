@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.activities;
+package com.ddmax.zjnucloud.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.model.NewsDetailModel;
-import com.ddmax.zjnucloud.ui.fragments.NewsDetailFragment;
+import com.ddmax.zjnucloud.ui.fragment.NewsDetailFragment;
 
 /**
  * @author ddMax

@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.activities;
+package com.ddmax.zjnucloud.ui.activity;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -21,8 +21,8 @@ import android.widget.Toast;
 
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.helpers.adapters.BasePagerAdapter;
-import com.ddmax.zjnucloud.helpers.adapters.ModulesViewAdapter;
+import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
+import com.ddmax.zjnucloud.adapter.ModulesViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

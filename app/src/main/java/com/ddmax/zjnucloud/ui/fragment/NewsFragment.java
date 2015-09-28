@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.ui.fragments;
+package com.ddmax.zjnucloud.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +15,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.activities.NewsDetailActivity;
-import com.ddmax.zjnucloud.helpers.adapters.NewsListAdapter;
+import com.ddmax.zjnucloud.ui.activity.NewsDetailActivity;
+import com.ddmax.zjnucloud.adapter.NewsListAdapter;
 import com.ddmax.zjnucloud.model.NewsModel;
 import com.ddmax.zjnucloud.task.GetNewsTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
-import com.ddmax.zjnucloud.ui.custom.SwipeRefreshLayout;
+import com.ddmax.zjnucloud.ui.view.SwipeRefreshLayout;
 
 import java.util.LinkedList;
 

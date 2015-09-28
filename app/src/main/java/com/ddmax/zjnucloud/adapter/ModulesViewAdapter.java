@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.helpers.adapters;
+package com.ddmax.zjnucloud.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

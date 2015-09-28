@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.helpers.utils;
+package com.ddmax.zjnucloud.utils;
 
 /**
  * @author ddMax

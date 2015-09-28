@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ddmax.zjnucloud.ui.custom;
+package com.ddmax.zjnucloud.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
