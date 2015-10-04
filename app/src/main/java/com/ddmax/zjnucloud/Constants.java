@@ -8,7 +8,6 @@ package com.ddmax.zjnucloud;
 public final class Constants {
 
 	// 各模块代号定义
-
 	public static final class MODULE {
 		public static final int NEWS = 0;
 		public static final int CALENDAR = 1;
@@ -17,19 +16,20 @@ public final class Constants {
 		public static final int RESOURCES = 4;
 	}
 
-
-
 	// 数信学工办新闻列表地址
     public static final class URL {
 
-		// 学工新闻
-		public static final String NEWS_LIVES = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=1&pageSize=10&pageNo=";
+		public static final class NEWS {
 
-		// 信息通告
-		public static final String NEWS_NOTIFICATION = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=2&pageSize=10&pageNo=";
+			// 学工新闻
+			public static final String SLXX_LIVES = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=1&pageSize=10&pageNo=";
 
-        // 新闻内容地址
-        public static final String NEWSDETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
+			// 信息通告
+			public static final String SLXX_NOTIFICATION = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=2&pageSize=10&pageNo=";
+
+			// 新闻内容地址
+			public static final String SLXX_DETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
+		}
     }
 
 	// 浙师大坐标
@@ -42,7 +42,7 @@ public final class Constants {
 	public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
 
 	// 数据库：NewsList
-	public static final String DB_NAME = "zjnu_news.db";
+	public static final String DB_NAME = "zjnucloud.db";
 	public static final int DB_VERSION = 5;
 
 	public static final String TABLE_NAME = "news_list";

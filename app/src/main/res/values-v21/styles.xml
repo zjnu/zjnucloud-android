@@ -1,9 +1,8 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-	    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-	    <item name="android:statusBarColor">@color/blue</item>
+	<style name="AppTheme21" parent="AppTheme19">
+		<!-- API 21 theme customizations can go here. -->
 
-    </style>
+	</style>
 
 </resources>

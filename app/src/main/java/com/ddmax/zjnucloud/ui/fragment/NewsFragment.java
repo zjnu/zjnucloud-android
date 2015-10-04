@@ -1,21 +1,19 @@
 package com.ddmax.zjnucloud.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.ui.activity.NewsDetailActivity;
 import com.ddmax.zjnucloud.adapter.NewsListAdapter;
 import com.ddmax.zjnucloud.model.NewsModel;
 import com.ddmax.zjnucloud.task.GetNewsTask;
@@ -29,7 +27,7 @@ import java.util.LinkedList;
  * @since 2014/12/31
  * 说明：新闻列表Fragment
  */
-public class NewsFragment extends Fragment implements AdapterView.OnItemClickListener, ResponseListener<LinkedList<NewsModel>> {
+public class NewsFragment extends Fragment implements ResponseListener<LinkedList<NewsModel>> {
 	private final static int REFRESH_DOWN = 0;
 	private final static int REFRESH_UP = 1;
 
@@ -38,7 +36,7 @@ public class NewsFragment extends Fragment implements AdapterView.OnItemClickLis
 
 	// 进度条
 	private RelativeLayout mLoadingProgress;
-	private ListView mList;
+	private RecyclerView mList;
 	private SwipeRefreshLayout mRefreshLayout;
 
 	// 新闻列表
@@ -79,10 +77,9 @@ public class NewsFragment extends Fragment implements AdapterView.OnItemClickLis
 		// 设置进度条
 		mLoadingProgress = (RelativeLayout) mViewGroup.findViewById(R.id.progressView);
 		// 设置新闻
-		mList = (ListView) mViewGroup.findViewById(R.id.newsList);
-		// 设置新闻列表点击监听事件
-		mList.setOnItemClickListener(this);
-
+		mList = (RecyclerView) mViewGroup.findViewById(R.id.newsList);
+		// 初始化新闻列表
+		initRecycler(mList);
 		// 初始化SwipeRefreshLayout，设置下拉主题
 		mRefreshLayout = (SwipeRefreshLayout) mViewGroup.findViewById(R.id.swipeRefreshLayout);
 		mRefreshLayout.setColor(R.color.holo_blue_bright,
@@ -106,13 +103,16 @@ public class NewsFragment extends Fragment implements AdapterView.OnItemClickLis
 		return mViewGroup;
 	}
 
+	private void initRecycler(RecyclerView recyclerView) {
+		recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+		recyclerView.setAdapter(new NewsListAdapter(mNewsList));
+	}
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		//加载新闻
 		loadNewsList(REFRESH_DOWN);
-
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class NewsFragment extends Fragment implements AdapterView.OnItemClickLis
 
 				if (mAdapter == null) {
 					// 此时为第一次获取新闻
-					mAdapter = new NewsListAdapter(getActivity(), result);
+					mAdapter = new NewsListAdapter(result);
 					mList.setAdapter(mAdapter);
 				} else {
 					// 此时为刷新新闻
@@ -216,22 +216,22 @@ public class NewsFragment extends Fragment implements AdapterView.OnItemClickLis
 
 	}
 
-	// ListView点击监听事件
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-		NewsModel mNewsModel = mNewsList != null ? mNewsList.get(position) : null;
-
-		if (mNewsModel == null) {
-			return;
-		}
-
-		Intent intent = new Intent();
-		intent.putExtra("id", mNewsModel.getId());
-		intent.putExtra("newsModel", mNewsModel);
-
-		// 跳转到NewsDetailActivity
-		intent.setClass(getActivity(), NewsDetailActivity.class);
-		getActivity().startActivity(intent);
-	}
+//	// ListView点击监听事件
+//	@Override
+//	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//		NewsModel mNewsModel = mNewsList != null ? mNewsList.get(position) : null;
+//
+//		if (mNewsModel == null) {
+//			return;
+//		}
+//
+//		Intent intent = new Intent();
+//		intent.putExtra("id", mNewsModel.getId());
+//		intent.putExtra("newsModel", mNewsModel);
+//
+//		// 跳转到NewsDetailActivity
+//		intent.setClass(getActivity(), NewsDetailActivity.class);
+//		getActivity().startActivity(intent);
+//	}
 }

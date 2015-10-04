@@ -1,6 +1,7 @@
 package com.ddmax.zjnucloud.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -9,14 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.BaseFragmentPagerAdapter;
-import com.ddmax.zjnucloud.ui.view.SlidingTabLayout;
 import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
 
 import java.util.ArrayList;
@@ -30,18 +27,19 @@ import java.util.Set;
  * @since 2015/02/19
  * 说明：新闻展示界面
  */
-public class NewsActivity extends AppCompatActivity {
 
-	// Toolbar, ActionBar, SlidingTabLayout
+public class NewsActivity extends AppCompatActivity {
+	// Toolbar, ActionBar, TabLayout
 	private ActionBar mActionBar;
 	private Toolbar mToolbar;
-	private SlidingTabLayout mSlidingTabLayout;
+	private TabLayout mTabLayout;
+//	private SlidingTabLayout mSlidingTabLayout;
 	// Fragments，及对应的新闻地址
 	private List<Fragment> mFragments;
 	private HashMap<String, String> mNewsInfo;
 	private int mCurrentFragment = 0;
 	// 中间内容
-	private RelativeLayout mViewPagerContainer;
+//	private CoordinatorLayout mViewPagerContainer;
 	private ViewPager mViewPager;
 	private BaseFragmentPagerAdapter mFragmentPagerAdapter;
 	// 具体内容，用于fragment之间切换
@@ -79,10 +77,11 @@ public class NewsActivity extends AppCompatActivity {
 	private void initNewsURLs() {
 		mNewsInfo = new HashMap<>();
 		//TODO: Fetch from server
-		mNewsInfo.put("信息通告", Constants.URL.NEWS_NOTIFICATION);
-		mNewsInfo.put("学工新闻", Constants.URL.NEWS_LIVES);
+		mNewsInfo.put("信息通告", Constants.URL.NEWS.SLXX_NOTIFICATION);
+		mNewsInfo.put("学工新闻", Constants.URL.NEWS.SLXX_LIVES);
 	}
 
+	// 初始化新闻Fragments
 	private void initFragments() {
 		mFragments = new ArrayList<>();
 		Set set = mNewsInfo.keySet();
@@ -99,10 +98,11 @@ public class NewsActivity extends AppCompatActivity {
 		}
 	}
 
+	// 初始化ViewPager
 	private void initViewPager() {
 		// 中间内容
 		mViewPager = (ViewPager) findViewById(R.id.view_pager);
-		mViewPagerContainer = (RelativeLayout) findViewById(R.id.news_container);
+//		mViewPagerContainer = (CoordinatorLayout) findViewById(R.id.news_container);
 		// 得到TabTitles
 		Set set = mNewsInfo.keySet();
 		Iterator it = set.iterator();
@@ -112,13 +112,14 @@ public class NewsActivity extends AppCompatActivity {
 		}
 		// ViewPager属性设置
 		mFragmentPagerAdapter = new BaseFragmentPagerAdapter(getSupportFragmentManager(), mViewPager, mFragments, mTabTitles);
-		mViewPager.setOnPageChangeListener(mPageChangeListener);
-		mViewPagerContainer.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return mViewPager.dispatchTouchEvent(event);
-			}
-		});
+		mViewPager.setAdapter(mFragmentPagerAdapter);
+		mViewPager.addOnPageChangeListener(mPageChangeListener);
+//		mViewPagerContainer.setOnTouchListener(new View.OnTouchListener() {
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				return mViewPager.dispatchTouchEvent(event);
+//			}
+//		});
 	}
 
 	/**
@@ -133,10 +134,9 @@ public class NewsActivity extends AppCompatActivity {
 		mActionBar = getSupportActionBar();
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 
-		// 设置SlidingTabLayout
-		mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.top_tabs);
-		mSlidingTabLayout.setDistributeEvenly(true);
-		mSlidingTabLayout.setViewPager(mViewPager);
+		// 设置TabLayout
+		mTabLayout = (TabLayout) findViewById(R.id.top_tabs);
+		mTabLayout.setupWithViewPager(mViewPager);
 
 	}
 

@@ -30,7 +30,7 @@ public class GetNewsDetailTask extends BaseGetNewsTask<NewsDetailModel> {
 		NewsDetailModel mNewsDetailModel = null;
 
 		try {
-			detailContent = getUrl(Constants.URL.NEWSDETAIL + params[0]);
+			detailContent = getUrl(Constants.URL.NEWS.SLXX_DETAIL + params[0]);
 			mNewsDetailModel = GsonUtils.getNewsDetail(detailContent);
 
 		} catch (IOException e) {

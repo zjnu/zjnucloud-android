@@ -15,8 +15,6 @@ import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.model.User;
 import com.ddmax.zjnucloud.utils.RegexUtils;
 
-import java.util.regex.Pattern;
-
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.listener.SaveListener;
 
