@@ -1,4 +1,4 @@
-package com.ddmax.zjnucloud.utils;
+package com.ddmax.zjnucloud.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
