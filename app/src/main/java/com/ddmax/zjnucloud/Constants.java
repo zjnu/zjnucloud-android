@@ -16,17 +16,25 @@ public final class Constants {
 		public static final int RESOURCES = 4;
 	}
 
-	// 数信学工办新闻列表地址
     public static final class URL {
 
+        // API服务器地址
+        public static final String BASE_URL = "http://api.ddmax.gq";
+
+        // 新闻列表地址
 		public static final class NEWS {
+            // 浙师新闻
+            public static final String ZSXW = BASE_URL + "/news/zsxw/?format=json";
+            // 学术动态
+            public static final String XSDT = BASE_URL + "/news/xsdt/?format=json";
+            // 通知公告
+            public static final String TZGG = BASE_URL + "/news/tzgg/?format=json";
 
-			// 学工新闻
+            /*----- 以下数理信息学工办 -----*/
+            // 学工新闻
 			public static final String SLXX_LIVES = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=1&pageSize=10&pageNo=";
-
 			// 信息通告
 			public static final String SLXX_NOTIFICATION = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=2&pageSize=10&pageNo=";
-
 			// 新闻内容地址
 			public static final String SLXX_DETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
 		}

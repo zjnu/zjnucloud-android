@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.model.User;
-import com.ddmax.zjnucloud.utils.RegexUtils;
+import com.ddmax.zjnucloud.util.RegexUtils;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.listener.SaveListener;
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 			Toast.makeText(this, R.string.error_invalid_username, Toast.LENGTH_LONG).show();
 			return;
 		}
-		if (RegexUtils.matchEmail(email)) {
+		if (!RegexUtils.matchEmail(email)) {
 			Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_LONG).show();
 			return;
 		}

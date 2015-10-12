@@ -17,8 +17,8 @@
     </style>
 
     <!-- Toolbar 字体颜色样式 -->
-    <!--<style name="mToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
-       <!--<item name="android:textColor">@color/white</item>-->
-    <!--</style>-->
+    <style name="mToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+       <item name="android:textColor">@color/white</item>
+    </style>
 
 </resources>

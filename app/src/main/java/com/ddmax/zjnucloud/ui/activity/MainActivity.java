@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements
 	private AutoRoundHandler mHandler = new AutoRoundHandler(new WeakReference<>(this));
 	// 展示图片资源ID
 	private static Integer[] mDisplayImgs = {
-			R.mipmap.display_img_1,
-			R.mipmap.display_img_2,
-			R.mipmap.display_img_3
+			R.drawable.display_img_1,
+			R.drawable.display_img_2,
+			R.drawable.display_img_3
 	};
 	// GridView展示模块
 	private GridView mGridView;

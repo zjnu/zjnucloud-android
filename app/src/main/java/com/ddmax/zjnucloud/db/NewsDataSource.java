@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.ddmax.zjnucloud.Constants;
-import com.ddmax.zjnucloud.model.NewsModel;
+import com.ddmax.zjnucloud.model.news.News;
 import com.lidroid.xutils.DbUtils;
 
 import java.util.LinkedList;
@@ -32,7 +32,7 @@ public final class NewsDataSource {
 		mDatabase = mDbUtil.getDatabase();
 	}
 
-	public LinkedList<NewsModel> insertNewsList(String id, String title, String author, String date) {
+	public LinkedList<News> insertNewsList(String id, String title, String author, String date) {
 		ContentValues values = new ContentValues();
 		values.put(Constants.COLUMN_ID, id);
 		values.put(Constants.COLUMN_TITLE, title);

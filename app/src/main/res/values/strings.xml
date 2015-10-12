@@ -4,6 +4,7 @@
     <string name="app_name">ZJNU Cloud</string>
     <string name="title_activity_news">Campus News</string>
     <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
     <string name="action_settings">Settings</string>
     <string name="detail">Content</string>
     <string name="content_loading">Loading&#8230;</string>

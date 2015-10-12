@@ -21,9 +21,9 @@ public class ModulesViewAdapter extends BaseAdapter {
 	private String[] mModulesTitles = null;
 
 	private Integer[] mModulesImages = {
-			R.mipmap.module_news, R.mipmap.module_calendar,
-			R.mipmap.module_bus, R.mipmap.module_speech,
-			R.mipmap.module_resources
+			R.drawable.module_news, R.drawable.module_calendar,
+			R.drawable.module_bus, R.drawable.module_speech,
+			R.drawable.module_resources
 	};
 
 	public ModulesViewAdapter(Context mContext) {

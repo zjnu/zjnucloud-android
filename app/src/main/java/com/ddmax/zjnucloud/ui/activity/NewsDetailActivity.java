@@ -1,14 +1,22 @@
 package com.ddmax.zjnucloud.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.model.NewsDetailModel;
+import com.ddmax.zjnucloud.model.news.BaseNewsDetail;
+import com.ddmax.zjnucloud.model.news.News;
+import com.ddmax.zjnucloud.model.news.NewsDetail;
+import com.ddmax.zjnucloud.model.news.SlxxDetail;
 import com.ddmax.zjnucloud.ui.fragment.NewsDetailFragment;
+
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * @author ddMax
@@ -17,69 +25,112 @@ import com.ddmax.zjnucloud.ui.fragment.NewsDetailFragment;
  */
 public class NewsDetailActivity extends AppCompatActivity {
 
-	private static final String NEWS_ID = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_id";
-	private static final String NEWS_DETAIL_MODEL = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_detail_model";
+    private static final String NEWS_ID = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_id";
+    private static final String NEWS_DETAIL_MODEL = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_detail_model";
 
-	private long mNewsId = 0;
-	private NewsDetailModel mNewsDetailModel = null;
+    private long mArticleId = 0; // 文章id
+    private BaseNewsDetail mBaseDetailModel = null; // 新闻详情模型
+    private News mNewsModel = null; // 新闻模型
+    private String mUrl; // 新闻详情连接
+    private boolean isSlxx; // 是否是数理信息新闻
 
-	// Toolbar
-	private Toolbar mToolbar;
+    // Toolbar
+    private Toolbar mToolbar;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_news_detail);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_news_detail);
 
-		// 设置Toolbar标题，居中，返回
-		mToolbar = (Toolbar) findViewById(R.id.mDetailToolbar);
-		mToolbar.setTitle(R.string.detail);
-		setSupportActionBar(mToolbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // 设置Toolbar标题，居中，返回
+        mToolbar = (Toolbar) findViewById(R.id.mDetailToolbar);
+        mToolbar.setTitle(R.string.detail);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		if (savedInstanceState == null) {
+        // 是否是数理信息新闻
+        isSlxx = getIntent().getBooleanExtra("isSlxx", false);
+        if (savedInstanceState == null) {
 
-			mNewsId = getIntent().getLongExtra("id", 0);
-			mNewsDetailModel = (NewsDetailModel) getIntent().getSerializableExtra("newsDetailModel");
+            mArticleId = getIntent().getLongExtra("id", 0);
+            if (!isSlxx) {
+                mBaseDetailModel = (NewsDetail) getIntent().getSerializableExtra("newsDetailModel");
+            } else {
+                mBaseDetailModel = (SlxxDetail) getIntent().getSerializableExtra("newsDetailModel");
+            }
 
-		} else {
-			mNewsId = savedInstanceState.getLong(NEWS_ID);
-			mNewsDetailModel = (NewsDetailModel) savedInstanceState.getSerializable(NEWS_DETAIL_MODEL);
-		}
+        } else {
+            mArticleId = savedInstanceState.getLong(NEWS_ID);
+            if (!isSlxx) {
+                mBaseDetailModel = (NewsDetail) savedInstanceState.getSerializable(NEWS_DETAIL_MODEL);
+            } else {
+                mBaseDetailModel = (SlxxDetail) savedInstanceState.getSerializable(NEWS_DETAIL_MODEL);
+            }
+        }
 
-		// 设置Bundle将新闻ID传给NewsDetailFragment
-		Bundle bundle = new Bundle();
-		bundle.putLong("id", mNewsId);
+        // 设置新闻对象模型
+        mNewsModel = (News) getIntent().getSerializableExtra("newsModel");
 
-		Fragment mFragment = getFragment();
-		mFragment.setArguments(bundle);
+        // 设置Bundle将新闻ID传给NewsDetailFragment
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", mArticleId);
+        bundle.putBoolean("isSlxx", isSlxx);
+        bundle.putInt("hits", mNewsModel.getHits());
 
-		getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, mFragment).commit();
-	}
+        Fragment mFragment = getFragment();
+        mFragment.setArguments(bundle);
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, mFragment).commit();
+    }
 
-		outState.putLong(NEWS_ID, mNewsId);
-		outState.putSerializable(NEWS_DETAIL_MODEL, mNewsDetailModel);
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-	protected Fragment getFragment() {
-		return new NewsDetailFragment();
-	}
+        outState.putLong(NEWS_ID, mArticleId);
+        outState.putSerializable(NEWS_DETAIL_MODEL, mBaseDetailModel);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+    protected Fragment getFragment() {
+        return new NewsDetailFragment();
+    }
 
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
-			default:
-				break;
-		}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_news_detail, menu);
+        return true;
+    }
 
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.action_share:
+                shareBySystem();
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void shareBySystem() {
+        ShareSDK.initSDK(this);
+        OnekeyShare oks = new OnekeyShare();
+        oks.disableSSOWhenAuthorize();
+        oks.setTitle(mNewsModel.getTitle());
+        oks.setText(mNewsModel.getTitle());
+
+        oks.show(this);
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType("text/plain");
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "Share");
+//        //设置分享的内容
+//        intent.putExtra(Intent.EXTRA_TEXT, mNewsModel.getTitle());
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(Intent.createChooser(intent, getTitle()));
+    }
 }
