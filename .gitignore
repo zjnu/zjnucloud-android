@@ -6,5 +6,6 @@
 
 /local.properties
 /gradle.properties
+/signedkey.jks
 *.iml
 
