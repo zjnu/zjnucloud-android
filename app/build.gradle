@@ -40,14 +40,10 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jiechic.library:xUtils:2.6.14'
 
-    //bmob-sdk ：Bmob的android sdk包
-    compile 'cn.bmob.android:bmob-sdk:3.4.3'
-    //bmob-push：Bmob的推送包
-    compile 'cn.bmob.android:bmob-push:0.6'
-    //bmob-im：bmob的im包，以下两个配置是im功能所需
-    compile 'cn.bmob.android:bmob-im:1.1.9'
-    compile 'cn.bmob.android:bmob-sdk:3.4.3'
-    //bmob-sms ：Bmob单独为短信服务提供的包
-    compile 'cn.bmob.android:bmob-sms:1.0.1'
+    testCompile 'junit:junit:4.12'
 }
