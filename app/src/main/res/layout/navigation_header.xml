@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blue"
     android:id="@+id/user_account_view"
     android:layout_height="220dp"
@@ -9,7 +8,7 @@
     >
 
     <ImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/avatar"
         android:layout_centerHorizontal="true"
         android:layout_height="72dp"
         android:layout_marginLeft="16dp"
@@ -22,7 +21,7 @@
 
     <LinearLayout
         android:id="@+id/buttons"
-        android:layout_below="@id/profile_image"
+        android:layout_below="@id/avatar"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -38,6 +37,14 @@
             android:text="@string/login"
             android:textColor="@color/white"
             android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/welcome_message"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:background="@drawable/button_drawer_user_bar"

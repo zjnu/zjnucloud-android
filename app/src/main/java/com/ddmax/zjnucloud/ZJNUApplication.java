@@ -3,6 +3,7 @@ package com.ddmax.zjnucloud;
 import android.app.Application;
 
 import com.ddmax.zjnucloud.db.NewsDataSource;
+import com.ddmax.zjnucloud.ui.activity.MainActivity;
 
 /**
  * @author ddMax
@@ -11,23 +12,37 @@ import com.ddmax.zjnucloud.db.NewsDataSource;
  */
 public class ZJNUApplication extends Application {
 
-	private static ZJNUApplication mApplication;
-	private static NewsDataSource mNewsDataSource;
+    private static final String TAG = "ZJNUApplication";
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
+    private static ZJNUApplication mApplication;
+    private static NewsDataSource mNewsDataSource;
 
-		mApplication = this;
-		mNewsDataSource = new NewsDataSource(getApplicationContext());
+    private MainActivity.LoginHandler loginHandler;
 
-	}
+    public MainActivity.LoginHandler getLoginHandler() {
+        return loginHandler;
+    }
 
-	public static ZJNUApplication getInstance() {
-		return mApplication;
-	}
+    public void setLoginHandler(MainActivity.LoginHandler loginHandler) {
+        this.loginHandler = loginHandler;
+    }
 
-	public static NewsDataSource getDataSource() {
-		return mNewsDataSource;
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        mApplication = this;
+        mNewsDataSource = new NewsDataSource(getApplicationContext());
+    }
+
+    public static ZJNUApplication getInstance() {
+        if (mApplication == null) {
+            mApplication = new ZJNUApplication();
+        }
+        return mApplication;
+    }
+
+    public static NewsDataSource getDataSource() {
+        return mNewsDataSource;
+    }
 }

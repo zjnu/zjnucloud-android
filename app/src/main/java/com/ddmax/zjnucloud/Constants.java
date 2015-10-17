@@ -7,14 +7,14 @@ package com.ddmax.zjnucloud;
  */
 public final class Constants {
 
-	// 各模块代号定义
-	public static final class MODULE {
-		public static final int NEWS = 0;
-		public static final int CALENDAR = 1;
-		public static final int BUS = 2;
-		public static final int SPEECH = 3;
-		public static final int RESOURCES = 4;
-	}
+    // 各模块代号定义
+    public static final class MODULE {
+        public static final int NEWS = 0;
+        public static final int CALENDAR = 1;
+        public static final int BUS = 2;
+        public static final int SPEECH = 3;
+        public static final int RESOURCES = 4;
+    }
 
     public static final class URL {
 
@@ -22,7 +22,7 @@ public final class Constants {
         public static final String BASE_URL = "http://api.ddmax.gq";
 
         // 新闻列表地址
-		public static final class NEWS {
+        public static final class NEWS {
             // 浙师新闻
             public static final String ZSXW = BASE_URL + "/news/zsxw/?format=json";
             // 学术动态
@@ -32,31 +32,34 @@ public final class Constants {
 
             /*----- 以下数理信息学工办 -----*/
             // 学工新闻
-			public static final String SLXX_LIVES = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=1&pageSize=10&pageNo=";
-			// 信息通告
-			public static final String SLXX_NOTIFICATION = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=2&pageSize=10&pageNo=";
-			// 新闻内容地址
-			public static final String SLXX_DETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
-		}
+            public static final String SLXX_LIVES = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=1&pageSize=10&pageNo=";
+            // 信息通告
+            public static final String SLXX_NOTIFICATION = "http://slxx.zjnu.edu.cn/xgb/listIndexInfo.action?index=2&pageSize=10&pageNo=";
+            // 新闻内容地址
+            public static final String SLXX_DETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
+        }
     }
 
-	// 浙师大坐标
-	public static final double ZJNU_LONGITUDE = 119.64751;
-	public static final double ZJNU_LATITUDE = 29.13876;
+    // 浙师大坐标
+    public static final double ZJNU_LONGITUDE = 119.64751;
+    public static final double ZJNU_LATITUDE = 29.13876;
 
-	public static final String TEMPLATE_NEWS_DETAIL = "news-templates/template.html";
+    public static final String TEMPLATE_NEWS_DETAIL = "news-templates/template.html";
 
-	// Bmob Application ID
-	public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
+    // Bmob Application ID
+    public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
+    // 登陆消息状态码
+    public static final int MSG_LOGIN_FAIL = 0x00;
+    public static final int MSG_LOGIN_SUCCESS = 0x01;
 
-	// 数据库：NewsList
-	public static final String DB_NAME = "zjnucloud.db";
-	public static final int DB_VERSION = 5;
+    // 数据库：NewsList
+    public static final String DB_NAME = "zjnucloud.db";
+    public static final int DB_VERSION = 5;
 
-	public static final String TABLE_NAME = "news_list";
-	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_TITLE = "title";
-	public static final String COLUMN_AUTHOR = "author";
-	public static final String COLUMN_DATE = "date";
+    public static final String TABLE_NAME = "news_list";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_AUTHOR = "author";
+    public static final String COLUMN_DATE = "date";
 
 }

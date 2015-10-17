@@ -26,7 +26,8 @@
 
 	<string name="register_success">Register success!</string>
 	<string name="register_fail">Register failed!</string>
-	<string name="login_success">Login success！</string>
+    <string name="login_info">Pending&#8230;</string>
+    <string name="login_success">Welcome back, %s!</string>
 	<string name="login_fail">Login failed！</string>
 	<string name="forgot_password">Forgot Password?</string>
 	<string name="error_invalid_username">Username is required.</string>
