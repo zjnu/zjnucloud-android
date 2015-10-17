@@ -24,6 +24,7 @@ import com.ddmax.zjnucloud.task.GetSlxxTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
 import com.ddmax.zjnucloud.ui.view.SwipeRefreshLayout;
 
+import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
 /**
@@ -52,23 +53,34 @@ public class NewsFragment extends Fragment implements ResponseListener<LinkedLis
     private LinkedList<News> mNewsList = null;
     private NewsListAdapter mAdapter = null;
 
-    private Handler refreshHandler = new Handler() {
+    // 新闻刷新Handler
+    private static class RefreshHandler extends Handler{
+        private final WeakReference<NewsFragment> mNewsFramgent;
+
+        public RefreshHandler(NewsFragment mNewsFramgent) {
+            this.mNewsFramgent = new WeakReference<NewsFragment>(mNewsFramgent);
+        }
+
+        @Override
         public void handleMessage(Message msg) {
+            NewsFragment target = mNewsFramgent.get();
             switch (msg.what) {
                 case REFRESH_DOWN:
-                    if (mNewsList != null) {
-                        loadNewsList(REFRESH_DOWN);
+                    if (target.mNewsList != null) {
+                        target.loadNewsList(REFRESH_DOWN);
                     }
                     break;
                 case REFRESH_UP:
-                    loadNewsList(REFRESH_UP);
+                    target.loadNewsList(REFRESH_UP);
                     break;
                 default:
                     break;
             }
         }
 
-    };
+    }
+
+    private final RefreshHandler refreshHandler = new RefreshHandler(this);
 
     public static NewsFragment newInstance(Page page) {
         NewsFragment fragment = new NewsFragment();
@@ -162,6 +174,12 @@ public class NewsFragment extends Fragment implements ResponseListener<LinkedLis
         super.onPause();
     }
 
+    // 显示/隐藏进度框
+    private void setNewsListShown(boolean finishLoading) {
+        mList.setVisibility(finishLoading ? View.VISIBLE : View.GONE);
+        mLoadingProgress.setVisibility(finishLoading ? View.GONE : View.VISIBLE);
+    }
+
     // 加载新闻列表
     private void loadNewsList(int status) {
 
@@ -189,12 +207,6 @@ public class NewsFragment extends Fragment implements ResponseListener<LinkedLis
                 new GetMoreNewsTask(getActivity(), this).execute(mPage.getUrl() + "&page=" + mListCount);
             }
         }
-    }
-
-    // 显示/隐藏进度框
-    private void setNewsListShown(boolean finishLoading) {
-        mList.setVisibility(finishLoading ? View.VISIBLE : View.GONE);
-        mLoadingProgress.setVisibility(finishLoading ? View.GONE : View.VISIBLE);
     }
 
     // 加载更多新闻GetMoreNewsTask
