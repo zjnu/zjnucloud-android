@@ -1,6 +1,7 @@
 package com.ddmax.zjnucloud;
 
 import android.app.Application;
+import android.os.Build;
 
 import com.ddmax.zjnucloud.db.NewsDataSource;
 import com.ddmax.zjnucloud.ui.activity.MainActivity;
@@ -16,6 +17,8 @@ public class ZJNUApplication extends Application {
 
     private static ZJNUApplication mApplication;
     private static NewsDataSource mNewsDataSource;
+    // Android SDK Version Code
+    private int sdkVersion = Build.VERSION.SDK_INT;
 
     private MainActivity.LoginHandler loginHandler;
 
@@ -33,6 +36,7 @@ public class ZJNUApplication extends Application {
 
         mApplication = this;
         mNewsDataSource = new NewsDataSource(getApplicationContext());
+
     }
 
     public static ZJNUApplication getInstance() {
@@ -44,5 +48,13 @@ public class ZJNUApplication extends Application {
 
     public static NewsDataSource getDataSource() {
         return mNewsDataSource;
+    }
+
+    public int getSdkVersion() {
+        return sdkVersion;
+    }
+
+    public void setSdkVersion(int sdkVersion) {
+        this.sdkVersion = sdkVersion;
     }
 }

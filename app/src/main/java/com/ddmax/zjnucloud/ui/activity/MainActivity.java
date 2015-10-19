@@ -2,6 +2,7 @@ package com.ddmax.zjnucloud.ui.activity;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +30,7 @@ import com.ddmax.zjnucloud.ZJNUApplication;
 import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
 import com.ddmax.zjnucloud.adapter.ModulesViewAdapter;
 import com.ddmax.zjnucloud.model.User;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements
         application = ZJNUApplication.getInstance();
         LoginHandler loginHandler = new LoginHandler(this);
         application.setLoginHandler(loginHandler);
+
     }
 
     // 实现再按一次返回键退出的功能
@@ -187,12 +190,6 @@ public class MainActivity extends AppCompatActivity implements
         mNavigationHeader = mNavigationView.inflateHeaderView(R.layout.navigation_header);
 //        mNavigationHeader = getLayoutInflater().inflate(R.layout.navigation_header, null);
         mImageDisplay = (ViewPager) findViewById(R.id.image_display);
-    }
-
-    // dp转换为px
-    private int dp2Px(float dp) {
-        final float scale = getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
     }
 
     // 展示图片
@@ -281,8 +278,10 @@ public class MainActivity extends AppCompatActivity implements
             if (avatarFile == null) {
                 avatarView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.avatar_default));
             } else {
-                avatarView.setImageBitmap(BitmapFactory.decodeFile(avatarFile.getFilename()));
+                Picasso.with(this).load(Constants.BMOB_FILE_LINK + avatarFile.getUrl()).into(avatarView);
             }
+            // 设置NavigationView header背景
+            mNavigationHeader.setBackgroundResource(R.drawable.drawer_background);
         }
     }
 

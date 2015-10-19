@@ -1,5 +1,7 @@
 package com.ddmax.zjnucloud;
 
+import android.os.Build;
+
 /**
  * @author ddMax
  * @since 2015/02/17 10:55
@@ -48,6 +50,8 @@ public final class Constants {
 
     // Bmob Application ID
     public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
+    // Bmob Static link
+    public static final String BMOB_FILE_LINK = "http://file.bmob.cn/";
     // 登陆消息状态码
     public static final int MSG_LOGIN_FAIL = 0x00;
     public static final int MSG_LOGIN_SUCCESS = 0x01;
