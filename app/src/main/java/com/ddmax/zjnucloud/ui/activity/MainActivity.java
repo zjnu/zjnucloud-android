@@ -2,7 +2,6 @@ package com.ddmax.zjnucloud.ui.activity;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -272,7 +271,16 @@ public class MainActivity extends AppCompatActivity implements
         welcomeText.setText(currentUser.getUsername());
         welcomeText.setVisibility(View.VISIBLE);
         // 更改Drawer头像
-        ImageView avatarView = (ImageView) mNavigationHeader.findViewById(R.id.avatar);
+        final ImageView avatarView = (ImageView) mNavigationHeader.findViewById(R.id.avatar);
+        // 设置头像点击事件
+        avatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                intent.putExtra("currentUser", currentUser);
+                startActivity(intent);
+            }
+        });
         if (currentUser != null) {
             BmobFile avatarFile = currentUser.getAvatar();
             if (avatarFile == null) {
@@ -428,6 +436,7 @@ public class MainActivity extends AppCompatActivity implements
             case Constants.MODULE.SPEECH:
                 break;
             case Constants.MODULE.RESOURCES:
+                startActivity(new Intent(this, ScoreActivity.class));
                 break;
             default:
                 break;

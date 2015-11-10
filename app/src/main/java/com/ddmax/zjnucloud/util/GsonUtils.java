@@ -7,8 +7,12 @@ import com.ddmax.zjnucloud.model.news.NewsDetail;
 import com.ddmax.zjnucloud.model.news.NewsList;
 import com.ddmax.zjnucloud.model.news.SlxxDetail;
 import com.ddmax.zjnucloud.model.news.SlxxList;
+import com.ddmax.zjnucloud.model.score.Score;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.HashMap;
 
 /**
  * @author ddMax
@@ -16,6 +20,17 @@ import com.google.gson.GsonBuilder;
  * 说明：使用Gson解析JSON工具类
  */
 public class GsonUtils {
+
+    public static Score getScore(String content){
+        if (TextUtils.isEmpty(content)) return null;
+
+        Gson gson = new GsonBuilder()
+                .serializeNulls()
+                .create();
+        Score score = gson.fromJson(content, Score.class);
+
+        return score != null ? score : null;
+    }
 
     // 返回新闻列表
     public static NewsList getNewsList(String content) {

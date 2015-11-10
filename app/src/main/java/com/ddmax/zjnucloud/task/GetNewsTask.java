@@ -4,12 +4,10 @@ import android.content.Context;
 
 import com.ddmax.zjnucloud.model.news.News;
 import com.ddmax.zjnucloud.model.news.NewsList;
-import com.ddmax.zjnucloud.model.news.SlxxList;
 import com.ddmax.zjnucloud.util.GsonUtils;
+import com.ddmax.zjnucloud.util.RequestUtil;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 /**
@@ -17,7 +15,7 @@ import java.util.LinkedList;
  * @since 2015/01/31 21:13.
  * 说明：后台获取浙师新闻列表
  */
-public class GetNewsTask extends BaseGetNewsTask<LinkedList<News>> {
+public class GetNewsTask extends BaseGetDataTask<LinkedList<News>> {
 
     public GetNewsTask(Context mContext, ResponseListener mResponseListener) {
         super(mContext, mResponseListener);
@@ -34,7 +32,7 @@ public class GetNewsTask extends BaseGetNewsTask<LinkedList<News>> {
         LinkedList<News> newsList = null;
 
         try {
-            newContent = getUrl(params[0]);
+            newContent = RequestUtil.getString(params[0]);
             NewsList newsListModel = GsonUtils.getNewsList(newContent);
             // 真正返回的新闻集合
             newsList = newsListModel.getResult();

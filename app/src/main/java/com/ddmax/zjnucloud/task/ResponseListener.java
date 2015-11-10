@@ -7,13 +7,13 @@ package com.ddmax.zjnucloud.task;
  */
 public interface ResponseListener<T> {
 
-	public void onPreExecute();
+	void onPreExecute();
 
 	// TODO: More args
-	public void onPostExecute(T result, boolean isRefreshSuccess, boolean isContentSame);
+	void onPostExecute(T result, boolean isRefreshSuccess, boolean isContentSame);
 
-	public void onProgressUpdate(Long value);
+	void onProgressUpdate(Long value);
 
-	public void onFail(Exception e);
+	void onFail(Exception e);
 
 }

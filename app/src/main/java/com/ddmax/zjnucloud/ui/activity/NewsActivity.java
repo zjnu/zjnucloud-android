@@ -110,7 +110,7 @@ public class NewsActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
 
         // 设置TabLayout
         mTabLayout = (TabLayout) findViewById(R.id.top_tabs);

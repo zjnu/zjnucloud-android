@@ -60,7 +60,7 @@ public class ModulesViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.module_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_module, parent, false);
         }
 
         ImageView mImageView = (ImageView) convertView.findViewById(R.id.module_image);

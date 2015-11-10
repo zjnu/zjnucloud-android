@@ -1,113 +1,135 @@
-<manifest
-	package="com.ddmax.zjnucloud"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ddmax.zjnucloud" >
 
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<!--<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />-->
-	<!--<uses-permission android:name="android.permission.BROADCAST_STICKY" />-->
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-	<!--<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />-->
-	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-	<uses-permission android:name="android.permission.READ_LOGS"/>
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	<!--<uses-permission android:name="android.permission.USE_CREDENTIALS" />-->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
+    <uses-sdk tools:overrideLibrary="jp.wasabeef.recyclerview" />
 
-	<application
-		android:allowBackup="true"
-		android:icon="@mipmap/ic_launcher"
-		android:label="@string/app_name"
-		android:theme="@style/AppTheme">
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" /> -->
+    <!-- <uses-permission android:name="android.permission.BROADCAST_STICKY" /> -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" /> -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- <uses-permission android:name="android.permission.USE_CREDENTIALS" /> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-		<!-- 百度LBS API-->
-		<meta-data
-			android:name="com.baidu.lbsapi.API_KEY"
-			android:value="gupjuKzCfblrzL1ztCPjKwF1"/>
+    <!-- <uses-permission android:name="android.permission.WRITE_SETTINGS" /> -->
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
 
-		<!-- Guide Activity -->
-		<activity
-			android:name=".ui.activity.GuideActivity"
-			android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
+        <!-- 百度LBS API -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="gupjuKzCfblrzL1ztCPjKwF1" />
 
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-		</activity>
+        <!-- 友盟API key -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="56233b8967e58ea63f00498a" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Channel ID" />
 
-		<!-- SplashActivity -->
-		<activity
-			android:name=".ui.activity.SplashActivity"
-			android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
+        <!-- Guide Activity -->
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-		<!-- Main Activity -->
-		<activity
-			android:name=".ui.activity.MainActivity"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
+        <!-- SplashActivity -->
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".ui.activity.NewsDetailActivity">
-		</activity>
-		<activity
-			android:name=".ui.activity.NewsActivity"
-			android:label="@string/title_activity_news">
-		</activity>
-		<activity
-			android:name=".ui.activity.LoginActivity"
-			android:label="@string/title_activity_login">
-		</activity>
-		<activity
-			android:name=".ui.activity.RegisterActivity"
-			android:label="@string/title_activity_register">
-		</activity>
-		<activity
-			android:name=".ui.activity.BusActivity"
-			android:label="@string/title_activity_bus">
-		</activity>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
-		<!-- Mob ShareSDK -->
-		<activity
-			android:name="com.mob.tools.MobUIShell"
-			android:configChanges="keyboardHidden|orientation|screenSize"
-			android:screenOrientation="portrait"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			android:windowSoftInputMode="stateHidden|adjustResize">
-			<intent-filter>
-				<data android:scheme="tencent100371282"/>
-				<action android:name="android.intent.action.VIEW"/>
+        <!-- Main Activity -->
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.BROWSABLE"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-		<!--微信分享回调 -->
-		<activity
-			android:name=".wxapi.WXEntryActivity"
-			android:configChanges="keyboardHidden|orientation|screenSize"
-			android:exported="true"
-			android:screenOrientation="portrait"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.NewsDetailActivity" >
+        </activity>
+        <activity
+            android:name=".ui.activity.NewsActivity"
+            android:label="@string/title_activity_news" >
+        </activity>
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name=".ui.activity.BusActivity"
+            android:label="@string/title_activity_bus" >
+        </activity>
 
-		<!--<uses-library android:name="android-test-runner" />-->
+        <!-- Mob ShareSDK -->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
 
-	</application>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- 微信分享回调 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".ui.activity.ScoreActivity"
+            android:label="@string/title_activity_score"
+            android:theme="@style/AppTheme" >
+        </activity>
+
+        <!-- <uses-library android:name="android-test-runner" /> -->
+
+        <activity
+            android:name=".ui.activity.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme" >
+        </activity>
+    </application>
 
 </manifest>

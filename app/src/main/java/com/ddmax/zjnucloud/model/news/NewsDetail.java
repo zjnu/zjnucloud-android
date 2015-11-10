@@ -14,6 +14,7 @@ public class NewsDetail extends BaseNewsDetail implements Serializable{
     private Date date;
     private String author;
     private String videolink;
+    private String videocover;
 
     public long getArticleId() {
         return articleId;
@@ -47,12 +48,22 @@ public class NewsDetail extends BaseNewsDetail implements Serializable{
         this.videolink = videolink;
     }
 
+    public String getVideocover() {
+        return videocover;
+    }
+
+    public void setVideocover(String videocover) {
+        this.videocover = videocover;
+    }
+
     @Override
     public String toString() {
-        return new StringBuilder("Id:").append(getArticleId())
-                .append("\nDate:").append(getDate())
-                .append("\nAuthor:").append(getAuthor())
-                .append("\nTitle:").append(getTitle())
-                .append("\nContent:").append(getContent()).toString();
+        return "NewsDetail{" +
+                "articleId=" + articleId +
+                ", date=" + date +
+                ", author='" + author + '\'' +
+                ", videolink='" + videolink + '\'' +
+                ", videocover='" + videocover + '\'' +
+                '}';
     }
 }

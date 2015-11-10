@@ -40,6 +40,10 @@ public final class Constants {
             // 新闻内容地址
             public static final String SLXX_DETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
         }
+
+        // 成绩查询地址
+        public static final String SCORE = "http://e.zjnu.gq/score/";
+
     }
 
     // 浙师大坐标

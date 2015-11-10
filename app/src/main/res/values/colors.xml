@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">@color/blue</color>
-    <color name="bar_text">@color/blue_dark</color>
+    <color name="primary">@color/material_blue</color>
+    <color name="bar_text">@color/material_blue_dark</color>
 
     <!-- 下拉刷新颜色 -->
     <color name="holo_blue_bright">#ff00ddff</color>
@@ -14,11 +14,15 @@
     <color name="list_item_bg_light_highlight">#ffe9e9e9</color>
     <color name="list_item_bg_light_normal">#ffffffff</color>
 
+    <!-- Material Palettes -->
+    <color name="material_amber">#FFC107</color>
+    <color name="material_blue">#2196F3</color> <!-- 蓝色 -->
+    <color name="material_blue_dark">#1E88E5</color> <!-- 蓝色(深) -->
+    <color name="material_green">#4CAF50</color>
+    <color name="material_pink">#E91E63</color>
+    <color name="material_red">#F44336</color>
+
     <!-- 颜色库 -->
-    <color name="blue">#0099ff</color> <!-- 蓝色 -->
-    <color name="blue_dark">#ff0288d1</color> <!-- 蓝色(深) -->
-    <color name="lightpink">#ff4081</color> <!-- 亮粉 -->
-    
     <color name="aliceblue">#f0f8ff</color> <!-- 艾利斯兰 -->
     <color name="khaki">#f0e68c</color> <!-- 黄褐色 -->
     <color name="lightcoral">#f08080</color> <!-- 亮珊瑚色 -->

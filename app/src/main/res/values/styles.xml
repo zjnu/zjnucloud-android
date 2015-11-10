@@ -8,17 +8,17 @@
     <!-- App主样式，需继承NoActionBar -->
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryDark">@color/blue_dark</item>
-        <item name="colorAccent">@color/lightpink</item>
+        <item name="colorPrimary">@color/material_blue</item>
+        <item name="colorPrimaryDark">@color/material_blue_dark</item>
+        <item name="colorAccent">@color/material_pink</item>
 	    <!--<item name="theme">@style/ThemeOverlay.AppCompat.Light</item>-->
-
-
     </style>
 
     <!-- Toolbar 字体颜色样式 -->
     <style name="mToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
        <item name="android:textColor">@color/white</item>
     </style>
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

@@ -1,12 +1,10 @@
 package com.ddmax.zjnucloud.task;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.model.news.NewsDetail;
-import com.ddmax.zjnucloud.model.news.SlxxDetail;
 import com.ddmax.zjnucloud.util.GsonUtils;
+import com.ddmax.zjnucloud.util.RequestUtil;
 
 import java.io.IOException;
 
@@ -15,7 +13,7 @@ import java.io.IOException;
  * @since 2015/10/11
  * 说明：从API服务端获取新闻详情
  */
-public class GetNewsDetailTask extends BaseGetNewsTask<NewsDetail> {
+public class GetNewsDetailTask extends BaseGetDataTask<NewsDetail> {
     public static final String TAG = "GetNewsDetailTask";
 
     public GetNewsDetailTask(Context mContext, ResponseListener mResponseListener) {
@@ -38,7 +36,7 @@ public class GetNewsDetailTask extends BaseGetNewsTask<NewsDetail> {
         NewsDetail mNewsDetailModel = null;
 
         try {
-            detailContent = getUrl(url);
+            detailContent = RequestUtil.getString(url);
             mNewsDetailModel = GsonUtils.getNewsDetail(detailContent);
 
         } catch (IOException e) {

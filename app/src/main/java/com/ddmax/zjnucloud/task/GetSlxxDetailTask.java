@@ -5,6 +5,7 @@ import android.content.Context;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.model.news.SlxxDetail;
+import com.ddmax.zjnucloud.util.RequestUtil;
 
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ import java.io.IOException;
  * 说明：由于数理信息学工网已有返回JSON数据新闻，
  * 		因此单独写成异步任务
  */
-public class GetSlxxDetailTask extends BaseGetNewsTask<SlxxDetail> {
+public class GetSlxxDetailTask extends BaseGetDataTask<SlxxDetail> {
 
 	public GetSlxxDetailTask(Context mContext, ResponseListener mResponseListener) {
 		super(mContext, mResponseListener);
@@ -31,7 +32,7 @@ public class GetSlxxDetailTask extends BaseGetNewsTask<SlxxDetail> {
 		SlxxDetail mSlxxDetailModel = null;
 
 		try {
-			detailContent = getUrl(Constants.URL.NEWS.SLXX_DETAIL + params[0]);
+			detailContent = RequestUtil.getString(Constants.URL.NEWS.SLXX_DETAIL + params[0]);
 			mSlxxDetailModel = GsonUtils.getSlxxDetail(detailContent);
 
 		} catch (IOException e) {

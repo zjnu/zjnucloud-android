@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
-        mRegisterLink.setLinkTextColor(getResources().getColor(R.color.blue));
+        mRegisterLink.setLinkTextColor(getResources().getColor(R.color.material_blue));
 
         // 设置登录按钮动作
         final Button loginButton = (Button) findViewById(R.id.login_in_button);

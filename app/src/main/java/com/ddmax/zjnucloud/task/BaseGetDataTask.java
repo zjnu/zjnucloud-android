@@ -13,9 +13,9 @@ import java.io.IOException;
 /**
  * @author ddMax
  * @since 2015/01/26 13:24.
- * 说明：HttpGet获取新闻列表BaseTask
+ * 说明：异步载入请求数据基类
  */
-public abstract class BaseGetNewsTask<T> extends AsyncTask<String, Long, T> {
+public abstract class BaseGetDataTask<T> extends AsyncTask<String, Long, T> {
 
 	protected Context mContext = null;
 	protected ResponseListener mResponseListener = null;
@@ -24,7 +24,7 @@ public abstract class BaseGetNewsTask<T> extends AsyncTask<String, Long, T> {
 	protected boolean isContentSame = false;
 
 
-	public BaseGetNewsTask(Context mContext, ResponseListener mResponseListener) {
+	public BaseGetDataTask(Context mContext, ResponseListener mResponseListener) {
 		super();
 		this.mContext = mContext;
 		this.mResponseListener = mResponseListener;
@@ -68,15 +68,6 @@ public abstract class BaseGetNewsTask<T> extends AsyncTask<String, Long, T> {
 		}
 
 		return oldContent.equals(newContent);
-	}
-
-	protected String getUrl(String url) throws IOException {
-
-		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().url(url).build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
-
 	}
 
 }
