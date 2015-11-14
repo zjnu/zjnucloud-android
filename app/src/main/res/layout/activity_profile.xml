@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,46 +44,27 @@
                 android:baselineAligned="true">
 
                 <include
-                    layout="@layout/view_bar_item"
+                    android:id="@+id/item_bar_dynamics"
+                    layout="@layout/item_bar_reverse"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginBottom="8dp" />
 
                 <include
-                    layout="@layout/view_bar_item"
+                    android:id="@+id/item_bar_explore"
+                    layout="@layout/item_bar_reverse"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
                 <include
-                    layout="@layout/view_bar_item"
+                    android:id="@+id/item_bar_notification"
+                    layout="@layout/item_bar_reverse"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
             </LinearLayout>
-
-            <!--<LinearLayout-->
-                <!--android:id="@+id/user_info_panel"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:background="@color/primary"-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--app:layout_collapseMode="parallax">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/username"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:gravity="bottom|center"-->
-                    <!--android:text="Username"-->
-                    <!--android:textColor="@android:color/white"-->
-                    <!--android:textSize="26sp" />-->
-
-            <!--</LinearLayout>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -104,12 +86,164 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.ddmax.zjnucloud.ui.activity.ProfileActivity">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/option_list"
-            android:layout_height="match_parent"
+        <LinearLayout
             android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_profile_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_profile_vertical_margin"
+            android:layout_marginRight="@dimen/activity_profile_vertical_margin"
+            android:paddingLeft="@dimen/activity_profile_vertical_margin"
+            android:paddingRight="@dimen/activity_profile_vertical_margin"
+            android:orientation="vertical">
+
+            <!-- 绑定教务系统账号 -->
+            <LinearLayout
+                android:id="@+id/item_bind_emis"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:gravity="start|center_horizontal"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="@dimen/profile_content_margin_left">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:gravity="start|center_vertical"
+                        android:tint="@android:color/darker_gray"
+                        android:src="@drawable/ic_insert_link_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/profile_item_bind_emis"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 修改头像-->
+            <LinearLayout
+                android:id="@+id/item_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:gravity="start|center_horizontal"
+                android:layout_marginTop="@dimen/activity_profile_vertical_margin"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="@dimen/profile_content_margin_left">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:gravity="start|center_vertical"
+                        android:tint="@android:color/darker_gray"
+                        android:src="@drawable/ic_face_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/profile_item_avatar"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 分割线 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <View
+                    style="@style/h_line"
+                    android:layout_marginLeft="@dimen/profile_divider_margin_left"
+                    android:layout_marginStart="@dimen/profile_divider_margin_left"
+                    android:layout_marginRight="@dimen/profile_divider_margin_right"
+                    android:layout_marginEnd="@dimen/profile_divider_margin_right"/>
+            </LinearLayout>
+            <!-- 修改密码 -->
+            <LinearLayout
+                android:id="@+id/item_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:gravity="start|center_horizontal"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="@dimen/profile_content_margin_left">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:gravity="start|center_vertical"
+                        android:tint="@android:color/darker_gray"
+                        android:src="@drawable/ic_lock_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/profile_item_password"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 退出登录 -->
+            <LinearLayout
+                android:id="@+id/item_logout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:gravity="start|center_horizontal"
+                android:background="@color/material_red"
+                android:clickable="true"
+                android:layout_marginTop="@dimen/activity_profile_vertical_margin"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="@dimen/profile_content_margin_left">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:gravity="start|center_vertical"
+                        android:tint="@color/white"
+                        android:src="@drawable/ic_exit_to_app_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/profile_button_logout"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

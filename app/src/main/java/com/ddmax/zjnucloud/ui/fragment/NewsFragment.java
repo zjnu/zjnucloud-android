@@ -27,6 +27,9 @@ import com.ddmax.zjnucloud.ui.view.SwipeRefreshLayout;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * @author ddMax
  * @since 2014/12/31
@@ -45,9 +48,9 @@ public class NewsFragment extends Fragment implements ResponseListener<LinkedLis
     private Page mPage;
 
     // 进度条
-    private RelativeLayout mLoadingProgress;
-    private RecyclerView mList;
-    private SwipeRefreshLayout mRefreshLayout;
+    @Bind(R.id.progressView) RelativeLayout mLoadingProgress;
+    @Bind(R.id.newsList) RecyclerView mList;
+    @Bind(R.id.swipeRefreshLayout) SwipeRefreshLayout mRefreshLayout;
 
     // 新闻列表
     private LinkedList<News> mNewsList = null;
@@ -115,14 +118,10 @@ public class NewsFragment extends Fragment implements ResponseListener<LinkedLis
                              Bundle savedInstanceState) {
         // 填充Fragment布局
         ViewGroup mViewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_news, container, false);
-        // 设置进度条
-        mLoadingProgress = (RelativeLayout) mViewGroup.findViewById(R.id.progressView);
-        // 设置新闻
-        mList = (RecyclerView) mViewGroup.findViewById(R.id.newsList);
+        ButterKnife.bind(this, mViewGroup);
         // 初始化新闻列表
         initRecycler(mList);
         // 初始化SwipeRefreshLayout，设置下拉主题
-        mRefreshLayout = (SwipeRefreshLayout) mViewGroup.findViewById(R.id.swipeRefreshLayout);
         mRefreshLayout.setColor(R.color.holo_blue_bright,
                 R.color.holo_green_light,
                 R.color.holo_orange_light,

@@ -1,6 +1,5 @@
 package com.ddmax.zjnucloud.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,8 @@ import com.ddmax.zjnucloud.model.news.NewsDetail;
 import com.ddmax.zjnucloud.model.news.SlxxDetail;
 import com.ddmax.zjnucloud.ui.fragment.NewsDetailFragment;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -35,15 +36,15 @@ public class NewsDetailActivity extends AppCompatActivity {
     private boolean isSlxx; // 是否是数理信息新闻
 
     // Toolbar
-    private Toolbar mToolbar;
+    @Bind(R.id.mDetailToolbar) Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
+        ButterKnife.bind(this);
 
         // 设置Toolbar标题，居中，返回
-        mToolbar = (Toolbar) findViewById(R.id.mDetailToolbar);
         mToolbar.setTitle(R.string.detail);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

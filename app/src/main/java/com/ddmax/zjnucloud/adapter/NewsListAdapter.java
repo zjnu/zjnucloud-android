@@ -18,6 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * @author ddMax
  * @since 2015/02/02 20:35.
@@ -41,14 +44,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
-        public final TextView mNewsTitleView, mNewAuthorView, mNewsDateView;
+        @Bind(R.id.titleView) TextView mNewsTitleView;
+        @Bind(R.id.authorView) TextView mNewAuthorView;
+        @Bind(R.id.dateView) TextView mNewsDateView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-            mNewsTitleView = (TextView) itemView.findViewById(R.id.titleView);
-            mNewAuthorView = (TextView) itemView.findViewById(R.id.authorView);
-            mNewsDateView = (TextView) itemView.findViewById(R.id.dateView);
+            ButterKnife.bind(this, mView);
         }
     }
 

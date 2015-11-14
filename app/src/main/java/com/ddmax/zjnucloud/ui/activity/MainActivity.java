@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -45,13 +48,14 @@ import cn.bmob.v3.datatype.BmobFile;
  * 说明：主界面
  */
 public class MainActivity extends AppCompatActivity implements
-        Toolbar.OnMenuItemClickListener, GridView.OnItemClickListener {
+        Toolbar.OnMenuItemClickListener, GridView.OnItemClickListener,
+        View.OnClickListener {
     public static final String TAG = "MainActivity";
 
     // Toolbar
-    private Toolbar mToolbar;
+    @Bind(R.id.mToolbar) Toolbar mToolbar;
     // 主界面图片展示
-    private ViewPager mImageDisplay;
+    @Bind(R.id.image_display) ViewPager mImageDisplay;
     private List<View> mDisplayViews = new ArrayList<>();
     private AutoRoundHandler mHandler = new AutoRoundHandler(new WeakReference<>(this));
     // 展示图片资源ID
@@ -61,12 +65,14 @@ public class MainActivity extends AppCompatActivity implements
             R.drawable.display_img_3
     };
     // GridView展示模块
-    private GridView mGridView;
+    @Bind(R.id.gridView) GridView mGridView;
     // 导航抽屉DrawerLayout, ListView及String[]
-    private DrawerLayout mDrawerLayout;
+    @Bind(R.id.mDrawerLayout) DrawerLayout mDrawerLayout;
+    @Bind(R.id.left_navdrawer) NavigationView mNavigationView;
+
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationView mNavigationView;
     private View mNavigationHeader;
+    private ImageView mAvatarView;
     // 用于返回键退出计时
     private long exitTime = 0;
     private Toast mToast;
@@ -88,12 +94,17 @@ public class MainActivity extends AppCompatActivity implements
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            MainActivity target = mActivity.get();
+            MainActivity activity = mActivity.get();
             switch (msg.what) {
                 case Constants.MSG_LOGIN_SUCCESS:
                     // 登陆成功后，显示用户信息
-                    target.mDrawerLayout.openDrawer(GravityCompat.START);
-                    target.updateUsername();
+                    activity.mDrawerLayout.openDrawer(GravityCompat.START);
+                    activity.updateUsername();
+                    break;
+                case Constants.MSG_LOGOUT_SUCCESS:
+                    activity.onLogout();
+                    break;
+                default:
                     break;
             }
         }
@@ -112,8 +123,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // 设置登录消息处理Handler
         application = ZJNUApplication.getInstance();
-        LoginHandler loginHandler = new LoginHandler(this);
-        application.setLoginHandler(loginHandler);
+        application.setLoginHandler(new LoginHandler(this));
 
     }
 
@@ -127,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             // 取消Toast显示
             mToast.cancel();
-
             finish();
         }
     }
@@ -139,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements
         updateUsername();
         updateNavBackground();
         updateNotification();
-
     }
 
     @Override
@@ -148,12 +156,15 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    @Bind(R.id.footer_exit) LinearLayout mDrawerExitBtn;
+    @Bind(R.id.footer_about) LinearLayout mDrawerAboutBtn;
+    @Bind(R.id.footer_feedback) LinearLayout mDrawerFeedbackBtn;
     /**
      * 初始化界面
      */
     private void initUi() {
 
-        findViewById();
+        ButterKnife.bind(this);
 
         // 初始化Toolbar，设置Toolbar菜单
         setSupportActionBar(mToolbar);
@@ -176,19 +187,9 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerToggle.syncState();
 
         // 绑定登录，注册按钮事件
-        mNavigationHeader.findViewById(R.id.user_login_button).setOnClickListener(btnLogin);
-        mNavigationHeader.findViewById(R.id.user_register_button).setOnClickListener(btnRegister);
-    }
-
-    // 绑定界面UI
-    private void findViewById() {
-        mToolbar = (Toolbar) findViewById(R.id.mToolbar);
-        mGridView = (GridView) findViewById(R.id.gridView);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
-        mNavigationView = (NavigationView)findViewById(R.id.left_navdrawer);
         mNavigationHeader = mNavigationView.inflateHeaderView(R.layout.navigation_header);
-//        mNavigationHeader = getLayoutInflater().inflate(R.layout.navigation_header, null);
-        mImageDisplay = (ViewPager) findViewById(R.id.image_display);
+        mNavigationHeader.findViewById(R.id.user_login_button).setOnClickListener(this);
+        mNavigationHeader.findViewById(R.id.user_register_button).setOnClickListener(this);
     }
 
     // 展示图片
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements
         mImageDisplay.setAdapter(new BasePagerAdapter(this, mDisplayViews));
 
         // 设置ViewPager.OnPageChangeListener
-        mImageDisplay.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mImageDisplay.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -271,9 +272,9 @@ public class MainActivity extends AppCompatActivity implements
         welcomeText.setText(currentUser.getUsername());
         welcomeText.setVisibility(View.VISIBLE);
         // 更改Drawer头像
-        final ImageView avatarView = (ImageView) mNavigationHeader.findViewById(R.id.avatar);
+        mAvatarView = (ImageView) mNavigationHeader.findViewById(R.id.avatar);
         // 设置头像点击事件
-        avatarView.setOnClickListener(new View.OnClickListener() {
+        mAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
@@ -284,9 +285,9 @@ public class MainActivity extends AppCompatActivity implements
         if (currentUser != null) {
             BmobFile avatarFile = currentUser.getAvatar();
             if (avatarFile == null) {
-                avatarView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.avatar_default));
+                mAvatarView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.avatar_default));
             } else {
-                Picasso.with(this).load(Constants.BMOB_FILE_LINK + avatarFile.getUrl()).into(avatarView);
+                Picasso.with(this).load(Constants.BMOB_FILE_LINK + avatarFile.getUrl()).into(mAvatarView);
             }
             // 设置NavigationView header背景
             mNavigationHeader.setBackgroundResource(R.drawable.drawer_background);
@@ -298,8 +299,14 @@ public class MainActivity extends AppCompatActivity implements
         // 显示按钮
         mNavigationHeader.findViewById(R.id.user_login_button).setVisibility(View.VISIBLE);
         mNavigationHeader.findViewById(R.id.user_register_button).setVisibility(View.VISIBLE);
-        // 隐藏登陆信息文字
-        mNavigationHeader.findViewById(R.id.welcome_message).setVisibility(View.INVISIBLE);
+        // 设置空头像
+        mAvatarView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.avatar_empty));
+        mAvatarView.setOnClickListener(null);
+        // 隐藏登录信息文字，去除背景
+        mNavigationHeader.findViewById(R.id.user_account_view).setBackgroundResource(R.color.material_blue);
+        mNavigationHeader.findViewById(R.id.welcome_message).setVisibility(View.GONE);
+        // 弹出成功Toast
+        Toast.makeText(MainActivity.this, getString(R.string.logout_success), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -325,26 +332,26 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
-    /**
-     * Nav Drawer登录按钮点击事件
-     */
-    private View.OnClickListener btnLogin = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.user_login_button:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                break;
+            case R.id.user_register_button:
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                break;
+            case R.id.footer_exit:
+                finish();
+                break;
+            case R.id.footer_about:
+                break;
+            case R.id.footer_feedback:
+                break;
+            default:
+                break;
         }
-    };
-
-    /**
-     * Nav Drawer注册按钮点击事件
-     */
-    private View.OnClickListener btnRegister = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-        }
-    };
-
+    }
 
     /**
      * Handler实现MainActivity中展示图片的自动循环播放

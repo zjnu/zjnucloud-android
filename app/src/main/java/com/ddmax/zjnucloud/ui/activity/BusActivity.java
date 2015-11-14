@@ -30,14 +30,16 @@ import com.ddmax.zjnucloud.model.bus.Stop;
 
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 
 public class BusActivity extends AppCompatActivity implements BaiduMap.OnMarkerClickListener {
     public static final String TAG = "BusActivity";
 
-    private MapView mMapView = null;
-    private BaiduMap mBaiduMap = null;
-    private Toolbar mToolbar = null;
+    @Bind(R.id.bus_map) MapView mMapView;
+    private BaiduMap mBaiduMap;
+    @Bind(R.id.mToolbar) Toolbar mToolbar;
 
     private Map<String, Stop> mAllStops;
 
@@ -61,18 +63,13 @@ public class BusActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_bus);
 
-        findViewById();
+        ButterKnife.bind(this);
+        mBaiduMap = mMapView.getMap();
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_activity_bus);
-    }
-
-    private void findViewById() {
-        mMapView = (MapView) findViewById(R.id.bus_map);
-        mBaiduMap = mMapView.getMap();
-        mToolbar = (Toolbar) findViewById(R.id.mToolbar);
     }
 
     private void initLocation() {
@@ -87,10 +84,10 @@ public class BusActivity extends AppCompatActivity implements BaiduMap.OnMarkerC
 
     private void addBusStopMarkers() {
         mAllStops = Stop.ALL_STOPS;
-        LatLng point = null;
-        OverlayOptions overlayOptions = null;
-        Marker marker = null;
-        BitmapDescriptor bitmap = null;
+        LatLng point;
+        OverlayOptions overlayOptions;
+        Marker marker;
+        BitmapDescriptor bitmap;
         for (int i = 0; i < mAllStops.size(); i++) {
             Stop stop = mAllStops.get(String.valueOf(i));
             //定义Maker坐标点

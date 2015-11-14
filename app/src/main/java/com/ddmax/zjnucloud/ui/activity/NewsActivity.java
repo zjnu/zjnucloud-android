@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,6 +20,9 @@ import com.ddmax.zjnucloud.adapter.BaseFragmentPagerAdapter;
 import com.ddmax.zjnucloud.model.Page;
 import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * @author ddMax
  * @since 2015/02/19
@@ -28,20 +30,16 @@ import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
  */
 
 public class NewsActivity extends AppCompatActivity {
-    // Toolbar, ActionBar, TabLayout
-    private ActionBar mActionBar;
-    private Toolbar mToolbar;
-    private AppBarLayout mAppBar;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-    private FragmentPagerAdapter mFragmentPagerAdapter;
 
-    public NewsActivity() {
-    }
+    @Bind(R.id.mToolbar) Toolbar mToolbar;
+    @Bind(R.id.app_bar) AppBarLayout mAppBar;
+    @Bind(R.id.top_tabs) TabLayout mTabLayout;
+    @Bind(R.id.view_pager) ViewPager mViewPager;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+        ButterKnife.bind(this);
 
         // 初始化ViewPager
         initViewPager();
@@ -91,32 +89,23 @@ public class NewsActivity extends AppCompatActivity {
 
     // 初始化ViewPager
     private void initViewPager() {
-        // ViewPager
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         // ViewPager属性设置
-        mFragmentPagerAdapter = new BaseFragmentPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mFragmentPagerAdapter);
+        FragmentPagerAdapter fragmentPagerAdapter = new BaseFragmentPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(fragmentPagerAdapter);
     }
 
     /**
      * 初始化界面
      */
     private void initView() {
-
         // 初始化Toolbar为ActionBar，设置ActionBar菜单，返回
-        mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         mToolbar.setTitle(R.string.title_activity_news);
         setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-
-        mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // 设置TabLayout
-        mTabLayout = (TabLayout) findViewById(R.id.top_tabs);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setupWithViewPager(mViewPager);
-
     }
 
     @Override

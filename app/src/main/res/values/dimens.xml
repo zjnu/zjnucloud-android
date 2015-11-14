@@ -8,6 +8,13 @@
 	<dimen name="activity_login_horizontal_margin">40dp</dimen>
 	<dimen name="activity_login_vertical_margin">60dp</dimen>
 
+    <!-- Profile Activity margins -->
+    <dimen name="activity_profile_vertical_margin">8dp</dimen>
+    <dimen name="profile_item_height">48dp</dimen>
+    <dimen name="profile_content_margin_left">16dp</dimen>
+    <dimen name="profile_divider_margin_left">56dp</dimen>
+    <dimen name="profile_divider_margin_right">8dp</dimen>
+
 	<dimen name="appbar_elevation">4dp</dimen>
 	<dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">200dp</dimen>

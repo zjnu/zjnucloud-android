@@ -17,6 +17,8 @@ import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.model.User;
 import com.ddmax.zjnucloud.util.RegexUtils;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -28,18 +30,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    private Toolbar mToolbar;
-    private EditText mUsername;
-    private EditText mPassword;
-    private EditText mEmail;
+    @Bind(R.id.username) Toolbar mToolbar;
+    @Bind(R.id.password) EditText mUsername;
+    @Bind(R.id.email) EditText mPassword;
+    @Bind(R.id.registerToolbar) EditText mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        // 初始化各组件
-        findViewById();
+        ButterKnife.bind(this);
 
         // 设置Toolbar
         setSupportActionBar(mToolbar);
@@ -103,13 +103,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void findViewById() {
-        mUsername = (EditText) findViewById(R.id.username);
-        mPassword = (EditText) findViewById(R.id.password);
-        mEmail = (EditText) findViewById(R.id.email);
-        mToolbar = (Toolbar) findViewById(R.id.registerToolbar);
     }
 
     @Override

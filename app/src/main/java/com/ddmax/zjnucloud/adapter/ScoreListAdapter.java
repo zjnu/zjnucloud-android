@@ -21,6 +21,9 @@ import com.ddmax.zjnucloud.model.score.Semester;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * @author ddMax
  * @since 2015/11/3 19:45.
@@ -69,25 +72,18 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      */
     public static class CourseViewHolder extends RecyclerView.ViewHolder {
 
-        CardView cardView;
-        TextView name;
-        TextView credit;
-        TextView gradepoint;
-        TextView mark_final;
-        TextView mark_first;
-        TextView mark_second;
-        TextView id;
+        @Bind(R.id.card_view) CardView cardView;
+        @Bind(R.id.tv_name) TextView name;
+        @Bind(R.id.tv_credit) TextView credit;
+        @Bind(R.id.tv_gp) TextView gradepoint;
+        @Bind(R.id.tv_mark_final) TextView mark_final;
+        @Bind(R.id.tv_mark_first) TextView mark_first;
+        @Bind(R.id.tv_mark_second) TextView mark_second;
+        @Bind(R.id.tv_id) TextView id;
 
         public CourseViewHolder(View itemView) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.card_view);
-            name = (TextView) itemView.findViewById(R.id.tv_name);
-            credit = (TextView) itemView.findViewById(R.id.tv_credit);
-            gradepoint = (TextView) itemView.findViewById(R.id.tv_gp);
-            mark_final = (TextView) itemView.findViewById(R.id.tv_mark_final);
-            mark_first = (TextView) itemView.findViewById(R.id.tv_mark_first);
-            mark_second = (TextView) itemView.findViewById(R.id.tv_mark_second);
-            id = (TextView) itemView.findViewById(R.id.tv_id);
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -213,6 +209,8 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             view.setText(markText);
             view.setTextColor(color);
         }
+        // 设置View可见
+        view.setVisibility(View.VISIBLE);
     }
 
     @Override

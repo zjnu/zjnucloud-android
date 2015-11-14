@@ -3,7 +3,6 @@ package com.ddmax.zjnucloud.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.ddmax.zjnucloud.R;
 
@@ -15,26 +14,24 @@ import java.util.TimerTask;
  * Created by Will on 15-9-18.
  */
 public class SplashActivity extends Activity {
+    private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final String TAG = "SplashActivity";
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
+        setContentView(R.layout.activity_splash);
 
-        Log.i(TAG, "onCreate");
-
-        final Intent it = new Intent(this, MainActivity.class); //需要转向的Activity
+        final Intent intent = new Intent(this, MainActivity.class); //需要转向的Activity
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                startActivity(it); //执行
+                startActivity(intent); //执行
                 finish();
             }
         };
-        timer.schedule(task, 1000 * 2); //2秒后
-
+        timer.schedule(task, 1000 * 1); //1秒后
     }
 }
 

@@ -17,16 +17,19 @@ import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.model.news.BaseNewsDetail;
 import com.ddmax.zjnucloud.model.news.NewsDetail;
-import com.ddmax.zjnucloud.task.GetNewsDetailTask;
-import com.ddmax.zjnucloud.util.AssetsUtils;
 import com.ddmax.zjnucloud.model.news.SlxxDetail;
+import com.ddmax.zjnucloud.task.GetNewsDetailTask;
 import com.ddmax.zjnucloud.task.GetSlxxDetailTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
+import com.ddmax.zjnucloud.util.AssetsUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * @author ddMax
@@ -38,8 +41,8 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
     public static final String ID = "com.ddmax.zjnunews.ui.fragments.NewsDetailFragment.id";
     public static final String TAG = "NewsDetailFragment";
 
-    private WebView mWebView;
-    private ProgressBar mProgressBar;
+    @Bind(R.id.webView) WebView mWebView;
+    @Bind(R.id.progressBar) ProgressBar mProgressBar;
 
     // 从Activity接收过来的新闻ID, isSlxx
     private long mArticleId = 0;
@@ -86,8 +89,7 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
         View rootView = inflater.inflate(R.layout.fragment_news_detail, container, false);
 
         // 设置WebView，进度条
-        mWebView = (WebView) rootView.findViewById(R.id.webView);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        ButterKnife.bind(this, rootView);
 
         setupWebViewDefaults(mWebView);
 

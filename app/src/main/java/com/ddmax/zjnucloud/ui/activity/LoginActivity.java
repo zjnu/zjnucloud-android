@@ -19,6 +19,8 @@ import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.ZJNUApplication;
 import com.ddmax.zjnucloud.model.User;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -29,16 +31,14 @@ import cn.bmob.v3.listener.SaveListener;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
-    private EditText mUsername;
-    private EditText mPassword;
+    @Bind(R.id.username) EditText mUsername;
+    @Bind(R.id.password) EditText mPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        // 初始化View
-        initView();
+        ButterKnife.bind(this);
 
         // 设置Toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.loginToolbar);
@@ -86,17 +86,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(int i, String s) {
                         loginDialog.dismiss();
                         Toast.makeText(LoginActivity.this, R.string.login_fail, Toast.LENGTH_LONG).show();
-                        Log.d(TAG, "登陆失败：" + s);
+                        Log.d(TAG, "登录失败：" + s);
                     }
                 });
             }
         });
 
-    }
-
-    private void initView() {
-        mUsername = (EditText) findViewById(R.id.username);
-        mPassword = (EditText) findViewById(R.id.password);
     }
 
     @Override

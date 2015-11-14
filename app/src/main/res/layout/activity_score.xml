@@ -11,38 +11,61 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleGravity="bottom|center_horizontal"
-            app:expandedTitleMarginTop="16dp">
+            app:expandedTitleGravity="center_horizontal"
+            app:expandedTitleTextAppearance="@color/white"
+            app:expandedTitleMarginBottom="90dp">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+            <LinearLayout
+                android:id="@+id/score_bar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark"
-                app:title="@string/score_title"
-                />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="12dp"
+                app:layout_collapseMode="parallax">
 
-            <RelativeLayout
-                android:id="@+id/score_heading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="parallax"
-                app:layout_anchor="@id/toolbar"
-                android:layout_gravity="bottom|center_horizontal"
-                android:gravity="bottom">
+                <LinearLayout
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:baselineAligned="true">
+
+                    <include
+                        android:id="@+id/item_credit"
+                        layout="@layout/item_bar"
+                        android:visibility="gone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        />
+
+                    <include
+                        android:id="@+id/item_gpa"
+                        layout="@layout/item_bar"
+                        android:visibility="gone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/score_subtitle"
@@ -52,10 +75,20 @@
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:visibility="gone"
-                    android:layout_gravity="bottom|center"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_marginBottom="28dp" />
-            </RelativeLayout>
+                    app:layout_collapseMode="parallax"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="@string/score_title"
+                app:titleTextColor="@color/white"
+                />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -97,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/server_error"/>
+            android:text="@string/score_server_error"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
