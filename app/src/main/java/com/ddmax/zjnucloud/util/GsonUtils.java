@@ -1,6 +1,7 @@
 package com.ddmax.zjnucloud.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.ddmax.zjnucloud.model.news.News;
 import com.ddmax.zjnucloud.model.news.NewsDetail;
@@ -10,6 +11,7 @@ import com.ddmax.zjnucloud.model.news.SlxxList;
 import com.ddmax.zjnucloud.model.score.Score;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
@@ -21,15 +23,22 @@ import java.util.HashMap;
  */
 public class GsonUtils {
 
+    private static final String TAG = "GsonUtils";
+
     public static Score getScore(String content){
         if (TextUtils.isEmpty(content)) return null;
 
         Gson gson = new GsonBuilder()
                 .serializeNulls()
                 .create();
-        Score score = gson.fromJson(content, Score.class);
-
-        return score != null ? score : null;
+        try {
+            Score score = gson.fromJson(content, Score.class);
+            return score != null ? score : null;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Gson解析错误，未能获取到正确内容?");
+            return null;
+        }
     }
 
     // 返回新闻列表
@@ -39,9 +48,15 @@ public class GsonUtils {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy年MM月dd日")
                 .create();
-        NewsList newsModel = gson.fromJson(content, NewsList.class);
+        try {
+            NewsList newsModel = gson.fromJson(content, NewsList.class);
+            return newsModel != null ? newsModel : null;
+        } catch (JsonSyntaxException e){
+            e.printStackTrace();
+            Log.e(TAG, "Gson解析错误，未能获取到正确内容?");
+            return null;
+        }
 
-        return newsModel != null ? newsModel : null;
     }
 
     // 返回新闻详情对象
@@ -51,9 +66,15 @@ public class GsonUtils {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy年MM月dd日")
                 .create();
-        NewsDetail newsDetail = gson.fromJson(content, NewsDetail.class);
+        try {
+            NewsDetail newsDetail = gson.fromJson(content, NewsDetail.class);
+            return newsDetail != null ? newsDetail : null;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Gson解析错误，未能获取到正确内容?");
+            return null;
+        }
 
-        return newsDetail != null ? newsDetail : null;
     }
 
     // 返回数理信息新闻列表对象
@@ -61,9 +82,15 @@ public class GsonUtils {
         if (TextUtils.isEmpty(content)) return null;
 
         Gson gson = new GsonBuilder().create();
-        SlxxList newsListModel = gson.fromJson(content, SlxxList.class);
+        try {
+            SlxxList newsListModel = gson.fromJson(content, SlxxList.class);
+            return newsListModel != null ? newsListModel : null;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Gson解析错误，未能获取到正确内容?");
+            return null;
+        }
 
-        return newsListModel != null ? newsListModel : null;
     }
 
     // 返回数理信息新闻详情对象
@@ -71,8 +98,14 @@ public class GsonUtils {
         if (TextUtils.isEmpty(content)) return null;
 
         Gson gson = new GsonBuilder().create();
-	    SlxxDetail newsDetail = gson.fromJson(content, SlxxDetail.class);
+        try {
+            SlxxDetail newsDetail = gson.fromJson(content, SlxxDetail.class);
+            return newsDetail != null ? newsDetail : null;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Gson解析错误，未能获取到正确内容?");
+            return null;
+        }
 
-        return newsDetail != null ? newsDetail : null;
     }
 }
