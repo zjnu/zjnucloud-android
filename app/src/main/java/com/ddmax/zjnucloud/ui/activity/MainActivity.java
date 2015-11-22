@@ -38,6 +38,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements
     // 导航抽屉DrawerLayout, ListView及String[]
     @Bind(R.id.mDrawerLayout) DrawerLayout mDrawerLayout;
     @Bind(R.id.left_navdrawer) NavigationView mNavigationView;
+    @Bind(R.id.footer_exit) LinearLayout mDrawerExitBtn;
+    @Bind(R.id.footer_about) LinearLayout mDrawerAboutBtn;
+    @Bind(R.id.footer_feedback) LinearLayout mDrawerFeedbackBtn;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private View mNavigationHeader;
@@ -156,9 +160,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    @Bind(R.id.footer_exit) LinearLayout mDrawerExitBtn;
-    @Bind(R.id.footer_about) LinearLayout mDrawerAboutBtn;
-    @Bind(R.id.footer_feedback) LinearLayout mDrawerFeedbackBtn;
     /**
      * 初始化界面
      */
@@ -333,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    @OnClick({R.id.footer_exit, R.id.footer_about, R.id.footer_feedback})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_login_button:
@@ -345,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements
                 finish();
                 break;
             case R.id.footer_about:
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 break;
             case R.id.footer_feedback:
                 break;

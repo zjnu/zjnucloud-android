@@ -30,10 +30,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    @Bind(R.id.username) Toolbar mToolbar;
-    @Bind(R.id.password) EditText mUsername;
-    @Bind(R.id.email) EditText mPassword;
-    @Bind(R.id.registerToolbar) EditText mEmail;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.username) EditText mUsername;
+    @Bind(R.id.password) EditText mPassword;
+    @Bind(R.id.email) EditText mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

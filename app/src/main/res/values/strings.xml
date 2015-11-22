@@ -81,4 +81,7 @@
     <string name="profile_item_password">修改密码</string>
     <string name="profile_button_logout">退出登录</string>
 
+    <!-- 关于界面 -->
+    <string name="title_activity_about">关于我们</string>
+
 </resources>
