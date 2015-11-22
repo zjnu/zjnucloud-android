@@ -94,6 +94,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/score_list"
         android:layout_height="match_parent"
@@ -101,22 +102,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_refresh_white_48dp"/>
-
     <LinearLayout
         android:id="@+id/error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
+        android:layout_marginTop="160dp"
         android:layout_gravity="center"
         android:gravity="center">
 
@@ -132,6 +124,17 @@
             android:layout_gravity="center"
             android:text="@string/score_server_error"/>
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_refresh_white_48dp"/>
+
+
 
 </android.support.design.widget.CoordinatorLayout>
 
