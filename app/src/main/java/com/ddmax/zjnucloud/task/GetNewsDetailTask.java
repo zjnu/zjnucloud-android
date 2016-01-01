@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.ddmax.zjnucloud.model.news.NewsDetail;
 import com.ddmax.zjnucloud.util.GsonUtils;
-import com.ddmax.zjnucloud.util.RequestUtil;
+import com.ddmax.zjnucloud.util.RequestUtils;
 
 import java.io.IOException;
 
@@ -36,7 +36,7 @@ public class GetNewsDetailTask extends BaseGetDataTask<NewsDetail> {
         NewsDetail mNewsDetailModel = null;
 
         try {
-            detailContent = RequestUtil.getString(url);
+            detailContent = RequestUtils.get(url);
             mNewsDetailModel = GsonUtils.getNewsDetail(detailContent);
 
         } catch (IOException e) {

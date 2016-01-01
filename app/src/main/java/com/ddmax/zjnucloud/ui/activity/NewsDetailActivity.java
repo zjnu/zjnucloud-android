@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.model.news.BaseNewsDetail;
 import com.ddmax.zjnucloud.model.news.News;
 import com.ddmax.zjnucloud.model.news.NewsDetail;
@@ -24,7 +25,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  * @since 2015/02/13
  * 说明：新闻详情页Activity
  */
-public class NewsDetailActivity extends AppCompatActivity {
+public class NewsDetailActivity extends BaseActivity {
 
     private static final String NEWS_ID = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_id";
     private static final String NEWS_DETAIL_MODEL = "com.ddmax.zjnunews.activities.NewsDetailActivity.news_detail_model";

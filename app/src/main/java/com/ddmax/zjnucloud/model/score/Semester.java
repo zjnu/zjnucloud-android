@@ -1,5 +1,9 @@
 package com.ddmax.zjnucloud.model.score;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,24 +11,18 @@ import java.util.List;
  * @author ddMax
  * @since 2015/11/4 20:46.
  */
-public class Semester implements Serializable {
+@Table(name = "score_semester")
+public class Semester extends Model implements Serializable {
 
-    private String semester;
-    private List<Course> values;
+    @Column(name = "semester")
+    public String semester;
+    @Column(name = "gpa")
+    public String gpa;
+    @Column(name = "vals")
+    public List<Score> values;
 
-    public String getSemester() {
-        return semester;
+    public List<Score> courses() {
+        return getMany(Score.class, "Semester");
     }
 
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
-
-    public List<Course> getValues() {
-        return values;
-    }
-
-    public void setValues(List<Course> values) {
-        this.values = values;
-    }
 }

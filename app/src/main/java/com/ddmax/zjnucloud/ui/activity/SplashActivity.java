@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.base.BaseActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,7 +32,7 @@ public class SplashActivity extends Activity {
                 finish();
             }
         };
-        timer.schedule(task, 1000 * 1); //1秒后
+        timer.schedule(task, 1000); //1秒后
     }
 }
 

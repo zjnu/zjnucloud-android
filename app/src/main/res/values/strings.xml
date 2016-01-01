@@ -5,11 +5,15 @@
     <string name="title_activity_news">校园新闻</string>
     <string name="action_search">搜索</string>
     <string name="action_share">分享</string>
-    <string name="action_refresh">刷新成绩数据</string>
     <string name="action_settings">设置</string>
     <string name="detail">详情</string>
     <string name="content_loading">正在玩命加载中。。。</string>
+    <string name="no_more_data">没有更多了</string>
     <string name="exit_hint">再按一次退出</string>
+    <string name="dialog_hint">提示</string>
+    <string name="try_again">重试</string>
+    <string name="request_fail">网络请求超时或失败，请检查您的网络设置！</string>
+
     <string name="placeholder_for_navdrawer_item">item</string>
 
     <!-- 用户模块相关 -->
@@ -25,6 +29,7 @@
     <string name="action_sign_in">登录</string>
     <string name="action_sign_in_short">登录</string>
 
+    <!-- 用户登录注册相关 -->
     <string name="register_success">注册成功！</string>
     <string name="register_fail">注册失败！</string>
     <string name="login_info">玩命登录中。。。</string>
@@ -36,6 +41,7 @@
     <string name="error_invalid_email">邮箱地址格式不正确</string>
     <string name="error_incorrect_password">密码长度不能小于6位</string>
 
+    <!-- 主页模块 -->
     <string-array name="module_titles">
         <item>新闻聚合</item>
         <item>校历</item>
@@ -48,6 +54,7 @@
         <item>后勤中心</item>
     </string-array>
 
+    <!-- 左侧抽屉 -->
     <string name="drawer_dynamics">我的动态</string>
     <string name="drawer_explore">发现</string>
     <string name="drawer_notification">消息通知</string>
@@ -56,19 +63,74 @@
     <string name="drawer_footer_about">关于</string>
     <string name="drawer_footer_feedback">反馈</string>
 
-    <!-- 查成绩模块 -->
+    <!-- 校历模块相关 -->
+    <string name="title_activity_calendar">浙师大2015-2016学年校历</string>
+    <string name="calendar_no_event">本月无校历活动</string>
+
+    <!-- 讲座预告模块相关 -->
+    <string name="title_activity_speech">讲座预告</string>
+    <string name="title_speech_detail">详情</string>
+
+    <!-- Bmob相关 -->
+    <string name="bmob_not_login">您需要登录后才能使用该功能，现在就去登录吧！</string>
+    <string name="action_to_bmob_login">前去登录</string>
+
+    <!-- 教务系统相关 -->
+    <string name="emis_not_bind">您当前还未绑定教务系统账号，是否现在去绑定？</string>
+    <string name="action_to_emis_bind">现在绑定</string>
+    <string name="title_activity_bind">教务系统账号绑定</string>
+    <string name="prompt_emis_username">教务账号</string>
+    <string name="prompt_emis_password">教务密码</string>
+    <string name="action_confirm_bind">确认绑定</string>
+    <string name="binding_info">教务账号绑定中，请耐心等待！</string>
+    <string name="bind_success">绑定成功！</string>
+    <string name="emis_request_timeout">请求超时，似乎您的网络不太好呢，再试一次吧！</string>
+    <string name="unbind_warning_info">解绑教务账号后，您本地缓存的成绩、课表、考试安排等数据将会被清空。确定要解绑？</string>
+    <string name="unbind_confirm">确定解绑</string>
+    <string name="unbinding_info">正在解除绑定，请稍侯。。。</string>
+    <string name="unbind_success">解绑成功</string>
+    <string name="unbind_fail">解绑失败，重新试一下吧！</string>
+    <string name="emis_token_invalid">用户认证失败，请到个人资料界面解绑后重新绑定教务账号</string>
+    <string name="action_confirm_rebind">重新绑定</string>
+    <string name="emis_server_error">我们的服务器出现了异常，程序员正玩命抢修中&#8230;</string>
+    <string name="emis_error">教务系统暂时无法访问，过会儿再试吧&#8230;</string>
+
+    <!-- 成绩查询模块 -->
+    <string name="title_activity_score">成绩查询</string>
     <string name="course_credit">学分：%1$s</string>
     <string name="course_mark_first">正考：%1$s</string>
     <string name="course_mark_second">补考：%1$s</string>
     <string name="course_gradepoint">绩点：%1$s</string>
     <string name="course_id">课程序号：%1$s</string>
-    <string name="score_title">成绩查询</string>
     <string name="score_subtitle">您历年的成绩如下</string>
     <string name="score_credit">所得总学分</string>
     <string name="score_gpa">平均绩点</string>
-    <string name="score_server_error">我们的服务器出现了异常，程序员正玩命抢修中&#8230;</string>
-    <string name="score_emis_error">教务系统暂时无法访问，过会儿再试吧&#8230;</string>
     <string name="score_refreshing_score">正在刷新成绩数据，请稍候&#8230;</string>
+
+    <!-- 考试安排模块 -->
+    <string name="title_activity_exam">考试安排</string>
+    <string name="exam_empty_title">同学</string>
+    <string name="exam_subtitle">您这学期的考试安排情况如下</string>
+    <string name="exam_id">课程代码：%1$s</string>
+    <string name="exam_name">课程名称：%1$s</string>
+    <string name="exam_class">教学班：%1$s</string>
+    <string name="exam_teacher">任课教师：%1$s</string>
+    <string name="exam_date">考试日期：%1$s</string>
+    <string name="exam_time">考试时间：%1$s</string>
+    <string name="exam_place">考试地点：%1$s</string>
+    <string name="exam_student_no">考生编号：%1$s</string>
+    <string name="exam_refreshing_exam">正在刷新考试安排数据，请稍候&#8230;</string>
+
+    <!-- 课表模块 -->
+    <string name="title_activity_course">课表</string>
+    <string name="course_toolbar_title">我的课表</string>
+    <string name="course_refreshing_course">正在刷新课表数据，请稍候&#8230;</string>
+
+    <!-- 图书馆模块相关 -->
+    <string name="title_activity_library">图文馆藏搜索</string>
+
+    <!-- 后勤模块相关 -->
+    <string name="title_activity_logistics">浙师微后勤</string>
 
     <!-- 个人资料 -->
     <string name="title_activity_profile">%1$s</string>
@@ -77,11 +139,15 @@
     <string name="profile_item_bar_explore">发现</string>
     <string name="profile_item_bar_notification">通知</string>
     <string name="profile_item_bind_emis">绑定教务系统账号</string>
+    <string name="profile_item_unbind_emis">解除绑定：%1$s</string>
     <string name="profile_item_avatar">修改头像</string>
     <string name="profile_item_password">修改密码</string>
     <string name="profile_button_logout">退出登录</string>
 
     <!-- 关于界面 -->
     <string name="title_activity_about">关于我们</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

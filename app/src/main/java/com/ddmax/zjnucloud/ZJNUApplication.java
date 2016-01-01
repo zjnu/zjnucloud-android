@@ -3,7 +3,8 @@ package com.ddmax.zjnucloud;
 import android.app.Application;
 import android.os.Build;
 
-import com.ddmax.zjnucloud.db.NewsDataSource;
+import com.activeandroid.ActiveAndroid;
+import com.ddmax.zjnucloud.db.NewsDbHelper;
 import com.ddmax.zjnucloud.ui.activity.MainActivity;
 
 /**
@@ -16,9 +17,19 @@ public class ZJNUApplication extends Application {
     private static final String TAG = "ZJNUApplication";
 
     private static ZJNUApplication mApplication;
-    private static NewsDataSource mNewsDataSource;
+    private static NewsDbHelper mNewsDbHelper;
     // Android SDK Version Code
     private int sdkVersion = Build.VERSION.SDK_INT;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ActiveAndroid.initialize(this);
+
+        mApplication = this;
+        mNewsDbHelper = new NewsDbHelper(getApplicationContext());
+
+    }
 
     private MainActivity.LoginHandler loginHandler;
 
@@ -30,14 +41,6 @@ public class ZJNUApplication extends Application {
         this.loginHandler = loginHandler;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        mApplication = this;
-        mNewsDataSource = new NewsDataSource(getApplicationContext());
-
-    }
 
     public static ZJNUApplication getInstance() {
         if (mApplication == null) {
@@ -46,8 +49,8 @@ public class ZJNUApplication extends Application {
         return mApplication;
     }
 
-    public static NewsDataSource getDataSource() {
-        return mNewsDataSource;
+    public static NewsDbHelper getNewsDbHelper() {
+        return mNewsDbHelper;
     }
 
     public int getSdkVersion() {

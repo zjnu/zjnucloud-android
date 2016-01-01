@@ -54,4 +54,6 @@
     line-height: 1.6em;
     font-size: 17px;
     margin: 10px 0 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
 }

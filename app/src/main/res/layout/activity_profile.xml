@@ -11,7 +11,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
+        android:layout_height="@dimen/app_bar_height_score"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -125,6 +125,41 @@
                         android:layout_marginLeft="@dimen/activity_vertical_margin"
                         android:gravity="start|center_vertical"
                         android:text="@string/profile_item_bind_emis"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 解绑教务账号 -->
+            <LinearLayout
+                android:id="@+id/item_unbind_emis"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:gravity="start|center_horizontal"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="@dimen/profile_content_margin_left">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:gravity="start|center_vertical"
+                        android:tint="@android:color/darker_gray"
+                        android:src="@drawable/ic_insert_link_black_24dp"/>
+                    <TextView
+                        android:id="@+id/tv_unbind_emis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/profile_item_unbind_emis"
                         android:textSize="14sp"
                         android:textColor="@color/black"/>
                 </LinearLayout>

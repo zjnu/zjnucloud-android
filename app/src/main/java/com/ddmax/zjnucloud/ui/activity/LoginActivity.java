@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.ZJNUApplication;
+import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.model.User;
 
 import butterknife.Bind;
@@ -28,7 +29,7 @@ import cn.bmob.v3.listener.SaveListener;
  * @since 2015/03/15 16:20
  * 说明：用户登录界面
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     public static final String TAG = "LoginActivity";
     @Bind(R.id.username) EditText mUsername;
@@ -79,6 +80,8 @@ public class LoginActivity extends AppCompatActivity {
                         loginDialog.dismiss();
                         Toast.makeText(LoginActivity.this, getString(R.string.login_success, user.getUsername()), Toast.LENGTH_LONG).show();
                         application.getLoginHandler().sendEmptyMessage(Constants.MSG_LOGIN_SUCCESS);
+                        // 设置结果码
+                        setResult(RESULT_OK);
                         LoginActivity.this.finish();
                     }
 
@@ -98,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                setResult(RESULT_CANCELED);
                 finish();
                 break;
             default:

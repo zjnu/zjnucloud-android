@@ -25,6 +25,7 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.model.bus.Path;
 import com.ddmax.zjnucloud.model.bus.Stop;
 
@@ -34,7 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 
-public class BusActivity extends AppCompatActivity implements BaiduMap.OnMarkerClickListener {
+public class BusActivity extends BaseActivity implements BaiduMap.OnMarkerClickListener {
     public static final String TAG = "BusActivity";
 
     @Bind(R.id.bus_map) MapView mMapView;

@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.model.score.Course;
 import com.ddmax.zjnucloud.model.score.Score;
+import com.ddmax.zjnucloud.model.score.ScoreList;
 import com.ddmax.zjnucloud.model.score.Semester;
 
 import java.util.ArrayList;
@@ -29,42 +29,21 @@ import butterknife.ButterKnife;
  * @since 2015/11/3 19:45.
  */
 public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    /**
-     * TODO: 1. 正考、补考滑动后消失
-     */
     private static final int COURSE_ITEM = 0;
     private static final int SEMESTER_ITEM = 1;
 
     private Context mContext;
     private List<String> mTitleList;
-    private List<Course> mCourseList;
+    private List<Score> mScoreList;
     // 用于记录学期标题的位置
     private List<Integer> positions;
 
-    public ScoreListAdapter(Score score, Context mContext) {
+    public ScoreListAdapter(ScoreList scoreList, Context mContext) {
         this.mContext = mContext;
         this.mTitleList = new ArrayList<>();
-        this.mCourseList = new ArrayList<>();
-        this.positions = new ArrayList<>(score.getScores().size());
-        // 初始化数据
-        List<Semester> semesters = score.getScores();
-        int lastCoursesSize = 0; // 上个学期的课程数量
-        for (int i = 0; i < semesters.size(); i++) {
-            Semester semester = semesters.get(i);
-            // 添加学期名称
-            mTitleList.add(semester.getSemester());
-            // 添加当前学期所有课程到mCourseList
-            List<Course> courses = semester.getValues();
-            mCourseList.addAll(courses);
-            // 要添加学期名称的位置
-            if (i == 0) {
-                positions.add(0);
-                lastCoursesSize = courses.size();
-            } else {
-                int position = positions.get(i-1) + lastCoursesSize;
-                positions.add(position);
-            }
-        }
+        this.mScoreList = new ArrayList<>();
+        this.positions = new ArrayList<>();
+        initData(scoreList);
     }
 
     /**
@@ -74,7 +53,7 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Bind(R.id.card_view) CardView cardView;
         @Bind(R.id.tv_name) TextView name;
-        @Bind(R.id.tv_credit) TextView credit;
+        @Bind(R.id.tv_date) TextView credit;
         @Bind(R.id.tv_gp) TextView gradepoint;
         @Bind(R.id.tv_mark_final) TextView mark_final;
         @Bind(R.id.tv_mark_first) TextView mark_first;
@@ -123,37 +102,37 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Course course = mCourseList.get(position);
+        Score score = mScoreList.get(position);
 
-        if (course == null) {
+        if (score == null) {
             return;
         }
 
         if (holder instanceof SemesterViewHolder) {
             // 若当前课程卡片位置应有学期标题
             String title = mTitleList.get(positions.indexOf(position));
-            bindSemesterItem(course, title, (SemesterViewHolder) holder);
+            bindSemesterItem(score, title, (SemesterViewHolder) holder);
         } else if (holder instanceof CourseViewHolder) {
-            bindCourseItem(course, (CourseViewHolder) holder);
+            bindCourseItem(score, (CourseViewHolder) holder);
         }
     }
 
-    private void bindCourseItem(Course course, CourseViewHolder holder) {
-        holder.name.setText(course.getName());
-        holder.credit.setText(mContext.getString(R.string.course_credit, course.getCredit()));
+    private void bindCourseItem(Score score, CourseViewHolder holder) {
+        holder.name.setText(score.name);
+        holder.credit.setText(mContext.getString(R.string.course_credit, score.credit));
         // 判断并设置重修、补考、正考成绩
-        if (!TextUtils.isEmpty(course.getRetakemark())) {
-            setMarkText(holder.mark_final, null, course.getRetakemark());
-            setMarkText(holder.mark_first, mContext.getString(R.string.course_mark_first), course.getMark());
-            setMarkText(holder.mark_second, mContext.getString(R.string.course_mark_second), course.getMakeupmark());
-        } else if (!TextUtils.isEmpty(course.getMakeupmark())) {
-            setMarkText(holder.mark_final, null, course.getMakeupmark());
-            setMarkText(holder.mark_first, mContext.getString(R.string.course_mark_first), course.getMark());
+        if (!TextUtils.isEmpty(score.retakemark)) {
+            setMarkText(holder.mark_final, null, score.retakemark);
+            setMarkText(holder.mark_first, mContext.getString(R.string.course_mark_first), score.mark);
+            setMarkText(holder.mark_second, mContext.getString(R.string.course_mark_second), score.makeupmark);
+        } else if (!TextUtils.isEmpty(score.makeupmark)) {
+            setMarkText(holder.mark_final, null, score.makeupmark);
+            setMarkText(holder.mark_first, mContext.getString(R.string.course_mark_first), score.mark);
             if (holder.mark_second.getVisibility() != View.GONE) {
                 holder.mark_second.setVisibility(View.GONE);
             }
         } else {
-            setMarkText(holder.mark_final, null, course.getMark());
+            setMarkText(holder.mark_final, null, score.mark);
             if (holder.mark_first.getVisibility() != View.GONE) {
                 holder.mark_first.setVisibility(View.GONE);
             }
@@ -161,12 +140,12 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.mark_second.setVisibility(View.GONE);
             }
         }
-        holder.gradepoint.setText(mContext.getString(R.string.course_gradepoint, course.getGradepoint()));
-        holder.id.setText(mContext.getString(R.string.course_id, course.getId()));
+        holder.gradepoint.setText(mContext.getString(R.string.course_gradepoint, score.gradepoint));
+        holder.id.setText(mContext.getString(R.string.course_id, score.id));
     }
 
-    private void bindSemesterItem(Course course, String title, SemesterViewHolder holder) {
-        bindCourseItem(course, holder);
+    private void bindSemesterItem(Score score, String title, SemesterViewHolder holder) {
+        bindCourseItem(score, holder);
         holder.semester.setText(title);
     }
 
@@ -213,6 +192,40 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         view.setVisibility(View.VISIBLE);
     }
 
+    private void initData(ScoreList scoreList) {
+        // 初始化数据
+        if (scoreList != null) {
+            List<Semester> semesters = scoreList.scores;
+            int lastCoursesSize = 0; // 上个学期的课程数量
+            // 清空列表中已有的数据
+            this.mTitleList = new ArrayList<>();
+            this.mScoreList = new ArrayList<>();
+            this.positions = new ArrayList<>();
+            for (int i = 0; i < semesters.size(); i++) {
+                Semester semester = semesters.get(i);
+                // 添加学期名称
+                mTitleList.add(semester.semester);
+                // 添加当前学期所有课程到mCourseList
+                List<Score> scores = semester.values;
+                mScoreList.addAll(scores);
+                // 要添加学期名称的位置
+                if (i == 0) {
+                    positions.add(0);
+                    lastCoursesSize = scores.size();
+                } else {
+                    int position = positions.get(i - 1) + lastCoursesSize;
+                    lastCoursesSize = scores.size();
+                    positions.add(position);
+                }
+            }
+        }
+    }
+
+    public void updateData(ScoreList scoreList) {
+        this.initData(scoreList);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (positions.contains(position)) {
@@ -223,7 +236,7 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return mCourseList.size();
+        return mScoreList.size();
     }
 
     @Override

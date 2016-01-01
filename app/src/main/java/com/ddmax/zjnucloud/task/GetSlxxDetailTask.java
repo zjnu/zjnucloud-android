@@ -5,7 +5,7 @@ import android.content.Context;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.model.news.SlxxDetail;
-import com.ddmax.zjnucloud.util.RequestUtil;
+import com.ddmax.zjnucloud.util.RequestUtils;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ public class GetSlxxDetailTask extends BaseGetDataTask<SlxxDetail> {
 		SlxxDetail mSlxxDetailModel = null;
 
 		try {
-			detailContent = RequestUtil.getString(Constants.URL.NEWS.SLXX_DETAIL + params[0]);
+			detailContent = RequestUtils.get(Constants.URL.NEWS.SLXX_DETAIL + params[0]);
 			mSlxxDetailModel = GsonUtils.getSlxxDetail(detailContent);
 
 		} catch (IOException e) {

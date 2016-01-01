@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ddmax.zjnucloud" >
+    package="com.ddmax.zjnucloud">
 
     <uses-sdk tools:overrideLibrary="jp.wasabeef.recyclerview" />
 
@@ -22,10 +22,11 @@
 
     <!-- <uses-permission android:name="android.permission.WRITE_SETTINGS" /> -->
     <application
+        android:name=".ZJNUApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!-- 百度LBS API -->
         <meta-data
@@ -40,11 +41,29 @@
             android:name="UMENG_CHANNEL"
             android:value="Channel ID" />
 
-        <!-- Guide Activity -->
+        <!-- ActiveAndroid -->
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="emis.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="com.ddmax.zjnucloud.model.EmisUser, com.ddmax.zjnucloud.model.score.ScoreList,
+                           com.ddmax.zjnucloud.model.score.Semester, com.ddmax.zjnucloud.model.score.Score,
+                           com.ddmax.zjnucloud.model.exam.Exam, com.ddmax.zjnucloud.model.exam.ExamList,
+                           com.ddmax.zjnucloud.model.course.Course, com.ddmax.zjnucloud.model.course.CourseList" />
+        <meta-data
+            android:name="AA_SERIALIZERS"
+            android:value="com.ddmax.zjnucloud.common.aa.ListSerializer" />
+
+        <!-- 引导界面 -->
         <activity
             android:name=".ui.activity.GuideActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,11 +71,12 @@
             </intent-filter>
         </activity>
 
-        <!-- SplashActivity -->
+        <!-- 启动界面 -->
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -64,34 +84,73 @@
             </intent-filter>
         </activity>
 
-        <!-- Main Activity -->
+        <!-- 主界面 -->
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ui.activity.NewsDetailActivity" >
         </activity>
         <activity
             android:name=".ui.activity.NewsActivity"
-            android:label="@string/title_activity_news" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_news" />
+        <activity
+            android:name=".ui.activity.NewsDetailActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".ui.activity.RegisterActivity"
-            android:label="@string/title_activity_register" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_register" />
         <activity
             android:name=".ui.activity.BusActivity"
-            android:label="@string/title_activity_bus" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_bus" />
+        <activity
+            android:name=".ui.activity.ScoreActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_score"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activity.ExamActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_score"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activity.CourseActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_course"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activity.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activity.AboutActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activity.BindActivity" />
+        <activity
+            android:name=".ui.activity.CalendarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SpeechActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SpeechDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".base.BaseWebActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Mob ShareSDK -->
         <activity
@@ -99,12 +158,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <data android:scheme="tencent100371282" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -117,24 +174,8 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".ui.activity.ScoreActivity"
-            android:label="@string/title_activity_score"
-            android:theme="@style/AppTheme" >
-        </activity>
 
         <!-- <uses-library android:name="android-test-runner" /> -->
-
-        <activity
-            android:name=".ui.activity.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme" >
-        </activity>
-        <activity
-            android:name=".ui.activity.AboutActivity"
-            android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme" >
-        </activity>
     </application>
 
 </manifest>

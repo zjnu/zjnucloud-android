@@ -5,7 +5,7 @@ import android.content.Context;
 import com.ddmax.zjnucloud.model.news.News;
 import com.ddmax.zjnucloud.model.news.NewsList;
 import com.ddmax.zjnucloud.util.GsonUtils;
-import com.ddmax.zjnucloud.util.RequestUtil;
+import com.ddmax.zjnucloud.util.RequestUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -32,7 +32,7 @@ public class GetNewsTask extends BaseGetDataTask<LinkedList<News>> {
         LinkedList<News> newsList = null;
 
         try {
-            newContent = RequestUtil.getString(params[0]);
+            newContent = RequestUtils.get(params[0]);
             NewsList newsListModel = GsonUtils.getNewsList(newContent);
             // 真正返回的新闻集合
             newsList = newsListModel.getResult();
@@ -42,7 +42,6 @@ public class GetNewsTask extends BaseGetDataTask<LinkedList<News>> {
 
         } catch (IOException e) {
             e.printStackTrace();
-
             this.isRefreshSuccess = false;
             this.e = e;
         }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.util.DensityUtils;
 
 /**
  * @author ddMax
@@ -38,9 +39,9 @@ public class ModulesViewAdapter extends BaseAdapter {
         this.mContext = mContext;
         mModulesTitles = mContext.getResources().getStringArray(R.array.module_titles);
         // 获得宽度，并计算每个item的宽高
-        this.width = getWidth((Activity) mContext);
+        this.width = DensityUtils.getWidth((Activity) mContext);
         // Item宽度 = (屏幕宽度 - (每行有几个间距 * 间距宽度)) / 每行有几个Item
-        width = (width - (5 * dp2Px(20))) / 4;
+        width = (width - (5 * DensityUtils.dip2px(mContext, 20))) / 4;
     }
 
     @Override
@@ -60,7 +61,6 @@ public class ModulesViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_module, parent, false);
         }
@@ -76,16 +76,4 @@ public class ModulesViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    // 获得当前Activity所在Window的宽度
-    private int getWidth(Activity activity){
-        int width;
-        width = activity.getWindowManager().getDefaultDisplay().getWidth();
-        return width;
-    }
-
-    // dp转换为px
-    private int dp2Px(float dp) {
-        final float scale = mContext.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
 }

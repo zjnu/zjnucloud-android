@@ -9,8 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.base.BaseActivity;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

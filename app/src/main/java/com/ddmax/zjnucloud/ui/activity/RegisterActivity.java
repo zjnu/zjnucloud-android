@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.model.User;
 import com.ddmax.zjnucloud.util.RegexUtils;
 
@@ -26,7 +27,7 @@ import cn.bmob.v3.listener.SaveListener;
  * @since 2015/03/15 18:30
  * 说明：用户注册界面
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private static final String TAG = "RegisterActivity";
 

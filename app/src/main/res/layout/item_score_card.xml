@@ -30,7 +30,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/tv_credit"
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_name"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_name"
             android:layout_alignStart="@+id/tv_name"
-            android:layout_below="@+id/tv_credit"
+            android:layout_below="@+id/tv_date"
             android:layout_marginBottom="12dp"
             android:text="@string/course_gradepoint"
             android:textAppearance="?android:attr/textAppearanceMedium"

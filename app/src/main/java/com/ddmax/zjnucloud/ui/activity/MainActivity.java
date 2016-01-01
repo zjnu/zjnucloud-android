@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +28,10 @@ import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.ZJNUApplication;
 import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
 import com.ddmax.zjnucloud.adapter.ModulesViewAdapter;
+import com.ddmax.zjnucloud.base.BaseActivity;
+import com.ddmax.zjnucloud.base.BaseWebActivity;
 import com.ddmax.zjnucloud.model.User;
+import com.ddmax.zjnucloud.util.DensityUtils;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
@@ -48,31 +50,30 @@ import cn.bmob.v3.datatype.BmobFile;
  * @since 2014/12/05.
  * 说明：主界面
  */
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends BaseActivity implements
         Toolbar.OnMenuItemClickListener, GridView.OnItemClickListener,
         View.OnClickListener {
     public static final String TAG = "MainActivity";
 
-    // Toolbar
     @Bind(R.id.mToolbar) Toolbar mToolbar;
-    // 主界面图片展示
-    @Bind(R.id.image_display) ViewPager mImageDisplay;
+    @Bind(R.id.image_display) ViewPager mImageDisplay; // 主界面图片展示
+    @Bind(R.id.gridView) GridView mGridView; // GridView展示模块
+    @Bind(R.id.mDrawerLayout) DrawerLayout mDrawerLayout; // 导航抽屉
+    @Bind(R.id.left_navdrawer) NavigationView mNavigationView; // 导航视图
+    @Bind(R.id.footer_exit) LinearLayout mDrawerExitBtn;
+    @Bind(R.id.footer_about) LinearLayout mDrawerAboutBtn;
+    @Bind(R.id.footer_feedback) LinearLayout mDrawerFeedbackBtn;
+
+    // 轮播页视图集合
     private List<View> mDisplayViews = new ArrayList<>();
+    // 轮播Handler
     private AutoRoundHandler mHandler = new AutoRoundHandler(new WeakReference<>(this));
-    // 展示图片资源ID
+    // 轮播图片资源ID
     private static Integer[] mDisplayImgs = {
             R.drawable.display_img_1,
             R.drawable.display_img_2,
             R.drawable.display_img_3
     };
-    // GridView展示模块
-    @Bind(R.id.gridView) GridView mGridView;
-    // 导航抽屉DrawerLayout, ListView及String[]
-    @Bind(R.id.mDrawerLayout) DrawerLayout mDrawerLayout;
-    @Bind(R.id.left_navdrawer) NavigationView mNavigationView;
-    @Bind(R.id.footer_exit) LinearLayout mDrawerExitBtn;
-    @Bind(R.id.footer_about) LinearLayout mDrawerAboutBtn;
-    @Bind(R.id.footer_feedback) LinearLayout mDrawerFeedbackBtn;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private View mNavigationHeader;
@@ -114,21 +115,18 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // 初始化界面
-        initUi();
-
         // 初始化 Bmob SDK
         Bmob.initialize(this, Constants.BMOB_APPID);
         Log.d(TAG, "Bmob SDK initialized!");
-
+        // 初始化界面
+        initUi();
         // 设置登录消息处理Handler
         application = ZJNUApplication.getInstance();
         application.setLoginHandler(new LoginHandler(this));
-
     }
 
     // 实现再按一次返回键退出的功能
@@ -155,21 +153,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     /**
      * 初始化界面
      */
     private void initUi() {
-
         ButterKnife.bind(this);
 
         // 初始化Toolbar，设置Toolbar菜单
         setSupportActionBar(mToolbar);
-//		mToolbar.inflateMenu(R.menu.menu_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 //		mToolbar.setNavigationIcon(R.drawable.ic_action_search);
@@ -195,7 +190,10 @@ public class MainActivity extends AppCompatActivity implements
 
     // 展示图片
     private void setImageDisplay() {
-
+        // 设置自适应ViewPager高度
+        int width = DensityUtils.getWidth(this);
+        int height = (int) (width / Constants.DISPLAY_SCALE);
+        mImageDisplay.setLayoutParams(new LinearLayout.LayoutParams(width, height));
         // ViewPager添加图片资源
         for (Integer mDisplayImg : mDisplayImgs) {
             ImageView mImageView = new ImageView(MainActivity.this);
@@ -203,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements
             mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             mDisplayViews.add(mImageView);
         }
-
         // 设置Adapter
         mImageDisplay.setAdapter(new BasePagerAdapter(this, mDisplayViews));
 
@@ -432,21 +429,40 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         switch (position) {
 
             case Constants.MODULE.NEWS:
                 startActivity(new Intent(this, NewsActivity.class));
                 break;
             case Constants.MODULE.CALENDAR:
+                startActivity(new Intent(this, CalendarActivity.class));
                 break;
             case Constants.MODULE.BUS:
                 startActivity(new Intent(this, BusActivity.class));
                 break;
             case Constants.MODULE.SPEECH:
+                startActivity(new Intent(this, SpeechActivity.class));
                 break;
-            case Constants.MODULE.RESOURCES:
+            case Constants.MODULE.SCORE:
                 startActivity(new Intent(this, ScoreActivity.class));
+                break;
+            case Constants.MODULE.EXAM:
+                startActivity(new Intent(this, ExamActivity.class));
+                break;
+            case Constants.MODULE.COURSE:
+                startActivity(new Intent(this, CourseActivity.class));
+                break;
+            case Constants.MODULE.LIBRARY:
+                BaseWebActivity.actionStart(this,
+                        getString(R.string.title_activity_library),
+                        Constants.URL.LIBRARY
+                );
+                break;
+            case Constants.MODULE.LOGISTICS:
+                BaseWebActivity.actionStart(this,
+                        getString(R.string.title_activity_logistics),
+                        Constants.URL.LOGISTICS
+                );
                 break;
             default:
                 break;

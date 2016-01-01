@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
+import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.util.ValuePreference;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class GuideActivity extends Activity {
      // 存放显示内容的View
     private List<View> mViews = new ArrayList<View>();
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ValuePreference value_on = new ValuePreference(this);

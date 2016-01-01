@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.BaseFragmentPagerAdapter;
+import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.model.Page;
 import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
 
@@ -29,10 +30,10 @@ import butterknife.ButterKnife;
  * 说明：新闻展示界面
  */
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends BaseActivity {
 
     @Bind(R.id.mToolbar) Toolbar mToolbar;
-    @Bind(R.id.app_bar) AppBarLayout mAppBar;
+//    @Bind(R.id.app_bar) AppBarLayout mAppBar;
     @Bind(R.id.top_tabs) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
@@ -73,15 +74,15 @@ public class NewsActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
 
-        this.setAppBarShadow(true);
+//        this.setAppBarShadow(true);
         invalidateOptionsMenu();
     }
 
-    private void setAppBarShadow(boolean isShown) {
-        final int elevation = isShown ?
-                getResources().getDimensionPixelSize(R.dimen.appbar_elevation) : 0;
-        ViewCompat.setElevation(mAppBar, elevation);
-    }
+//    private void setAppBarShadow(boolean isShown) {
+//        final int elevation = isShown ?
+//                getResources().getDimensionPixelSize(R.dimen.appbar_elevation) : 0;
+//        ViewCompat.setElevation(mAppBar, elevation);
+//    }
 
     private Fragment getFragmentToShow(Intent intent) {
         return NewsFragment.newInstance((Page)intent.getExtras().getParcelable("page"));
