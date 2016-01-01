@@ -53,7 +53,7 @@ public final class Constants {
         public static final String LOGISTICS = "http://365.zjnu.edu.cn/whq1.1/news/news_manage.do?command=showList";
 
         // ZJNU Intra API 地址
-        public static final String BASE_INTRA_URL = "https://zjnu.gq";
+        public static final String BASE_INTRA_URL = "https://e.zjnucloud.com";
 //        public static final String BASE_INTRA_URL = "http://10.7.90.233";
         public static final class EMIS {
             // 教务绑定地址
