@@ -45,7 +45,7 @@ public class SpeechActivity extends BaseActivity implements ResponseListener<Lis
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.speech_list) RecyclerView mSpeechList;
-    @Bind(R.id.progressView) RelativeLayout mLoadingProgress;
+    @Bind(R.id.progress_view) RelativeLayout mLoadingProgress;
     @Bind(R.id.swipeRefreshLayout) SwipeRefreshLayout mRefreshLayout;
 
     private final static int REFRESH_DOWN = 0;

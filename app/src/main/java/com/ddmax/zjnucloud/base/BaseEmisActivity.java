@@ -122,6 +122,8 @@ public abstract class BaseEmisActivity extends BaseActivity {
             case INTENT_LOGIN:
                 if (resultCode == RESULT_OK) {
                     ensureEmisBinded();
+                } else {
+                    finish();
                 }
                 break;
             case INTENT_BIND:

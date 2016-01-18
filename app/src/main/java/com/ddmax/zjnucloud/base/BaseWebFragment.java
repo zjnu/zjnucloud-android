@@ -2,9 +2,11 @@ package com.ddmax.zjnucloud.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.ddmax.zjnucloud.R;
 
@@ -27,9 +30,12 @@ import butterknife.ButterKnife;
  */
 public class BaseWebFragment extends Fragment implements Serializable{
     protected static final String URL = "url";
+    protected static final String IS_PADDING = "isPadding";
 
     protected String mUrl;
+    protected boolean isPadding;
 
+    @Bind(R.id.container) protected RelativeLayout mContainer;
     @Bind(R.id.webView) protected WebView mWebView;
     @Bind(R.id.progressBar) protected ProgressBar mProgressBar;
 
@@ -39,10 +45,11 @@ public class BaseWebFragment extends Fragment implements Serializable{
         // 保留空的构造器
     }
 
-    public static BaseWebFragment newInstance(String url) {
+    public static BaseWebFragment newInstance(String url, boolean isPadding) {
         BaseWebFragment fragment = new BaseWebFragment();
         Bundle args = new Bundle();
         args.putString(URL, url);
+        args.putBoolean(IS_PADDING, isPadding);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,10 +59,13 @@ public class BaseWebFragment extends Fragment implements Serializable{
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             mUrl = savedInstanceState.getString(URL);
+            isPadding = savedInstanceState.getBoolean("isPadding", true);
         } else {
             Bundle args = getArguments();
             if (args != null) {
                 mUrl = getArguments().getString(URL);
+                isPadding = getArguments().getBoolean("isPadding", true);
+                Log.d("isPadding", String.valueOf(isPadding));
             }
         }
 
@@ -103,6 +113,11 @@ public class BaseWebFragment extends Fragment implements Serializable{
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
         mWebView.setWebViewClient(new MyWebViewClient());
+
+        // 是否设置网页边距
+        if (!isPadding) {
+            mContainer.setPadding(0, 0, 0, 0);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -147,8 +162,13 @@ public class BaseWebFragment extends Fragment implements Serializable{
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            mUrl = url;
-            view.loadUrl(url);
+            if( url.startsWith("http:") || url.startsWith("https:") ) {
+                return false;
+            }
+
+            // Otherwise allow the OS to handle things like tel, mailto, etc.
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
             return true;
         }
     }

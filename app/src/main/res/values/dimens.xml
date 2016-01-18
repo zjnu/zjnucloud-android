@@ -4,27 +4,35 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <!-- Login/Register Activities margins -->
+    <!-- 登录/主页模块尺寸参数 -->
     <dimen name="activity_login_horizontal_margin">40dp</dimen>
     <dimen name="activity_login_vertical_margin">60dp</dimen>
 
-    <!-- Profile Activity margins -->
+    <!-- 个人资料尺寸参数 -->
     <dimen name="activity_profile_vertical_margin">8dp</dimen>
+    <dimen name="profile_app_bar_height">180dp</dimen>
     <dimen name="profile_item_height">48dp</dimen>
     <dimen name="profile_content_margin_left">16dp</dimen>
     <dimen name="profile_divider_margin_left">56dp</dimen>
     <dimen name="profile_divider_margin_right">8dp</dimen>
 
-    <!-- Profile Activity margins -->
+    <!-- 考试安排模块尺寸参数 -->
     <dimen name="exam_list_first_margin">14dp</dimen>
 
-    <!-- About Activity-->
+    <!-- 发现模块尺寸参数 -->
+    <dimen name="explore_card_title_left_margin">6dp</dimen>
+
+    <!-- 关于模块尺寸参数-->
     <dimen name="about_app_bar_height">256dp</dimen>
 
+    <!-- 其它尺寸参数 -->
     <dimen name="appbar_elevation">4dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height_score">200dp</dimen>
     <dimen name="app_bar_height_exam">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="item_list_margin">4dp</dimen>
+
+    <!-- WebView 尺寸参数 -->
+    <dimen name="webview_padding">8dp</dimen>
 </resources>

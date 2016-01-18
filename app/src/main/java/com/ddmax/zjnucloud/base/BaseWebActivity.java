@@ -8,6 +8,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
 
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.ui.view.MarqueeToolbar;
@@ -25,10 +27,11 @@ public class BaseWebActivity extends BaseActivity {
 
     public static final String TAG = BaseWebActivity.class.getSimpleName();
 
-    public static BaseWebFragment mFragment;
+    public static Fragment mFragment;
 
     @Bind(R.id.toolbar) MarqueeToolbar mToolbar;
     private String url;
+    private boolean isPadding;
 
     /**
      * 使用此方法启动BaseWebActivity
@@ -36,10 +39,11 @@ public class BaseWebActivity extends BaseActivity {
      * @param toolbarTitle Toolbar标题字符串
      * @param url 链接地址
      */
-    public static void actionStart(Context context, String toolbarTitle, String url) {
+    public static void actionStart(Context context, String toolbarTitle, String url, boolean isPadding) {
         Intent intent = new Intent(context, BaseWebActivity.class);
         intent.putExtra("toolbarTitle", toolbarTitle);
         intent.putExtra("url", url);
+        intent.putExtra("isPadding", isPadding);
         context.startActivity(intent);
     }
 
@@ -49,7 +53,7 @@ public class BaseWebActivity extends BaseActivity {
      * @param toolbarTitle Toolbar标题字符串
      * @param fragment ? extends BaseWebFragment
      */
-    public static void actionStart(Context context, String toolbarTitle, BaseWebFragment fragment) {
+    public static void actionStart(Context context, String toolbarTitle, Fragment fragment) {
         Intent intent = new Intent(context, BaseWebActivity.class);
         intent.putExtra("toolbarTitle", toolbarTitle);
         mFragment = fragment;
@@ -67,8 +71,10 @@ public class BaseWebActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             url = getIntent().getStringExtra("url");
+            isPadding = getIntent().getBooleanExtra("isPadding", true);
         } else {
             url = savedInstanceState.getString("url");
+            isPadding = savedInstanceState.getBoolean("isPadding", true);
         }
 
         // 初始化Fragment
@@ -99,7 +105,7 @@ public class BaseWebActivity extends BaseActivity {
         if (mFragment != null) {
             return mFragment;
         }
-        return BaseWebFragment.newInstance(url);
+        return BaseWebFragment.newInstance(url, false);
     }
 
     protected void initFragment() {

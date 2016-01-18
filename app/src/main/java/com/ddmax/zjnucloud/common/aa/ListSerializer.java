@@ -1,6 +1,7 @@
 package com.ddmax.zjnucloud.common.aa;
 
 import com.activeandroid.Model;
+import com.ddmax.zjnucloud.model.course.Course;
 import com.ddmax.zjnucloud.model.exam.Exam;
 import com.ddmax.zjnucloud.model.score.Semester;
 import com.google.gson.reflect.TypeToken;
@@ -24,12 +25,16 @@ public class ListSerializer extends Serializer {
         if (data == null) {
             return null;
         }
+        // TODO: Implement in a more elegant way
         String strData = (String) data;
         if (strData.contains("semester")) {
             return gson.fromJson((String) data, new TypeToken<List<Semester>>() {
             }.getType());
         } else if (strData.contains("place")) {
             return gson.fromJson((String) data, new TypeToken<List<Exam>>() {
+            }.getType());
+        } else if (strData.contains("classroom")) {
+            return gson.fromJson((String) data, new TypeToken<List<Course>>() {
             }.getType());
         }
         return gson.fromJson((String) data, new TypeToken<List>() {

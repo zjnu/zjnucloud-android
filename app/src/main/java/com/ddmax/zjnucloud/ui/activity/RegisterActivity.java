@@ -20,6 +20,7 @@ import com.ddmax.zjnucloud.util.RegexUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -60,47 +61,61 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    private void performRegister(String username, String email, String password) {
+    private void performRegister(final String username, final String email, final String password) {
         if (TextUtils.isEmpty(username)) {
             Toast.makeText(this, R.string.error_invalid_username, Toast.LENGTH_LONG).show();
             return;
         }
         if (!RegexUtils.matchEmail(email)) {
-            Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_SHORT).show();
             return;
         }
         if (password.length() < 6) {
             Toast.makeText(this, R.string.error_incorrect_password, Toast.LENGTH_LONG).show();
             return;
         }
-        User user = new User();
+        final User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
         user.setIdentify(0);
         // 设置用户默认头像
-        Bitmap avatarBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar_default);
-//        user.setAvatar(BmobUtils.getImage(avatarBitmap, this, "default-avatar.png"));
+//        Bitmap avatarBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar_default);
         user.signUp(this, new SaveListener() {
-//			DialogFragment startDialog = new DialogFragment();
 
             @Override
             public void onStart() {
                 super.onStart();
-//				startDialog.show(getSupportFragmentManager(), "注册中，请稍候...");
             }
 
             @Override
             public void onSuccess() {
                 Toast.makeText(RegisterActivity.this, R.string.register_success, Toast.LENGTH_LONG).show();
-//				new DialogFragment().show(getSupportFragmentManager(), "注册成功！");
+                // 自动登录
+                user.login(RegisterActivity.this, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, String errorMsg) {
+                        Log.d(TAG, statusCode + "自动登录失败：" + errorMsg);
+                    }
+                });
             }
 
             @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(RegisterActivity.this, R.string.register_fail, Toast.LENGTH_LONG).show();
-                Log.e(TAG, "注册失败：" + s);
-//				new DialogFragment().show(getSupportFragmentManager(), "注册失败！");
+            public void onFailure(int statusCode, String errorMsg) {
+                Log.e(TAG, statusCode + "注册失败：" + errorMsg);
+                if (statusCode == 202) {
+                    Toast.makeText(RegisterActivity.this, getString(R.string.register_fail_username, username), Toast.LENGTH_SHORT).show();
+                } else if (statusCode == 203) {
+                    Toast.makeText(RegisterActivity.this, getString(R.string.register_fail_email, email), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(RegisterActivity.this, getString(R.string.register_fail), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

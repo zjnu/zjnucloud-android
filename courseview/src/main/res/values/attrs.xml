@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="WeekView">
+    <declare-styleable name="CourseView">
         <attr name="firstDayOfWeek" format="enum">
             <enum name="sunday" value="1"/>
             <enum name="monday" value="2"/>
@@ -49,5 +49,7 @@
 
         <!-- Course related -->
         <attr name="dayCourseAmount" format="integer"/>
+        <attr name="courseTimeNoHeight" format="float"/>
+
     </declare-styleable>
 </resources>

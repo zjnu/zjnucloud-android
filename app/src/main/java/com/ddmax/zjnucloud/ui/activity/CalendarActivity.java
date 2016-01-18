@@ -50,7 +50,7 @@ public class CalendarActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_close_white_24dp));
         // 设置校历
-        mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+//        mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
         mCalendar.setIsOverflowDateVisible(true);
         mCalendar.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
 
@@ -59,6 +59,7 @@ public class CalendarActivity extends BaseActivity {
                 initEventList(SchoolCalendar.get(monthDate));
             }
         });
+        mCalendar.invalidate();
         // 设置当月校历事件
         Calendar cal = Calendar.getInstance();
         initEventList(SchoolCalendar.get(

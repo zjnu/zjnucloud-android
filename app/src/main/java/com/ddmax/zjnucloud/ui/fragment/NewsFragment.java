@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.NewsListAdapter;
 import com.ddmax.zjnucloud.common.exception.FatalException;
-import com.ddmax.zjnucloud.model.Page;
+import com.ddmax.zjnucloud.model.news.Page;
 import com.ddmax.zjnucloud.model.news.News;
 import com.ddmax.zjnucloud.task.GetNewsTask;
 import com.ddmax.zjnucloud.task.GetSlxxTask;
@@ -48,7 +48,7 @@ public class NewsFragment extends Fragment implements ResponseListener<LinkedLis
     private Page mPage;
 
     // 进度条
-    @Bind(R.id.progressView) RelativeLayout mLoadingProgress;
+    @Bind(R.id.progress_view) RelativeLayout mLoadingProgress;
     @Bind(R.id.newsList) RecyclerView mList;
     @Bind(R.id.swipeRefreshLayout) SwipeRefreshLayout mRefreshLayout;
 

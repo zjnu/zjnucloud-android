@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.activeandroid.Model;
 import com.ddmax.zjnucloud.common.aa.ActiveAndroidExclusionStrategy;
+import com.ddmax.zjnucloud.model.banner.BannerDetail;
 import com.ddmax.zjnucloud.model.course.CourseList;
 import com.ddmax.zjnucloud.model.exam.ExamList;
 import com.ddmax.zjnucloud.model.news.NewsDetail;
@@ -160,6 +161,20 @@ public class GsonUtils {
         try {
             CourseList courseList = gson.fromJson(content, CourseList.class);
             return courseList != null ? courseList : null;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Gson解析错误，未能获取到正确内容?");
+            return null;
+        }
+    }
+
+    // 返回轮播图详情对象BannerDetail
+    public static BannerDetail getBannerDetail(String content) {
+        if (TextUtils.isEmpty(content)) return null;
+
+        try {
+            BannerDetail bannerDetail = gson.fromJson(content, BannerDetail.class);
+            return bannerDetail != null ? bannerDetail : null;
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             Log.e(TAG, "Gson解析错误，未能获取到正确内容?");

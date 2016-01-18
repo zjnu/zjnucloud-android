@@ -1,8 +1,8 @@
 <resources>
 
-	<style name="AppTheme21" parent="AppTheme19">
-		<!-- API 21 theme customizations can go here. -->
+    <style name="AppTheme21" parent="AppTheme19">
+        <!-- API 21 theme customizations can go here. -->
 
-	</style>
+    </style>
 
 </resources>

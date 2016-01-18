@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.ddmax.zjnucloud.model.Tab;
+import com.ddmax.zjnucloud.model.news.Tab;
 import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
 
 import java.util.List;

@@ -130,7 +130,8 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
 
     private List<DayDecorator> mDecoratorsList = null;
     private boolean mIsOverflowDateVisible = true;
-    private int mFirstDayOfWeek = Calendar.SUNDAY;
+    // TODO: Has bug when setFirstDayOfWeek() called
+    private int mFirstDayOfWeek = Calendar.MONDAY;
     private int mCurrentMonthIndex = 0;
 
     /**
