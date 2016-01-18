@@ -17,9 +17,9 @@ import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,7 +40,9 @@ import java.util.Locale;
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
  * Website: http://alamkanak.github.io/
  */
-public class WeekView extends View {
+public class CourseView extends View {
+
+    public static final String TAG = CourseView.class.getSimpleName();
 
     @Deprecated
     public static final int LENGTH_SHORT = 1;
@@ -71,10 +72,12 @@ public class WeekView extends View {
     private Paint mTodayHeaderTextPaint;
     private Paint mEventBackgroundPaint;
     private float mHeaderColumnWidth;
-    private List<EventRect> mEventRects;
-    private List<WeekViewEvent> mPreviousPeriodEvents;
-    private List<WeekViewEvent> mCurrentPeriodEvents;
-    private List<WeekViewEvent> mNextPeriodEvents;
+//    private List<EventRect> mEventRects;
+    private List<CourseRect> mCourseRects;
+    private List<CourseViewEvent> mAllCourseEvents;
+    private List<CourseViewEvent> mPreviousPeriodEvents;
+    private List<CourseViewEvent> mCurrentPeriodEvents;
+    private List<CourseViewEvent> mNextPeriodEvents;
     private TextPaint mEventTextPaint;
     private Paint mHeaderColumnBackgroundPaint;
     private int mFetchedPeriod = -1; // the middle period the calendar has fetched.
@@ -127,13 +130,15 @@ public class WeekView extends View {
     private boolean mShowDistinctWeekendColor = false;
     private boolean mShowNowLine = false;
     private boolean mShowDistinctPastFutureColor = false;
-    // Amount of course in one day, replaced this variable instead of 24
+
+    // Attributes related to course event
     private int mDayCourseAmount = 12;
+    private float mCourseTimeNoPaddingHeight = 4.3f;
 
     // Listeners.
     private EventClickListener mEventClickListener;
     private EventLongPressListener mEventLongPressListener;
-    private WeekViewLoader mWeekViewLoader;
+    private CourseViewLoader mCourseViewLoader;
     private EmptyViewClickListener mEmptyViewClickListener;
     private EmptyViewLongPressListener mEmptyViewLongPressListener;
     private DateTimeInterpreter mDateTimeInterpreter;
@@ -166,14 +171,13 @@ public class WeekView extends View {
 
             // Calculate the new origin after scroll.
             switch (mCurrentScrollDirection) {
-                // TODO: Temporarily disable horizontal scroll, should work more later
 //                case HORIZONTAL:
 //                    mCurrentOrigin.x -= distanceX * mXScrollingSpeed;
-//                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+//                    ViewCompat.postInvalidateOnAnimation(CourseView.this);
 //                    break;
                 case VERTICAL:
                     mCurrentOrigin.y -= distanceY;
-                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+                    ViewCompat.postInvalidateOnAnimation(CourseView.this);
                     break;
             }
             return true;
@@ -185,14 +189,13 @@ public class WeekView extends View {
 
             mCurrentFlingDirection = mCurrentScrollDirection;
             if (mCurrentFlingDirection == Direction.HORIZONTAL){
-                // TODO: Temporarily disable horizontal fling, should work more later
-//                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * (mDayCourseAmount+1) + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
+//                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
             }
             else if (mCurrentFlingDirection == Direction.VERTICAL){
-                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, 0, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * (mDayCourseAmount+1) + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
+                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, 0, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
             }
 
-            ViewCompat.postInvalidateOnAnimation(WeekView.this);
+            ViewCompat.postInvalidateOnAnimation(CourseView.this);
             return true;
         }
 
@@ -200,12 +203,12 @@ public class WeekView extends View {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             // If the tap was on an event then trigger the callback.
-            if (mEventRects != null && mEventClickListener != null) {
-                List<EventRect> reversedEventRects = mEventRects;
+            if (mCourseRects != null && mEventClickListener != null) {
+                List<CourseRect> reversedEventRects = mCourseRects;
                 Collections.reverse(reversedEventRects);
-                for (EventRect event : reversedEventRects) {
+                for (CourseRect event : reversedEventRects) {
                     if (event.rectF != null && e.getX() > event.rectF.left && e.getX() < event.rectF.right && e.getY() > event.rectF.top && e.getY() < event.rectF.bottom) {
-                        mEventClickListener.onEventClick(event.originalEvent, event.rectF);
+                        mEventClickListener.onEventClick(event.event, event.rectF);
                         playSoundEffect(SoundEffectConstants.CLICK);
                         return super.onSingleTapConfirmed(e);
                     }
@@ -228,12 +231,12 @@ public class WeekView extends View {
         public void onLongPress(MotionEvent e) {
             super.onLongPress(e);
 
-            if (mEventLongPressListener != null && mEventRects != null) {
-                List<EventRect> reversedEventRects = mEventRects;
+            if (mEventLongPressListener != null && mCourseRects != null) {
+                List<CourseRect> reversedEventRects = mCourseRects;
                 Collections.reverse(reversedEventRects);
-                for (EventRect event : reversedEventRects) {
+                for (CourseRect event : reversedEventRects) {
                     if (event.rectF != null && e.getX() > event.rectF.left && e.getX() < event.rectF.right && e.getY() > event.rectF.top && e.getY() < event.rectF.bottom) {
-                        mEventLongPressListener.onEventLongPress(event.originalEvent, event.rectF);
+                        mEventLongPressListener.onEventLongPress(event.event, event.rectF);
                         performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                         return;
                     }
@@ -255,60 +258,61 @@ public class WeekView extends View {
         NONE, HORIZONTAL, VERTICAL
     }
 
-    public WeekView(Context context) {
+    public CourseView(Context context) {
         this(context, null);
     }
 
-    public WeekView(Context context, AttributeSet attrs) {
+    public CourseView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public WeekView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CourseView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         // Hold references.
         mContext = context;
 
         // Get the attribute values (if any).
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WeekView, 0, 0);
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CourseView, 0, 0);
         try {
-            mFirstDayOfWeek = a.getInteger(R.styleable.WeekView_firstDayOfWeek, mFirstDayOfWeek);
-            mHourHeight = a.getDimensionPixelSize(R.styleable.WeekView_hourHeight, mHourHeight);
-            mMinHourHeight = a.getDimensionPixelSize(R.styleable.WeekView_minHourHeight, mMinHourHeight);
+            mFirstDayOfWeek = a.getInteger(R.styleable.CourseView_firstDayOfWeek, mFirstDayOfWeek);
+            mHourHeight = a.getDimensionPixelSize(R.styleable.CourseView_hourHeight, mHourHeight);
+            mMinHourHeight = a.getDimensionPixelSize(R.styleable.CourseView_minHourHeight, mMinHourHeight);
             mEffectiveMinHourHeight = mMinHourHeight;
-            mMaxHourHeight = a.getDimensionPixelSize(R.styleable.WeekView_maxHourHeight, mMaxHourHeight);
-            mTextSize = a.getDimensionPixelSize(R.styleable.WeekView_textSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mTextSize, context.getResources().getDisplayMetrics()));
-            mHeaderColumnPadding = a.getDimensionPixelSize(R.styleable.WeekView_headerColumnPadding, mHeaderColumnPadding);
-            mColumnGap = a.getDimensionPixelSize(R.styleable.WeekView_columnGap, mColumnGap);
-            mHeaderColumnTextColor = a.getColor(R.styleable.WeekView_headerColumnTextColor, mHeaderColumnTextColor);
-            mNumberOfVisibleDays = a.getInteger(R.styleable.WeekView_noOfVisibleDays, mNumberOfVisibleDays);
-            mHeaderRowPadding = a.getDimensionPixelSize(R.styleable.WeekView_headerRowPadding, mHeaderRowPadding);
-            mHeaderRowBackgroundColor = a.getColor(R.styleable.WeekView_headerRowBackgroundColor, mHeaderRowBackgroundColor);
-            mDayBackgroundColor = a.getColor(R.styleable.WeekView_dayBackgroundColor, mDayBackgroundColor);
-            mFutureBackgroundColor = a.getColor(R.styleable.WeekView_futureBackgroundColor, mFutureBackgroundColor);
-            mPastBackgroundColor = a.getColor(R.styleable.WeekView_pastBackgroundColor, mPastBackgroundColor);
-            mFutureWeekendBackgroundColor = a.getColor(R.styleable.WeekView_futureWeekendBackgroundColor, mFutureBackgroundColor); // If not set, use the same color as in the week
-            mPastWeekendBackgroundColor = a.getColor(R.styleable.WeekView_pastWeekendBackgroundColor, mPastBackgroundColor);
-            mNowLineColor = a.getColor(R.styleable.WeekView_nowLineColor, mNowLineColor);
-            mNowLineThickness = a.getDimensionPixelSize(R.styleable.WeekView_nowLineThickness, mNowLineThickness);
-            mHourSeparatorColor = a.getColor(R.styleable.WeekView_hourSeparatorColor, mHourSeparatorColor);
-            mTodayBackgroundColor = a.getColor(R.styleable.WeekView_todayBackgroundColor, mTodayBackgroundColor);
-            mHourSeparatorHeight = a.getDimensionPixelSize(R.styleable.WeekView_hourSeparatorHeight, mHourSeparatorHeight);
-            mTodayHeaderTextColor = a.getColor(R.styleable.WeekView_todayHeaderTextColor, mTodayHeaderTextColor);
-            mEventTextSize = a.getDimensionPixelSize(R.styleable.WeekView_eventTextSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mEventTextSize, context.getResources().getDisplayMetrics()));
-            mEventTextColor = a.getColor(R.styleable.WeekView_eventTextColor, mEventTextColor);
-            mEventPadding = a.getDimensionPixelSize(R.styleable.WeekView_hourSeparatorHeight, mEventPadding);
-            mHeaderColumnBackgroundColor = a.getColor(R.styleable.WeekView_headerColumnBackground, mHeaderColumnBackgroundColor);
-            mDayNameLength = a.getInteger(R.styleable.WeekView_dayNameLength, mDayNameLength);
-            mOverlappingEventGap = a.getDimensionPixelSize(R.styleable.WeekView_overlappingEventGap, mOverlappingEventGap);
-            mEventMarginVertical = a.getDimensionPixelSize(R.styleable.WeekView_eventMarginVertical, mEventMarginVertical);
-            mXScrollingSpeed = a.getFloat(R.styleable.WeekView_xScrollingSpeed, mXScrollingSpeed);
-            mEventCornerRadius = a.getDimensionPixelSize(R.styleable.WeekView_eventCornerRadius, mEventCornerRadius);
-            mShowDistinctPastFutureColor = a.getBoolean(R.styleable.WeekView_showDistinctPastFutureColor, mShowDistinctPastFutureColor);
-            mShowDistinctWeekendColor = a.getBoolean(R.styleable.WeekView_showDistinctWeekendColor, mShowDistinctWeekendColor);
-            mShowNowLine = a.getBoolean(R.styleable.WeekView_showNowLine, mShowNowLine);
-            // Course part
-            mDayCourseAmount = a.getInteger(R.styleable.WeekView_dayCourseAmount, mDayCourseAmount);
+            mMaxHourHeight = a.getDimensionPixelSize(R.styleable.CourseView_maxHourHeight, mMaxHourHeight);
+            mTextSize = a.getDimensionPixelSize(R.styleable.CourseView_textSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mTextSize, context.getResources().getDisplayMetrics()));
+            mHeaderColumnPadding = a.getDimensionPixelSize(R.styleable.CourseView_headerColumnPadding, mHeaderColumnPadding);
+            mColumnGap = a.getDimensionPixelSize(R.styleable.CourseView_columnGap, mColumnGap);
+            mHeaderColumnTextColor = a.getColor(R.styleable.CourseView_headerColumnTextColor, mHeaderColumnTextColor);
+            mNumberOfVisibleDays = a.getInteger(R.styleable.CourseView_noOfVisibleDays, mNumberOfVisibleDays);
+            mHeaderRowPadding = a.getDimensionPixelSize(R.styleable.CourseView_headerRowPadding, mHeaderRowPadding);
+            mHeaderRowBackgroundColor = a.getColor(R.styleable.CourseView_headerRowBackgroundColor, mHeaderRowBackgroundColor);
+            mDayBackgroundColor = a.getColor(R.styleable.CourseView_dayBackgroundColor, mDayBackgroundColor);
+            mFutureBackgroundColor = a.getColor(R.styleable.CourseView_futureBackgroundColor, mFutureBackgroundColor);
+            mPastBackgroundColor = a.getColor(R.styleable.CourseView_pastBackgroundColor, mPastBackgroundColor);
+            mFutureWeekendBackgroundColor = a.getColor(R.styleable.CourseView_futureWeekendBackgroundColor, mFutureBackgroundColor); // If not set, use the same color as in the week
+            mPastWeekendBackgroundColor = a.getColor(R.styleable.CourseView_pastWeekendBackgroundColor, mPastBackgroundColor);
+            mNowLineColor = a.getColor(R.styleable.CourseView_nowLineColor, mNowLineColor);
+            mNowLineThickness = a.getDimensionPixelSize(R.styleable.CourseView_nowLineThickness, mNowLineThickness);
+            mHourSeparatorColor = a.getColor(R.styleable.CourseView_hourSeparatorColor, mHourSeparatorColor);
+            mTodayBackgroundColor = a.getColor(R.styleable.CourseView_todayBackgroundColor, mTodayBackgroundColor);
+            mHourSeparatorHeight = a.getDimensionPixelSize(R.styleable.CourseView_hourSeparatorHeight, mHourSeparatorHeight);
+            mTodayHeaderTextColor = a.getColor(R.styleable.CourseView_todayHeaderTextColor, mTodayHeaderTextColor);
+            mEventTextSize = a.getDimensionPixelSize(R.styleable.CourseView_eventTextSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mEventTextSize, context.getResources().getDisplayMetrics()));
+            mEventTextColor = a.getColor(R.styleable.CourseView_eventTextColor, mEventTextColor);
+            mEventPadding = a.getDimensionPixelSize(R.styleable.CourseView_hourSeparatorHeight, mEventPadding);
+            mHeaderColumnBackgroundColor = a.getColor(R.styleable.CourseView_headerColumnBackground, mHeaderColumnBackgroundColor);
+            mDayNameLength = a.getInteger(R.styleable.CourseView_dayNameLength, mDayNameLength);
+            mOverlappingEventGap = a.getDimensionPixelSize(R.styleable.CourseView_overlappingEventGap, mOverlappingEventGap);
+            mEventMarginVertical = a.getDimensionPixelSize(R.styleable.CourseView_eventMarginVertical, mEventMarginVertical);
+            mXScrollingSpeed = a.getFloat(R.styleable.CourseView_xScrollingSpeed, mXScrollingSpeed);
+            mEventCornerRadius = a.getDimensionPixelSize(R.styleable.CourseView_eventCornerRadius, mEventCornerRadius);
+            mShowDistinctPastFutureColor = a.getBoolean(R.styleable.CourseView_showDistinctPastFutureColor, mShowDistinctPastFutureColor);
+            mShowDistinctWeekendColor = a.getBoolean(R.styleable.CourseView_showDistinctWeekendColor, mShowDistinctWeekendColor);
+            mShowNowLine = a.getBoolean(R.styleable.CourseView_showNowLine, mShowNowLine);
+            // Course attributes
+            mDayCourseAmount = a.getInteger(R.styleable.CourseView_dayCourseAmount, mDayCourseAmount);
+            mCourseTimeNoPaddingHeight = a.getFloat(R.styleable.CourseView_courseTimeNoHeight, mCourseTimeNoPaddingHeight);
 
         } finally {
             a.recycle();
@@ -427,11 +431,11 @@ public class WeekView extends View {
     }
 
     /**
-     * Initialize time column width. Calculate value with all possible hours (supposed widest text).
+     * Initialize course time column width. Calculate value with all possible hours (supposed widest text).
      */
     private void initTextTimeWidth() {
         mTimeTextWidth = 0;
-        for (int i = 1; i < mDayCourseAmount + 1; i++) {
+        for (int i = 1; i < mDayCourseAmount; i++) {
             // Measure time string and get max width.
             String time = getDateTimeInterpreter().interpretTime(i);
             if (time == null)
@@ -445,7 +449,7 @@ public class WeekView extends View {
         super.onDraw(canvas);
 
         // Draw the header row.
-        drawHeaderRowAndEvents(canvas);
+        drawHeaderRowAndCourses(canvas);
 
         // Draw the time column and all the axes/separators.
         drawTimeColumnAndAxes(canvas);
@@ -454,7 +458,7 @@ public class WeekView extends View {
         canvas.drawRect(0, 0, mTimeTextWidth + mHeaderColumnPadding * 2, mHeaderTextHeight + mHeaderRowPadding * 2, mHeaderBackgroundPaint);
 
         // Hide anything that is in the bottom margin of the header row.
-        canvas.drawRect(mHeaderColumnWidth, mHeaderTextHeight + mHeaderRowPadding * 2, getWidth(), mHeaderRowPadding * 2 + mHeaderTextHeight + mHeaderMarginBottom + mTimeTextHeight/2, mHeaderColumnBackgroundPaint);
+        canvas.drawRect(mHeaderColumnWidth, mHeaderTextHeight + mHeaderRowPadding * 2, getWidth(), mHeaderRowPadding * 2 + mHeaderTextHeight + mHeaderMarginBottom + mTimeTextHeight / 2, mHeaderColumnBackgroundPaint);
     }
 
     private void drawTimeColumnAndAxes(Canvas canvas) {
@@ -466,14 +470,16 @@ public class WeekView extends View {
             float top = mHeaderTextHeight + mHeaderRowPadding * 2 + mCurrentOrigin.y + mHourHeight * i + mHeaderMarginBottom;
 
             // Draw the text if its y position is not outside of the visible area. The pivot point of the text is the point at the bottom-right corner.
-            String time = getDateTimeInterpreter().interpretTime(i + 1);
+            String time = getDateTimeInterpreter().interpretTime(i + 1); // Course time number start from 1
             if (time == null)
                 throw new IllegalStateException("A DateTimeInterpreter must not return null time");
-            if (top < getHeight()) canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top + mTimeTextHeight * 4.3f, mTimeTextPaint);
+            // Use user-defined course time no padding height
+            if (top < getHeight()) canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding,
+                    top + mTimeTextHeight * mCourseTimeNoPaddingHeight, mTimeTextPaint);
         }
     }
 
-    private void drawHeaderRowAndEvents(Canvas canvas) {
+    private void drawHeaderRowAndCourses(Canvas canvas) {
         // Calculate the available width for each day.
         mHeaderColumnWidth = mTimeTextWidth + mHeaderColumnPadding *2;
         mWidthPerDay = getWidth() - mHeaderColumnWidth - mColumnGap * (mNumberOfVisibleDays - 1);
@@ -499,7 +505,7 @@ public class WeekView extends View {
         if (mIsFirstDraw){
             mIsFirstDraw = false;
 
-            // If the week view is being drawn for the first time, then consider the first day of the week.
+            // If the course view is being drawn for the first time, then consider the first day of the week.
             if(mNumberOfVisibleDays >= 7 && today.get(Calendar.DAY_OF_WEEK) != mFirstDayOfWeek) {
                 int difference = 7 + (today.get(Calendar.DAY_OF_WEEK) - mFirstDayOfWeek);
                 mCurrentOrigin.x += (mWidthPerDay + mColumnGap) * difference;
@@ -519,8 +525,8 @@ public class WeekView extends View {
         }
 
         // If the new mCurrentOrigin.y is invalid, make it valid.
-        if (mCurrentOrigin.y < getHeight() - mHourHeight * (mDayCourseAmount+1) - mHeaderTextHeight - mHeaderRowPadding * 2 - mHeaderMarginBottom - mTimeTextHeight/2)
-            mCurrentOrigin.y = getHeight() - mHourHeight * (mDayCourseAmount+1) - mHeaderTextHeight - mHeaderRowPadding * 2 - mHeaderMarginBottom - mTimeTextHeight/2;
+        if (mCurrentOrigin.y < getHeight() - mHourHeight * mDayCourseAmount - mHeaderTextHeight - mHeaderRowPadding * 2 - mHeaderMarginBottom - mTimeTextHeight/2)
+            mCurrentOrigin.y = getHeight() - mHourHeight * mDayCourseAmount - mHeaderTextHeight - mHeaderRowPadding * 2 - mHeaderMarginBottom - mTimeTextHeight/2;
 
         // Don't put an "else if" because it will trigger a glitch when completely zoomed out and
         // scrolling vertically.
@@ -530,6 +536,8 @@ public class WeekView extends View {
 
         // Consider scroll offset.
         int leftDaysWithGaps = (int) -(Math.ceil(mCurrentOrigin.x / (mWidthPerDay + mColumnGap)));
+        // TODO: Figure it out!!!
+//        int leftDaysWithGaps = 0;
         float startFromPixel = mCurrentOrigin.x + (mWidthPerDay + mColumnGap) * leftDaysWithGaps +
                 mHeaderColumnWidth;
         float startPixel = startFromPixel;
@@ -545,8 +553,8 @@ public class WeekView extends View {
         float[] hourLines = new float[lineCount * 4];
 
         // Clear the cache for event rectangles.
-        if (mEventRects != null) {
-            for (EventRect eventRect: mEventRects) {
+        if (mCourseRects != null) {
+            for (CourseRect eventRect: mCourseRects) {
                 eventRect.rectF = null;
             }
         }
@@ -558,10 +566,15 @@ public class WeekView extends View {
         if(!mFirstVisibleDay.equals(oldFirstVisibleDay) && mScrollListener != null){
             mScrollListener.onFirstVisibleDayChanged(mFirstVisibleDay, oldFirstVisibleDay);
         }
-        for (int dayNumber = leftDaysWithGaps + 1;
-             dayNumber <= leftDaysWithGaps + mNumberOfVisibleDays + 1;
-             dayNumber++) {
 
+//        Log.d(TAG, "leftDaysWithGaps: " + leftDaysWithGaps);
+//        Log.d(TAG, "mNumberOfVisibleDays: " + mNumberOfVisibleDays);
+
+        // TODO: Critical method
+//        for (int dayNumber = leftDaysWithGaps + 1;
+//             dayNumber <= leftDaysWithGaps + mNumberOfVisibleDays + 1;
+//             dayNumber++) {
+        for (int dayNumber = 1; dayNumber <= mNumberOfVisibleDays; dayNumber++) {
             // Check if the day is today.
             day = (Calendar) today.clone();
             mLastVisibleDay = (Calendar) day.clone();
@@ -569,13 +582,13 @@ public class WeekView extends View {
             mLastVisibleDay.add(Calendar.DATE, dayNumber - 2);
             boolean sameDay = isSameDay(day, today);
 
-            // Get more events if necessary. We want to store the events 3 months beforehand. Get
-            // events only when it is the first iteration of the loop.
-            if (mEventRects == null || mRefreshEvents ||
-                    (dayNumber == leftDaysWithGaps + 1 && mFetchedPeriod != (int) mWeekViewLoader.toWeekViewPeriodIndex(day) &&
-                            Math.abs(mFetchedPeriod - mWeekViewLoader.toWeekViewPeriodIndex(day)) > 0.5)) {
-                getMoreEvents(day);
+            // Get all courses in one day
+            if (mCourseRects == null || mRefreshEvents) {
+                getOneDayCourses(dayNumber);
                 mRefreshEvents = false;
+            } else { // TODO: Better way to solve this?
+                mRefreshEvents = true;
+                getOneDayCourses(dayNumber);
             }
 
             // Draw background color for each day.
@@ -601,7 +614,8 @@ public class WeekView extends View {
                     }
                 }
                 else {
-                    canvas.drawRect(start, mHeaderTextHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom, startPixel + mWidthPerDay, getHeight(), sameDay ? mTodayBackgroundPaint : mDayBackgroundPaint);
+//                    canvas.drawRect(start, mHeaderTextHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom, startPixel + mWidthPerDay, getHeight(), sameDay ? mTodayBackgroundPaint : mDayBackgroundPaint);
+                    canvas.drawRect(start, mHeaderTextHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom, startPixel + mWidthPerDay, getHeight(), mDayBackgroundPaint);
                 }
             }
 
@@ -622,7 +636,7 @@ public class WeekView extends View {
             canvas.drawLines(hourLines, mHourSeparatorPaint);
 
             // Draw the events.
-            drawEvents(day, startPixel, canvas);
+            drawCourses(dayNumber, startPixel, canvas);
 
             // Draw the line at the current time.
             if (mShowNowLine && sameDay){
@@ -688,52 +702,49 @@ public class WeekView extends View {
     }
 
     /**
-     * Draw all the events of a particular day.
-     * @param date The day.
+     * Draw all the courses.
      * @param startFromPixel The left position of the day area. The events will never go any left from this value.
      * @param canvas The canvas to draw upon.
      */
-    private void drawEvents(Calendar date, float startFromPixel, Canvas canvas) {
-        if (mEventRects != null && mEventRects.size() > 0) {
-            for (int i = 0; i < mEventRects.size(); i++) {
-                if (isSameDay(mEventRects.get(i).event.getStartTime(), date)) {
+    private void drawCourses(int dayNubmer, float startFromPixel, Canvas canvas) {
+        if (mCourseRects != null && mCourseRects.size() > 0) {
+            for (int i = 0; i < mCourseRects.size(); i++) {
+                if (isSameDay(mCourseRects.get(i).event.getWeekDay(), dayNubmer)) {
 
                     // Calculate top.
-                    float top = mHourHeight * mDayCourseAmount * mEventRects.get(i).top / 1440 + mCurrentOrigin.y + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 + mEventMarginVertical;
+                    float top = mHourHeight * mDayCourseAmount * mCourseRects.get(i).top / 1440 + mCurrentOrigin.y + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight / 2 + mEventMarginVertical;
 
                     // Calculate bottom.
-                    float bottom = mEventRects.get(i).bottom;
-                    bottom = mHourHeight * mDayCourseAmount * bottom / 1440 + mCurrentOrigin.y + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - mEventMarginVertical;
+                    float bottom = mCourseRects.get(i).bottom;
+                    bottom = mHourHeight * mDayCourseAmount * bottom / 1440 + mCurrentOrigin.y + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight / 2 - mEventMarginVertical;
 
                     // Calculate left and right.
-                    float left = startFromPixel + mEventRects.get(i).left * mWidthPerDay;
+                    float left = startFromPixel + mCourseRects.get(i).left * mWidthPerDay;
                     if (left < startFromPixel)
                         left += mOverlappingEventGap;
-                    float right = left + mEventRects.get(i).width * mWidthPerDay;
+                    float right = left + mCourseRects.get(i).width * mWidthPerDay;
                     if (right < startFromPixel + mWidthPerDay)
                         right -= mOverlappingEventGap;
 
                     // Draw the event and the event name on top of it.
-                    RectF eventRectF = new RectF(left, top, right, bottom);
-                    if (bottom > mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 && left < right &&
-                            eventRectF.right > mHeaderColumnWidth &&
-                            eventRectF.left < getWidth() &&
-                            eventRectF.bottom > mHeaderTextHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom &&
-                            eventRectF.top < getHeight() &&
+                    RectF courseRectF = new RectF(left, top, right, bottom);
+                    if (bottom > mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight / 2 && left < right &&
+                            courseRectF.right > mHeaderColumnWidth &&
+                            courseRectF.left < getWidth() &&
+                            courseRectF.bottom > mHeaderTextHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom &&
+                            courseRectF.top < getHeight() &&
                             left < right
                             ) {
-                        mEventRects.get(i).rectF = eventRectF;
-                        mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
-                        canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
-                        drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, top, left);
-                    }
-                    else
-                        mEventRects.get(i).rectF = null;
+                        mCourseRects.get(i).rectF = courseRectF;
+                        mEventBackgroundPaint.setColor(mCourseRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mCourseRects.get(i).event.getColor());
+                        canvas.drawRoundRect(mCourseRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
+                        drawCourseTitle(mCourseRects.get(i).event, mCourseRects.get(i).rectF, canvas, top, left);
+                    } else
+                        mCourseRects.get(i).rectF = null;
                 }
             }
         }
     }
-
 
     /**
      * Draw the name of the event on top of the event rectangle.
@@ -743,7 +754,7 @@ public class WeekView extends View {
      * @param originalTop The original top position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      * @param originalLeft The original left position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      */
-    private void drawEventTitle(WeekViewEvent event, RectF rect, Canvas canvas, float originalTop, float originalLeft) {
+    private void drawCourseTitle(CourseViewEvent event, RectF rect, Canvas canvas, float originalTop, float originalLeft) {
         if (rect.right - rect.left - mEventPadding * 2 < 0) return;
         if (rect.bottom - rect.top - mEventPadding * 2 < 0) return;
 
@@ -751,13 +762,13 @@ public class WeekView extends View {
         SpannableStringBuilder bob = new SpannableStringBuilder();
         if (event.getName() != null) {
             bob.append(event.getName());
-            bob.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, bob.length(), 0);
-            bob.append(' ');
+            bob.setSpan(new StyleSpan(Typeface.BOLD), 0, bob.length(), 0);
+            bob.append('@');
         }
 
         // Prepare the location of the event.
-        if (event.getLocation() != null) {
-            bob.append(event.getLocation());
+        if (event.getPlace() != null) {
+            bob.append(event.getPlace());
         }
 
         int availableHeight = (int) (rect.bottom - originalTop - mEventPadding * 2);
@@ -789,188 +800,84 @@ public class WeekView extends View {
         }
     }
 
-
-    /**
-     * A class to hold reference to the events and their visual representation. An EventRect is
-     * actually the rectangle that is drawn on the calendar for a given event. There may be more
-     * than one rectangle for a single event (an event that expands more than one day). In that
-     * case two instances of the EventRect will be used for a single event. The given event will be
-     * stored in "originalEvent". But the event that corresponds to rectangle the rectangle
-     * instance will be stored in "event".
-     */
-    private class EventRect {
-        public WeekViewEvent event;
-        public WeekViewEvent originalEvent;
+    private class CourseRect {
+        public CourseViewEvent event;
         public RectF rectF;
         public float left;
         public float width;
         public float top;
         public float bottom;
 
-        /**
-         * Create a new instance of event rect. An EventRect is actually the rectangle that is drawn
-         * on the calendar for a given event. There may be more than one rectangle for a single
-         * event (an event that expands more than one day). In that case two instances of the
-         * EventRect will be used for a single event. The given event will be stored in
-         * "originalEvent". But the event that corresponds to rectangle the rectangle instance will
-         * be stored in "event".
-         * @param event Represents the event which this instance of rectangle represents.
-         * @param originalEvent The original event that was passed by the user.
-         * @param rectF The rectangle.
-         */
-        public EventRect(WeekViewEvent event, WeekViewEvent originalEvent, RectF rectF) {
+        public CourseRect(CourseViewEvent event, RectF rectF) {
             this.event = event;
             this.rectF = rectF;
-            this.originalEvent = originalEvent;
         }
     }
 
-
     /**
-     * Gets more events of one/more month(s) if necessary. This method is called when the user is
-     * scrolling the week view. The week view stores the events of three months: the visible month,
-     * the previous month, the next month.
-     * @param day The day where the user is currently is.
+     * Get all courses in specific day
      */
-    private void getMoreEvents(Calendar day) {
-
-        // Get more events if the month is changed.
-        if (mEventRects == null)
-            mEventRects = new ArrayList<EventRect>();
-        if (mWeekViewLoader == null && !isInEditMode())
-            throw new IllegalStateException("You must provide a MonthChangeListener");
+    private void getOneDayCourses(int dayNumber) {
+        if (mCourseRects == null)
+            mCourseRects = new ArrayList<>();
+        if (mCourseViewLoader == null && !isInEditMode())
+            throw new IllegalStateException("You must provide a LoadListener");
 
         // If a refresh was requested then reset some variables.
         if (mRefreshEvents) {
-            mEventRects.clear();
-            mPreviousPeriodEvents = null;
-            mCurrentPeriodEvents = null;
-            mNextPeriodEvents = null;
-            mFetchedPeriod = -1;
+            mCourseRects.clear();
+            mAllCourseEvents = null;
         }
 
-        if (mWeekViewLoader != null){
-            int periodToFetch = (int) mWeekViewLoader.toWeekViewPeriodIndex(day);
-            if (!isInEditMode() && (mFetchedPeriod < 0 || mFetchedPeriod != periodToFetch || mRefreshEvents)) {
-                List<WeekViewEvent> previousPeriodEvents = null;
-                List<WeekViewEvent> currentPeriodEvents = null;
-                List<WeekViewEvent> nextPeriodEvents = null;
+        if (mCourseViewLoader != null) {
+            List<CourseViewEvent> allCourseEvents = null;
 
-                if (mPreviousPeriodEvents != null && mCurrentPeriodEvents != null && mNextPeriodEvents != null){
-                    if (periodToFetch == mFetchedPeriod-1){
-                        currentPeriodEvents = mPreviousPeriodEvents;
-                        nextPeriodEvents = mCurrentPeriodEvents;
-                    }
-                    else if (periodToFetch == mFetchedPeriod){
-                        previousPeriodEvents = mPreviousPeriodEvents;
-                        currentPeriodEvents = mCurrentPeriodEvents;
-                        nextPeriodEvents = mNextPeriodEvents;
-                    }
-                    else if (periodToFetch == mFetchedPeriod+1){
-                        previousPeriodEvents = mCurrentPeriodEvents;
-                        currentPeriodEvents = mNextPeriodEvents;
-                    }
-                }
-                if (currentPeriodEvents == null)
-                    currentPeriodEvents = mWeekViewLoader.onLoad(periodToFetch);
-                if (previousPeriodEvents == null)
-                    previousPeriodEvents = mWeekViewLoader.onLoad(periodToFetch-1);
-                if (nextPeriodEvents == null)
-                    nextPeriodEvents = mWeekViewLoader.onLoad(periodToFetch+1);
+            if (mAllCourseEvents != null)
+                allCourseEvents = mAllCourseEvents;
+            if (allCourseEvents == null)
+                allCourseEvents = mCourseViewLoader.onLoad(dayNumber);
 
+            // Add all courses into List<CourseRect> mCourseRects
+            cacheEvents(allCourseEvents);
 
-                // Clear events.
-                mEventRects.clear();
-                sortAndCacheEvents(previousPeriodEvents);
-                sortAndCacheEvents(currentPeriodEvents);
-                sortAndCacheEvents(nextPeriodEvents);
-
-                mPreviousPeriodEvents = previousPeriodEvents;
-                mCurrentPeriodEvents = currentPeriodEvents;
-                mNextPeriodEvents = nextPeriodEvents;
-                mFetchedPeriod = periodToFetch;
-            }
+            mAllCourseEvents = allCourseEvents;
         }
 
         // Prepare to calculate positions of each events.
-        List<EventRect> tempEvents = mEventRects;
-        mEventRects = new ArrayList<EventRect>();
+        List<CourseRect> tempEvents = mCourseRects;
+        mCourseRects = new ArrayList<CourseRect>();
 
         // Iterate through each day with events to calculate the position of the events.
+        computePositionOfEvents(mCourseRects);
+
         while (tempEvents.size() > 0) {
-            ArrayList<EventRect> eventRects = new ArrayList<>(tempEvents.size());
+            ArrayList<CourseRect> courseRects = new ArrayList<>(tempEvents.size());
 
             // Get first event for a day.
-            EventRect eventRect1 = tempEvents.remove(0);
-            eventRects.add(eventRect1);
+            CourseRect courseRect1 = tempEvents.remove(0);
+            courseRects.add(courseRect1);
 
             int i = 0;
             while (i < tempEvents.size()) {
                 // Collect all other events for same day.
-                EventRect eventRect2 = tempEvents.get(i);
-                if (isSameDay(eventRect1.event.getStartTime(), eventRect2.event.getStartTime())) {
+                CourseRect courseRect2 = tempEvents.get(i);
+                if (isSameDay(courseRect1.event.getWeekDay(), dayNumber)) {
                     tempEvents.remove(i);
-                    eventRects.add(eventRect2);
+                    courseRects.add(courseRect2);
                 } else {
                     i++;
                 }
             }
-            computePositionOfEvents(eventRects);
+            computePositionOfEvents(courseRects);
         }
     }
 
     /**
-     * Cache the event for smooth scrolling functionality.
-     * @param event The event to cache.
-     */
-    private void cacheEvent(WeekViewEvent event) {
-        if (!isSameDay(event.getStartTime(), event.getEndTime())) {
-            // Add first day.
-            Calendar endTime = (Calendar) event.getStartTime().clone();
-            endTime.set(Calendar.HOUR_OF_DAY, 23);
-            endTime.set(Calendar.MINUTE, 59);
-            WeekViewEvent event1 = new WeekViewEvent(event.getId(), event.getName(), event.getLocation(), event.getStartTime(), endTime);
-            event1.setColor(event.getColor());
-            mEventRects.add(new EventRect(event1, event, null));
-
-            // Add other days.
-            Calendar otherDay = (Calendar) event.getStartTime().clone();
-            otherDay.add(Calendar.DATE, 1);
-            while (!isSameDay(otherDay, event.getEndTime())) {
-                Calendar overDay = (Calendar) otherDay.clone();
-                overDay.set(Calendar.HOUR_OF_DAY, 0);
-                overDay.set(Calendar.MINUTE, 0);
-                Calendar endOfOverDay = (Calendar) overDay.clone();
-                endOfOverDay.set(Calendar.HOUR_OF_DAY, 23);
-                endOfOverDay.set(Calendar.MINUTE, 59);
-                WeekViewEvent eventMore = new WeekViewEvent(event.getId(), event.getName(), overDay, endOfOverDay);
-                eventMore.setColor(event.getColor());
-                mEventRects.add(new EventRect(eventMore, event, null));
-
-                // Add next day.
-                otherDay.add(Calendar.DATE, 1);
-            }
-
-            // Add last day.
-            Calendar startTime = (Calendar) event.getEndTime().clone();
-            startTime.set(Calendar.HOUR_OF_DAY, 0);
-            startTime.set(Calendar.MINUTE, 0);
-            WeekViewEvent event2 = new WeekViewEvent(event.getId(), event.getName(), event.getLocation(), startTime, event.getEndTime());
-            event2.setColor(event.getColor());
-            mEventRects.add(new EventRect(event2, event, null));
-        }
-        else {
-            mEventRects.add(new EventRect(event, event, null));
-        }
-    }
-
-    /**
-     * Sort and cache events.
+     * Cache events.
      * @param events The events to be sorted and cached.
      */
-    private void sortAndCacheEvents(List<WeekViewEvent> events) {
-        sortEvents(events);
-        for (WeekViewEvent event : events) {
+    private void cacheEvents(List<CourseViewEvent> events) {
+        for (CourseViewEvent event : events) {
             cacheEvent(event);
         }
     }
@@ -979,51 +886,59 @@ public class WeekView extends View {
      * Sorts the events in ascending order.
      * @param events The events to be sorted.
      */
-    private void sortEvents(List<WeekViewEvent> events) {
-        Collections.sort(events, new Comparator<WeekViewEvent>() {
-            @Override
-            public int compare(WeekViewEvent event1, WeekViewEvent event2) {
-                long start1 = event1.getStartTime().getTimeInMillis();
-                long start2 = event2.getStartTime().getTimeInMillis();
-                int comparator = start1 > start2 ? 1 : (start1 < start2 ? -1 : 0);
-                if (comparator == 0) {
-                    long end1 = event1.getEndTime().getTimeInMillis();
-                    long end2 = event2.getEndTime().getTimeInMillis();
-                    comparator = end1 > end2 ? 1 : (end1 < end2 ? -1 : 0);
-                }
-                return comparator;
-            }
-        });
+//    private void sortEvents(List<CourseViewEvent> events) {
+//        Collections.sort(events, new Comparator<CourseViewEvent>() {
+//            @Override
+//            public int compare(CourseViewEvent event1, CourseViewEvent event2) {
+//                long start1 = event1.getStartTime().getTimeInMillis();
+//                long start2 = event2.getStartTime().getTimeInMillis();
+//                int comparator = start1 > start2 ? 1 : (start1 < start2 ? -1 : 0);
+//                if (comparator == 0) {
+//                    long end1 = event1.getEndTime().getTimeInMillis();
+//                    long end2 = event2.getEndTime().getTimeInMillis();
+//                    comparator = end1 > end2 ? 1 : (end1 < end2 ? -1 : 0);
+//                }
+//                return comparator;
+//            }
+//        });
+//    }
+
+    /**
+     * Cache the event for smooth scrolling functionality.
+     * @param event The event to cache.
+     */
+    private void cacheEvent(CourseViewEvent event) {
+        mCourseRects.add(new CourseRect(event, null));
     }
 
     /**
      * Calculates the left and right positions of each events. This comes handy specially if events
      * are overlapping.
-     * @param eventRects The events along with their wrapper class.
+     * @param courseRects The events along with their wrapper class.
      */
-    private void computePositionOfEvents(List<EventRect> eventRects) {
+    private void computePositionOfEvents(List<CourseRect> courseRects) {
         // Make "collision groups" for all events that collide with others.
-        List<List<EventRect>> collisionGroups = new ArrayList<List<EventRect>>();
-        for (EventRect eventRect : eventRects) {
+        List<List<CourseRect>> collisionGroups = new ArrayList<List<CourseRect>>();
+        for (CourseRect courseRect : courseRects) {
             boolean isPlaced = false;
             outerLoop:
-            for (List<EventRect> collisionGroup : collisionGroups) {
-                for (EventRect groupEvent : collisionGroup) {
-                    if (isEventsCollide(groupEvent.event, eventRect.event)) {
-                        collisionGroup.add(eventRect);
+            for (List<CourseRect> collisionGroup : collisionGroups) {
+                for (CourseRect groupEvent : collisionGroup) {
+                    if (isEventsCollide(groupEvent.event, courseRect.event)) {
+                        collisionGroup.add(courseRect);
                         isPlaced = true;
                         break outerLoop;
                     }
                 }
             }
             if (!isPlaced) {
-                List<EventRect> newGroup = new ArrayList<EventRect>();
-                newGroup.add(eventRect);
+                List<CourseRect> newGroup = new ArrayList<CourseRect>();
+                newGroup.add(courseRect);
                 collisionGroups.add(newGroup);
             }
         }
 
-        for (List<EventRect> collisionGroup : collisionGroups) {
+        for (List<CourseRect> collisionGroup : collisionGroups) {
             expandEventsToMaxWidth(collisionGroup);
         }
     }
@@ -1033,26 +948,26 @@ public class WeekView extends View {
      * space available horizontally.
      * @param collisionGroup The group of events which overlap with each other.
      */
-    private void expandEventsToMaxWidth(List<EventRect> collisionGroup) {
+    private void expandEventsToMaxWidth(List<CourseRect> collisionGroup) {
         // Expand the events to maximum possible width.
-        List<List<EventRect>> columns = new ArrayList<List<EventRect>>();
-        columns.add(new ArrayList<EventRect>());
-        for (EventRect eventRect : collisionGroup) {
+        List<List<CourseRect>> columns = new ArrayList<List<CourseRect>>();
+        columns.add(new ArrayList<CourseRect>());
+        for (CourseRect courseRect : collisionGroup) {
             boolean isPlaced = false;
-            for (List<EventRect> column : columns) {
+            for (List<CourseRect> column : columns) {
                 if (column.size() == 0) {
-                    column.add(eventRect);
+                    column.add(courseRect);
                     isPlaced = true;
                 }
-                else if (!isEventsCollide(eventRect.event, column.get(column.size()-1).event)) {
-                    column.add(eventRect);
+                else if (!isEventsCollide(courseRect.event, column.get(column.size()-1).event)) {
+                    column.add(courseRect);
                     isPlaced = true;
                     break;
                 }
             }
             if (!isPlaced) {
-                List<EventRect> newColumn = new ArrayList<EventRect>();
-                newColumn.add(eventRect);
+                List<CourseRect> newColumn = new ArrayList<CourseRect>();
+                newColumn.add(courseRect);
                 columns.add(newColumn);
             }
         }
@@ -1061,20 +976,21 @@ public class WeekView extends View {
         // Calculate left and right position for all the events.
         // Get the maxRowCount by looking in all columns.
         int maxRowCount = 0;
-        for (List<EventRect> column : columns){
+        for (List<CourseRect> column : columns){
             maxRowCount = Math.max(maxRowCount, column.size());
         }
         for (int i = 0; i < maxRowCount; i++) {
             // Set the left and right values of the event.
             float j = 0;
-            for (List<EventRect> column : columns) {
+            for (List<CourseRect> column : columns) {
                 if (column.size() >= i+1) {
-                    EventRect eventRect = column.get(i);
-                    eventRect.width = 1f / columns.size();
-                    eventRect.left = j / columns.size();
-                    eventRect.top = eventRect.event.getStartTime().get(Calendar.HOUR_OF_DAY) * 60 + eventRect.event.getStartTime().get(Calendar.MINUTE);
-                    eventRect.bottom = eventRect.event.getEndTime().get(Calendar.HOUR_OF_DAY) * 60 + eventRect.event.getEndTime().get(Calendar.MINUTE);
-                    mEventRects.add(eventRect);
+                    CourseRect courseRect = column.get(i);
+                    courseRect.width = 1f / columns.size();
+                    courseRect.left = j / columns.size();
+                    // TODO: Calculate the height with change of mDayCourseAmount
+                    courseRect.top = courseRect.event.getStartTime() * 120;
+                    courseRect.bottom = courseRect.event.getEndTime() * 120;
+                    mCourseRects.add(courseRect);
                 }
                 j++;
             }
@@ -1088,11 +1004,11 @@ public class WeekView extends View {
      * @param event2 The second event.
      * @return true if the events overlap.
      */
-    private boolean isEventsCollide(WeekViewEvent event1, WeekViewEvent event2) {
-        long start1 = event1.getStartTime().getTimeInMillis();
-        long end1 = event1.getEndTime().getTimeInMillis();
-        long start2 = event2.getStartTime().getTimeInMillis();
-        long end2 = event2.getEndTime().getTimeInMillis();
+    private boolean isEventsCollide(CourseViewEvent event1, CourseViewEvent event2) {
+        int start1 = event1.getStartTime();
+        int end1 = event1.getEndTime();
+        int start2 = event2.getStartTime();
+        int end2 = event2.getEndTime();
         return !((start1 >= end2) || (end1 <= start2));
     }
 
@@ -1127,34 +1043,34 @@ public class WeekView extends View {
         return mEventClickListener;
     }
 
-    public @Nullable MonthLoader.MonthChangeListener getMonthChangeListener() {
-        if (mWeekViewLoader instanceof MonthLoader)
-            return ((MonthLoader) mWeekViewLoader).getOnMonthChangeListener();
+    public @Nullable CourseLoader.LoadListener getLoadListener() {
+        if (mCourseViewLoader instanceof CourseLoader)
+            return ((CourseLoader) mCourseViewLoader).getLoadListener();
         return null;
     }
 
-    public void setMonthChangeListener(MonthLoader.MonthChangeListener monthChangeListener) {
-        this.mWeekViewLoader = new MonthLoader(monthChangeListener);
+    public void setLoadListener(CourseLoader.LoadListener loadListener) {
+        this.mCourseViewLoader = new CourseLoader(loadListener);
     }
 
     /**
-     * Get event loader in the week view. Event loaders define the  interval after which the events
-     * are loaded in week view. For a MonthLoader events are loaded for every month. You can define
-     * your custom event loader by extending WeekViewLoader.
+     * Get event loader in the course view. Event loaders define the  interval after which the events
+     * are loaded in course view. For a CourseLoader events are loaded for every month. You can define
+     * your custom event loader by extending CourseViewLoader.
      * @return The event loader.
      */
-    public WeekViewLoader getWeekViewLoader(){
-        return mWeekViewLoader;
+    public CourseViewLoader getCourseViewLoader(){
+        return mCourseViewLoader;
     }
 
     /**
-     * Set event loader in the week view. For example, a MonthLoader. Event loaders define the
-     * interval after which the events are loaded in week view. For a MonthLoader events are loaded
-     * for every month. You can define your custom event loader by extending WeekViewLoader.
+     * Set event loader in the course view. For example, a CourseLoader. Event loaders define the
+     * interval after which the events are loaded in course view. For a CourseLoader events are loaded
+     * for every month. You can define your custom event loader by extending CourseViewLoader.
      * @param loader The event loader.
      */
-    public void setWeekViewLoader(WeekViewLoader loader){
-        this.mWeekViewLoader = loader;
+    public void setCourseViewLoader(CourseViewLoader loader){
+        this.mCourseViewLoader = loader;
     }
 
     public EventLongPressListener getEventLongPressListener() {
@@ -1199,7 +1115,6 @@ public class WeekView extends View {
                 @Override
                 public String interpretDate(Calendar date) {
                     try {
-//                        SimpleDateFormat sdf = mDayNameLength == LENGTH_SHORT ? new SimpleDateFormat("EEEEE MM-dd", Locale.getDefault()) : new SimpleDateFormat("EEE", Locale.getDefault());
                         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
                         return sdf.format(date.getTime()).toUpperCase();
                     } catch (Exception e) {
@@ -1209,8 +1124,8 @@ public class WeekView extends View {
                 }
 
                 @Override
-                public String interpretTime(int hour) {
-                    return String.valueOf(hour);
+                public String interpretTime(int courseTimeNo) {
+                    return String.valueOf(courseTimeNo);
                 }
             };
         }
@@ -1271,16 +1186,16 @@ public class WeekView extends View {
     }
 
     /**
-     * Set the first day of the week. First day of the week is used only when the week view is first
+     * Set the first day of the week. First day of the week is used only when the course view is first
      * drawn. It does not of any effect after user starts scrolling horizontally.
      * <p>
-     *     <b>Note:</b> This method will only work if the week view is set to display more than 6 days at
+     *     <b>Note:</b> This method will only work if the course view is set to display more than 6 days at
      *     once.
      * </p>
-     * @param firstDayOfWeek The supported values are {@link java.util.Calendar#SUNDAY},
-     * {@link java.util.Calendar#MONDAY}, {@link java.util.Calendar#TUESDAY},
-     * {@link java.util.Calendar#WEDNESDAY}, {@link java.util.Calendar#THURSDAY},
-     * {@link java.util.Calendar#FRIDAY}.
+     * @param firstDayOfWeek The supported values are {@link Calendar#SUNDAY},
+     * {@link Calendar#MONDAY}, {@link Calendar#TUESDAY},
+     * {@link Calendar#WEDNESDAY}, {@link Calendar#THURSDAY},
+     * {@link Calendar#FRIDAY}.
      */
     public void setFirstDayOfWeek(int firstDayOfWeek) {
         mFirstDayOfWeek = firstDayOfWeek;
@@ -1442,8 +1357,8 @@ public class WeekView extends View {
      * <p>
      *     <b>Note:</b> Use {@link #setDateTimeInterpreter(DateTimeInterpreter)} instead.
      * </p>
-     * @param length Supported values are {@link com.ddmax.courseview.WeekView#LENGTH_SHORT} and
-     * {@link com.ddmax.courseview.WeekView#LENGTH_LONG}.
+     * @param length Supported values are {@link CourseView#LENGTH_SHORT} and
+     * {@link CourseView#LENGTH_LONG}.
      */
     @Deprecated
     public void setDayNameLength(int length) {
@@ -1494,16 +1409,16 @@ public class WeekView extends View {
     }
 
     /**
-     * Returns the first visible day in the week view.
-     * @return The first visible day in the week view.
+     * Returns the first visible day in the course view.
+     * @return The first visible day in the course view.
      */
     public Calendar getFirstVisibleDay() {
         return mFirstVisibleDay;
     }
 
     /**
-     * Returns the last visible day in the week view.
-     * @return The last visible day in the week view.
+     * Returns the last visible day in the course view.
+     * @return The last visible day in the course view.
      */
     public Calendar getLastVisibleDay() {
         return mLastVisibleDay;
@@ -1569,25 +1484,6 @@ public class WeekView extends View {
     }
 
     /**
-     * Get amount of one day's courses
-     * @return Amount of day's courses
-     */
-    public int getDayCourseAmount() {
-        return mDayCourseAmount;
-    }
-
-    /**
-     * Set amount of one day's courses
-     * @param dayCourseAmount Amount of day courses
-     */
-    public void setDayCourseAmount(int dayCourseAmount) {
-        if (dayCourseAmount > 0) {
-            this.mDayCourseAmount = dayCourseAmount;
-            invalidate();
-        }
-    }
-
-    /**
      * Get whether "now" line should be displayed. "Now" line is defined by the attributes
      * `nowLineColor` and `nowLineThickness`.
      * @return True if "now" line should be displayed.
@@ -1640,6 +1536,25 @@ public class WeekView extends View {
         invalidate();
     }
 
+    /**
+     * Get amount of one day's courses
+     * @return Amount of day's courses
+     */
+    public int getDayCourseAmount() {
+        return mDayCourseAmount;
+    }
+
+    /**
+     * Set amount of one day's courses
+     * @param dayCourseAmount Amount of day courses
+     */
+    public void setDayCourseAmount(int dayCourseAmount) {
+        if (dayCourseAmount > 0) {
+            this.mDayCourseAmount = dayCourseAmount;
+            invalidate();
+        }
+    }
+
     /////////////////////////////////////////////////////////////////
     //
     //      Functions related to scrolling.
@@ -1672,7 +1587,7 @@ public class WeekView extends View {
             mScroller.forceFinished(true);
             // Snap to date.
             mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, -nearestOrigin, 0, 50);
-            ViewCompat.postInvalidateOnAnimation(WeekView.this);
+            ViewCompat.postInvalidateOnAnimation(CourseView.this);
         }
         // Reset scrolling and fling direction.
         mCurrentScrollDirection = mCurrentFlingDirection = Direction.NONE;
@@ -1705,7 +1620,7 @@ public class WeekView extends View {
     /////////////////////////////////////////////////////////////////
 
     /**
-     * Show today on the week view.
+     * Show today on the course view.
      */
     public void goToToday() {
         Calendar today = Calendar.getInstance();
@@ -1713,7 +1628,7 @@ public class WeekView extends View {
     }
 
     /**
-     * Show a specific day on the week view.
+     * Show a specific day on the course view.
      * @param date The date to show.
      */
     public void goToDate(Calendar date) {
@@ -1755,8 +1670,7 @@ public class WeekView extends View {
     }
 
     /**
-     * TODO:
-     * Vertically scroll to a specific hour in the week view.
+     * Vertically scroll to a specific hour in the course view.
      * @param hour The hour to scroll to in 24-hour format. Supported values are 0-24.
      */
     public void goToHour(double hour){
@@ -1766,13 +1680,13 @@ public class WeekView extends View {
         }
 
         int verticalOffset = 0;
-        if (hour > mDayCourseAmount+1)
-            verticalOffset = mHourHeight * (mDayCourseAmount+1);
+        if (hour > 24)
+            verticalOffset = mHourHeight * 24;
         else if (hour > 0)
             verticalOffset = (int) (mHourHeight * hour);
 
-        if (verticalOffset > mHourHeight * (mDayCourseAmount+1) - getHeight() + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom)
-            verticalOffset = (int)(mHourHeight * (mDayCourseAmount+1) - getHeight() + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom);
+        if (verticalOffset > mHourHeight * 24 - getHeight() + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom)
+            verticalOffset = (int)(mHourHeight * 24 - getHeight() + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom);
 
         mCurrentOrigin.y = -verticalOffset;
         invalidate();
@@ -1800,16 +1714,16 @@ public class WeekView extends View {
          * @param event: event clicked.
          * @param eventRect: view containing the clicked event.
          */
-        void onEventClick(WeekViewEvent event, RectF eventRect);
+        void onEventClick(CourseViewEvent event, RectF eventRect);
     }
 
     public interface EventLongPressListener {
         /**
-         * Similar to {@link com.ddmax.courseview.WeekView.EventClickListener} but with a long press.
+         * Similar to {@link EventClickListener} but with a long press.
          * @param event: event clicked.
          * @param eventRect: view containing the clicked event.
          */
-        void onEventLongPress(WeekViewEvent event, RectF eventRect);
+        void onEventLongPress(CourseViewEvent event, RectF eventRect);
     }
 
     public interface EmptyViewClickListener {
@@ -1822,7 +1736,7 @@ public class WeekView extends View {
 
     public interface EmptyViewLongPressListener {
         /**
-         * Similar to {@link com.ddmax.courseview.WeekView.EmptyViewClickListener} but with long press.
+         * Similar to {@link EmptyViewClickListener} but with long press.
          * @param time: {@link Calendar} object set with the date and time of the long pressed position on the view.
          */
         void onEmptyViewLongPress(Calendar time);
@@ -1832,7 +1746,7 @@ public class WeekView extends View {
         /**
          * Called when the first visible day has changed.
          *
-         * (this will also be called during the first draw of the weekview)
+         * (this will also be called during the first draw of the CourseView)
          * @param newFirstVisibleDay The new first visible day
          * @param oldFirstVisibleDay The old first visible day (is null on the first call).
          */
@@ -1854,6 +1768,17 @@ public class WeekView extends View {
      */
     private boolean isSameDay(Calendar dayOne, Calendar dayTwo) {
         return dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR) && dayOne.get(Calendar.DAY_OF_YEAR) == dayTwo.get(Calendar.DAY_OF_YEAR);
+    }
+
+    /**
+     * Checks if two times are on the same day.
+     * @param weekDay The weekDay in CourseViewEvent.
+     * @param dayNumber The given dayNumber.
+     * @return Whether the times are on the same day.
+     */
+    private boolean isSameDay(String weekDay, int dayNumber) {
+        String weekDays = "一二三四五六七";
+        return dayNumber == weekDays.indexOf(weekDay) + 1;
     }
 
     /**

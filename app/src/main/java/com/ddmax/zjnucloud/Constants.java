@@ -14,8 +14,8 @@ public final class Constants {
         public static final int BUS = 2;
         public static final int SPEECH = 3;
         public static final int SCORE = 4;
-        public static final int EXAM = 5;
-        public static final int COURSE = 6;
+        public static final int COURSE = 5;
+        public static final int EXAM = 6;
         public static final int LIBRARY = 7;
         public static final int LOGISTICS = 8;
     }
@@ -24,6 +24,11 @@ public final class Constants {
 
         // API服务器地址
         public static final String BASE_URL = "http://api.ddmax.gq";
+
+        // 首页轮播图地址
+        public static final String BANNER = BASE_URL + "/banner/?format=json";
+        public static final String BANNER_DETAIL = "{prefix}?json=1";
+
         // 新闻列表地址
         public static final class NEWS {
 
@@ -52,9 +57,11 @@ public final class Constants {
         // 浙师微后勤地址
         public static final String LOGISTICS = "http://365.zjnu.edu.cn/whq1.1/news/news_manage.do?command=showList";
 
+        // 发现地址
+        public static final String EXPLORE = "http://www.leo23.com/?json=1&count=10";
+
         // ZJNU Intra API 地址
         public static final String BASE_INTRA_URL = "https://e.zjnucloud.com";
-//        public static final String BASE_INTRA_URL = "http://10.7.90.233";
         public static final class EMIS {
             // 教务绑定地址
             public static final String BIND = BASE_INTRA_URL + "/emis/binding/";
@@ -83,6 +90,7 @@ public final class Constants {
 
     public static final String TEMPLATE_NEWS_DETAIL = "news-templates/template.html";
     public static final String TEMPLATE_SPEECH_DETAIL = "speech-templates/template.html";
+    public static final String TEMPLATE_EXPLORE_DETAIL = "explore-templates/template.html";
 
     // Bmob Application ID
     public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";

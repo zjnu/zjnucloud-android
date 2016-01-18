@@ -28,9 +28,11 @@ import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.ExamListAdapter;
 import com.ddmax.zjnucloud.base.BaseEmisActivity;
 import com.ddmax.zjnucloud.model.EmisUser;
+import com.ddmax.zjnucloud.model.exam.Exam;
 import com.ddmax.zjnucloud.model.exam.ExamList;
 import com.ddmax.zjnucloud.task.BaseGetDataTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
+import com.ddmax.zjnucloud.util.EmisUtils;
 import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.util.RequestUtils;
 
@@ -254,8 +256,9 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
                     return;
                 }
                 this.examList = examList;
-                // 保存到数据库
+                // 若为刷新数据，则清空后保存到数据库
                 if (!isContentSame) {
+                    EmisUtils.clean(Exam.class, ExamList.class);
                     this.examList.save();
                 }
                 // 设置标题文字

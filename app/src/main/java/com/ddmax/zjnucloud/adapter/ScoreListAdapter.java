@@ -203,8 +203,9 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.positions = new ArrayList<>();
             for (int i = 0; i < semesters.size(); i++) {
                 Semester semester = semesters.get(i);
-                // 添加学期名称
-                mTitleList.add(semester.semester);
+                // 添加学期标题名称
+                String title = semester.semester + " 绩点:" + semester.gpa + " 学分:" + semester.credits;
+                mTitleList.add(title);
                 // 添加当前学期所有课程到mCourseList
                 List<Score> scores = semester.values;
                 mScoreList.addAll(scores);

@@ -1,51 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/course_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.ddmax.zjnucloud.ui.activity.ScoreActivity">
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    tools:context="com.ddmax.zjnucloud.ui.activity.CourseActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <include android:id="@+id/toolbar"
+        layout="@layout/top_toolbar" />
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/top_toolbar" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <com.ddmax.courseview.WeekView
+    <com.ddmax.courseview.CourseView
         android:id="@+id/course_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@id/toolbar"
+        app:columnGap="2dp"
         app:eventTextColor="@android:color/white"
-        app:textSize="12sp"
-        app:hourHeight="55dp"
-        app:headerColumnPadding="6dp"
-        app:headerColumnTextColor="#8f000000"
-        app:headerRowPadding="12dp"
-        app:columnGap="4dp"
-        app:noOfVisibleDays="7"
-        app:showNowLine="true"
-        app:headerRowBackgroundColor="#efefef"
-        app:dayBackgroundColor="#05000000"
-        app:todayBackgroundColor="#1848adff"
         app:headerColumnBackground="#ffffffff"
-        app:dayCourseAmount="12"/>
+        app:headerColumnPadding="6dp"
+        app:headerColumnTextColor="@color/course_text"
+        app:headerRowBackgroundColor="@color/course"
+        app:headerRowPadding="12dp"
+        app:hourHeight="60dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:noOfVisibleDays="7"
+        app:textSize="12sp" />
 
     <LinearLayout
         android:id="@+id/error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:layout_marginTop="160dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
@@ -68,9 +57,11 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_refresh_white_48dp"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_refresh_white_48dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
 

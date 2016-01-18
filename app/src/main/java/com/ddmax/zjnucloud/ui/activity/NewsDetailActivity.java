@@ -2,7 +2,6 @@ package com.ddmax.zjnucloud.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +16,6 @@ import com.ddmax.zjnucloud.ui.fragment.NewsDetailFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * @author ddMax
@@ -119,14 +116,15 @@ public class NewsDetailActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // TODO: ShareSDK分享模块 - 新闻
     private void shareBySystem() {
-        ShareSDK.initSDK(this);
-        OnekeyShare oks = new OnekeyShare();
-        oks.disableSSOWhenAuthorize();
-        oks.setTitle(mNewsModel.getTitle());
-        oks.setText(mNewsModel.getTitle());
-
-        oks.show(this);
+//        ShareSDK.initSDK(this);
+//        OnekeyShare oks = new OnekeyShare();
+//        oks.disableSSOWhenAuthorize();
+//        oks.setTitle(mNewsModel.getTitle());
+//        oks.setText(mNewsModel.getTitle());
+//
+//        oks.show(this);
 //        Intent intent = new Intent(Intent.ACTION_SEND);
 //        intent.setType("text/plain");
 //        intent.putExtra(Intent.EXTRA_SUBJECT, "Share");
