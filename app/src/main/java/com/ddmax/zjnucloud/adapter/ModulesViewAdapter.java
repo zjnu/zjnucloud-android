@@ -30,8 +30,8 @@ public class ModulesViewAdapter extends BaseAdapter {
     private Integer[] mModulesImages = {
             R.drawable.module_news, R.drawable.module_calendar,
             R.drawable.module_bus, R.drawable.module_speech,
-            R.drawable.module_resources, R.drawable.module_exam,
-            R.drawable.module_coursetable, R.drawable.module_library,
+            R.drawable.module_resources, R.drawable.module_coursetable,
+            R.drawable.module_exam, R.drawable.module_library,
             R.drawable.module_logistics
     };
 

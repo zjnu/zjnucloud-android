@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ddmax.zjnucloud.R;
-import com.ddmax.zjnucloud.model.Page;
+import com.ddmax.zjnucloud.model.news.Page;
 import com.ddmax.zjnucloud.model.news.News;
 import com.ddmax.zjnucloud.ui.activity.NewsDetailActivity;
 

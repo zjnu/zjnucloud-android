@@ -1,5 +1,6 @@
 package com.ddmax.zjnucloud.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,10 +32,18 @@ import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
 import com.ddmax.zjnucloud.adapter.ModulesViewAdapter;
 import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.base.BaseWebActivity;
+import com.ddmax.zjnucloud.model.banner.Banner;
 import com.ddmax.zjnucloud.model.User;
+import com.ddmax.zjnucloud.model.banner.BannerDetail;
+import com.ddmax.zjnucloud.task.BaseGetDataTask;
+import com.ddmax.zjnucloud.task.ResponseListener;
+import com.ddmax.zjnucloud.ui.fragment.CommonDetailFragment;
 import com.ddmax.zjnucloud.util.DensityUtils;
+import com.ddmax.zjnucloud.util.GsonUtils;
+import com.ddmax.zjnucloud.util.RequestUtils;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +51,16 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.update.BmobUpdateAgent;
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * @author ddMax
@@ -52,8 +69,11 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 public class MainActivity extends BaseActivity implements
         Toolbar.OnMenuItemClickListener, GridView.OnItemClickListener,
-        View.OnClickListener {
+        View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     public static final String TAG = "MainActivity";
+    // 请求码
+    public static final int REQUEST_PROFILE = 0;
+    public static final int REQUEST_LOGIN = 1;
 
     @Bind(R.id.mToolbar) Toolbar mToolbar;
     @Bind(R.id.image_display) ViewPager mImageDisplay; // 主界面图片展示
@@ -68,24 +88,17 @@ public class MainActivity extends BaseActivity implements
     private List<View> mDisplayViews = new ArrayList<>();
     // 轮播Handler
     private AutoRoundHandler mHandler = new AutoRoundHandler(new WeakReference<>(this));
-    // 轮播图片资源ID
-    private static Integer[] mDisplayImgs = {
-            R.drawable.display_img_1,
-            R.drawable.display_img_2,
-            R.drawable.display_img_3
-    };
+    // 轮播图片链接地址
+    private static List<Banner.Image> mBannerImgs;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private View mNavigationHeader;
-    private ImageView mAvatarView;
+    private CircleImageView mAvatarView;
     // 用于返回键退出计时
     private long exitTime = 0;
     private Toast mToast;
     // 当前登录的用户
     private User currentUser = null;
-
-    // Application全局类
-    private ZJNUApplication application;
 
     // 用户登录处理Handler
     public static class LoginHandler extends Handler {
@@ -102,7 +115,7 @@ public class MainActivity extends BaseActivity implements
             MainActivity activity = mActivity.get();
             switch (msg.what) {
                 case Constants.MSG_LOGIN_SUCCESS:
-                    // 登陆成功后，显示用户信息
+                    // 登录成功后，显示用户信息
                     activity.mDrawerLayout.openDrawer(GravityCompat.START);
                     activity.updateUsername();
                     break;
@@ -123,10 +136,71 @@ public class MainActivity extends BaseActivity implements
         Bmob.initialize(this, Constants.BMOB_APPID);
         Log.d(TAG, "Bmob SDK initialized!");
         // 初始化界面
-        initUi();
+        initView();
         // 设置登录消息处理Handler
-        application = ZJNUApplication.getInstance();
+        ZJNUApplication application = ZJNUApplication.getInstance();
         application.setLoginHandler(new LoginHandler(this));
+        // 初始化更新代理
+        initUpdate();
+        // 初始化推送服务
+        initPush();
+        Log.i(TAG, "deviceInfo:" + getDeviceInfo(this));
+    }
+
+
+    public static String getDeviceInfo(Context context) {
+        try{
+            org.json.JSONObject json = new org.json.JSONObject();
+            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+
+            String device_id = tm.getDeviceId();
+
+            android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+            String mac = wifi.getConnectionInfo().getMacAddress();
+            json.put("mac", mac);
+
+            if( TextUtils.isEmpty(device_id) ){
+                device_id = mac;
+            }
+
+            if( TextUtils.isEmpty(device_id) ){
+                device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),android.provider.Settings.Secure.ANDROID_ID);
+            }
+
+            json.put("device_id", device_id);
+
+            return json.toString();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    // Bmob更新代理
+    private void initUpdate() {
+        BmobUpdateAgent.update(this);
+        BmobUpdateAgent.setUpdateOnlyWifi(false);
+//        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+//            @Override
+//            public void onUpdateReturned(int versionCode, UpdateResponse updateResponse) {
+//                if (versionCode > ZJNUApplication.getVersionCode(MainActivity.this)) {
+//                    new AlertDialog.Builder(MainActivity.this)
+//                            .setTitle(getString(R.string.update_available))
+//                            .setMessage(updateResponse.updateLog)
+//                            .
+//                }
+//            }
+//        });
+    }
+
+    // Bmob推送服务
+    private void initPush() {
+        // 使用推送服务时的初始化操作
+        BmobInstallation.getCurrentInstallation(this).save();
+        BmobPush.startWork(this, Constants.BMOB_APPID);
     }
 
     // 实现再按一次返回键退出的功能
@@ -154,13 +228,23 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_PROFILE:
+                    updateAvatar();
+                    break;
+                case REQUEST_LOGIN:
+                    // do nothing
+                default:
+                    break;
+            }
+        }
     }
 
     /**
      * 初始化界面
      */
-    private void initUi() {
+    private void initView() {
         ButterKnife.bind(this);
 
         // 初始化Toolbar，设置Toolbar菜单
@@ -170,11 +254,15 @@ public class MainActivity extends BaseActivity implements
 //		mToolbar.setNavigationIcon(R.drawable.ic_action_search);
         mToolbar.setOnMenuItemClickListener(this);
 
+        // 从网络获取轮播图
+        requestBanner();
         // 展示图片
-        setImageDisplay();
+        setUpBanner();
+
         // 初始化GridView
         mGridView.setAdapter(new ModulesViewAdapter(this));
         mGridView.setOnItemClickListener(this);
+
         // 设置左边抽屉图标
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
                 R.string.app_name, R.string.app_name);
@@ -186,20 +274,79 @@ public class MainActivity extends BaseActivity implements
         mNavigationHeader = mNavigationView.inflateHeaderView(R.layout.navigation_header);
         mNavigationHeader.findViewById(R.id.user_login_button).setOnClickListener(this);
         mNavigationHeader.findViewById(R.id.user_register_button).setOnClickListener(this);
+
+        // 绑定NavigationView菜单项点击事件
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    // 展示图片
-    private void setImageDisplay() {
+    // 从网络获取轮播图
+    private void requestBanner() {
+        // 设置缓存
+//        RequestUtils.setCacheInterceptor(this, 1);
+        // 请求数据
+        RequestUtils.getBanner(new Callback<Banner>() {
+            @Override
+            public void onResponse(Response<Banner> response, Retrofit retrofit) {
+                mBannerImgs = response.body().result;
+                // 请求成功后重新设置轮播图
+                setUpBanner();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    // 设置首页轮播图片
+    private void setUpBanner() {
         // 设置自适应ViewPager高度
         int width = DensityUtils.getWidth(this);
         int height = (int) (width / Constants.DISPLAY_SCALE);
         mImageDisplay.setLayoutParams(new LinearLayout.LayoutParams(width, height));
         // ViewPager添加图片资源
-        for (Integer mDisplayImg : mDisplayImgs) {
-            ImageView mImageView = new ImageView(MainActivity.this);
-            mImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), mDisplayImg));
+        if (mBannerImgs == null || mBannerImgs.size() == 0) {
+            ImageView mImageView = new ImageView(this);
+            mImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.display_banner_default));
             mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             mDisplayViews.add(mImageView);
+        } else {
+            // 移除原有的轮播页
+            mDisplayViews.clear();
+            // 添加mBannerImgs到轮播页
+            for (final Banner.Image bannerImg : mBannerImgs) {
+                ImageView mImageView = new ImageView(this);
+                mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                mImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 请求详情数据
+                        new GetBannerDetailTask(MainActivity.this, new ResponseListener<BannerDetail>() {
+                            @Override
+                            public void onPreExecute() {}
+                            @Override
+                            public void onPostExecute(BannerDetail result, boolean isRefreshSuccess, boolean isContentSame) {
+                                if (result != null) {
+                                    BaseWebActivity.actionStart(MainActivity.this,
+                                            getString(R.string.detail),
+                                            CommonDetailFragment.newInstance(result.page.content));
+                                }
+                            }
+                            @Override
+                            public void onProgressUpdate(Long value) {}
+                            @Override
+                            public void onFail(Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(MainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                            }
+                        }).execute(bannerImg.href + "?json=1");
+
+                    }
+                });
+                Picasso.with(this).load(bannerImg.image).fit().centerInside().into(mImageView);
+                mDisplayViews.add(mImageView);
+            }
         }
         // 设置Adapter
         mImageDisplay.setAdapter(new BasePagerAdapter(this, mDisplayViews));
@@ -208,7 +355,6 @@ public class MainActivity extends BaseActivity implements
         mImageDisplay.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             // 配合Adapter的currentItem字段进行设置
@@ -237,6 +383,34 @@ public class MainActivity extends BaseActivity implements
 
         // 设置ViewPager滑动动画效果
 
+    }
+
+    /**
+     * 获取轮播图详情页任务
+     */
+    private static class GetBannerDetailTask extends BaseGetDataTask<BannerDetail> {
+
+        public GetBannerDetailTask(Context mContext, ResponseListener mResponseListener) {
+            super(mContext, mResponseListener);
+        }
+
+        @Override
+        protected BannerDetail doInBackground(String... params) {
+            if (params.length == 0) {
+                return null;
+            }
+            String newContent;
+            BannerDetail bannerDetail = null;
+            try {
+                newContent = RequestUtils.get(params[0]);
+                bannerDetail = GsonUtils.getBannerDetail(newContent);
+            } catch (IOException e) {
+                e.printStackTrace();
+                this.isRefreshSuccess = false;
+                this.e = e;
+            }
+            return bannerDetail == null ? null : bannerDetail;
+        }
     }
 
     // TODO: onStart()时更新用户信息
@@ -270,14 +444,14 @@ public class MainActivity extends BaseActivity implements
         welcomeText.setText(currentUser.getUsername());
         welcomeText.setVisibility(View.VISIBLE);
         // 更改Drawer头像
-        mAvatarView = (ImageView) mNavigationHeader.findViewById(R.id.avatar);
+        mAvatarView = (CircleImageView) mNavigationHeader.findViewById(R.id.avatar);
         // 设置头像点击事件
         mAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_PROFILE);
             }
         });
         if (currentUser != null) {
@@ -307,6 +481,15 @@ public class MainActivity extends BaseActivity implements
         Toast.makeText(MainActivity.this, getString(R.string.logout_success), Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * 更新左侧抽屉用户头像
+     */
+    private void updateAvatar() {
+        if (currentUser != null) {
+            Picasso.with(this).load(Constants.BMOB_FILE_LINK + currentUser.getAvatar().getUrl()).into(mAvatarView);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // 填充Toolbar上的菜单项
@@ -322,35 +505,10 @@ public class MainActivity extends BaseActivity implements
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_search:
-                break;
             default:
                 break;
         }
         return false;
-    }
-
-    @Override
-    @OnClick({R.id.footer_exit, R.id.footer_about, R.id.footer_feedback})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.user_login_button:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                break;
-            case R.id.user_register_button:
-                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-                break;
-            case R.id.footer_exit:
-                finish();
-                break;
-            case R.id.footer_about:
-                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                break;
-            case R.id.footer_feedback:
-                break;
-            default:
-                break;
-        }
     }
 
     /**
@@ -403,7 +561,7 @@ public class MainActivity extends BaseActivity implements
             // 处理消息事件
             switch (msg.what) {
                 case MSG_UPDATE_IMAGE:
-                    currentItem = (++currentItem) % mDisplayImgs.length;
+                    currentItem = (++currentItem) % (mBannerImgs == null ? 1 : mBannerImgs.size());
                     activity.mImageDisplay.setCurrentItem(currentItem);
                     // 准备下次播放
                     activity.mHandler.sendEmptyMessageDelayed(MSG_UPDATE_IMAGE, MSG_DELAY);
@@ -420,8 +578,34 @@ public class MainActivity extends BaseActivity implements
                     break;
             }
         }
+    }
 
-
+    /**
+     * DrawerLayout的HeaderView中登录注册及底部三个按钮点击事件
+     * @param view
+     */
+    @Override
+    @OnClick({R.id.footer_exit, R.id.footer_about, R.id.footer_feedback})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.user_login_button:
+                startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), REQUEST_LOGIN);
+                break;
+            case R.id.user_register_button:
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                break;
+            case R.id.footer_exit:
+                finish();
+                break;
+            case R.id.footer_about:
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                break;
+            case R.id.footer_feedback:
+                startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -446,26 +630,50 @@ public class MainActivity extends BaseActivity implements
             case Constants.MODULE.SCORE:
                 startActivity(new Intent(this, ScoreActivity.class));
                 break;
-            case Constants.MODULE.EXAM:
-                startActivity(new Intent(this, ExamActivity.class));
-                break;
             case Constants.MODULE.COURSE:
                 startActivity(new Intent(this, CourseActivity.class));
+                break;
+            case Constants.MODULE.EXAM:
+                startActivity(new Intent(this, ExamActivity.class));
                 break;
             case Constants.MODULE.LIBRARY:
                 BaseWebActivity.actionStart(this,
                         getString(R.string.title_activity_library),
-                        Constants.URL.LIBRARY
+                        Constants.URL.LIBRARY,
+                        false
                 );
                 break;
             case Constants.MODULE.LOGISTICS:
                 BaseWebActivity.actionStart(this,
                         getString(R.string.title_activity_logistics),
-                        Constants.URL.LOGISTICS
+                        Constants.URL.LOGISTICS,
+                        false
                 );
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * NavigationView中菜单项点击事件
+     */
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.explore:
+                startActivity(new Intent(this, ExploreActivity.class));
+                break;
+            // TODO: 通知中心
+//            case R.id.notification:
+//
+//                break;
+            case R.id.setting:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

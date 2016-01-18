@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.ddmax.zjnucloud.ui.activity.FeedbackActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include android:id="@+id/toolbar"
+            layout="@layout/top_toolbar" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <ScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:scrollbars="none"
+            android:cacheColorHint="@android:color/transparent"
+            android:scrollingCache="false"
+            android:overScrollMode="never">
+            <LinearLayout
+                android:layout_margin="20dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    style="@style/EditTextTheme"
+                    android:id="@+id/et_contact"
+                    android:textSize="@dimen/abc_text_size_large_material"
+                    android:focusable="true"
+                    app:met_primaryColor="?attr/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelText="@string/feedback_contact"
+                    app:met_floatingLabelAlwaysShown="true"
+                    app:met_floatingLabelTextColor="?attr/colorPrimary"/>
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    style="@style/EditTextTheme"
+                    android:id="@+id/et_content"
+                    android:lineSpacingExtra="4dp"
+                    app:met_hideUnderline="true"
+                    app:met_primaryColor="?attr/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelAlwaysShown="true"
+                    app:met_floatingLabelTextColor="?attr/colorPrimary"
+                    app:met_floatingLabelText="@string/feedback_content" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_send_white_24dp"
+        app:layout_anchor="@id/content"
+        app:layout_anchorGravity="bottom|right"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -32,7 +32,7 @@ public class SplashActivity extends Activity {
                 finish();
             }
         };
-        timer.schedule(task, 1000); //1秒后
+        timer.schedule(task, 500); //0.5秒后
     }
 }
 

@@ -18,6 +18,8 @@ public class Semester extends Model implements Serializable {
     public String semester;
     @Column(name = "gpa")
     public String gpa;
+    @Column(name = "credits")
+    public String credits;
     @Column(name = "vals")
     public List<Score> values;
 

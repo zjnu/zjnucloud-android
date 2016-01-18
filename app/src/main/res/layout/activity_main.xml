@@ -2,59 +2,60 @@
 
 <!-- DrawerLayout抽屉-->
 <android.support.v4.widget.DrawerLayout
-	android:id="@+id/mDrawerLayout"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:fitsSystemWindows="true"
-	tools:context=".activities.MainActivity"
-	>
+    android:id="@+id/mDrawerLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.MainActivity"
+    >
 
-	<RelativeLayout
-		android:id="@+id/main_container"
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		>
+    <RelativeLayout
+        android:id="@+id/main_container"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        >
 
-		<!-- 顶部Toolbar -->
-		<include
-			android:id="@+id/mToolbar"
-			layout="@layout/top_toolbar"/>
+        <!-- 顶部Toolbar -->
+        <include
+            android:id="@+id/mToolbar"
+            layout="@layout/top_toolbar"/>
 
-		<!-- 主界面内容 -->
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_below="@id/mToolbar"
-			android:orientation="vertical">
+        <!-- 主界面内容 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/mToolbar"
+            android:orientation="vertical">
 
-			<android.support.v4.view.ViewPager
-				android:id="@+id/image_display"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+            <android.support.v4.view.ViewPager
+                android:id="@+id/image_display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-			</android.support.v4.view.ViewPager>
+            </android.support.v4.view.ViewPager>
 
-			<GridView
-				android:id="@+id/gridView"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center"
-				android:horizontalSpacing="0dp"
-				android:numColumns="4"
-				android:paddingTop="10dp"
-				android:stretchMode="columnWidth"
-				android:verticalSpacing="20dp"/>
+            <GridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="0dp"
+                android:numColumns="4"
+                android:paddingTop="10dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="20dp"/>
 
-		</LinearLayout>
+        </LinearLayout>
 
 
-	</RelativeLayout>
-	<!--左侧导航抽屉-->
-	<include
-		android:id="@+id/left_navdrawer"
-		layout="@layout/navdrawer"/>
+    </RelativeLayout>
+    <!--左侧导航抽屉-->
+    <include
+        android:id="@+id/left_navdrawer"
+        layout="@layout/navdrawer"/>
 
 </android.support.v4.widget.DrawerLayout>

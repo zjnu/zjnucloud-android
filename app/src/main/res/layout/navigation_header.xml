@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/material_blue"
+    android:background="@color/colorPrimary"
     android:id="@+id/user_account_view"
     android:layout_height="220dp"
     android:layout_width="match_parent"
     >
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
         android:layout_centerHorizontal="true"
         android:layout_height="72dp"

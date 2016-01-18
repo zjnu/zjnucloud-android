@@ -6,10 +6,24 @@ android {
 
     defaultConfig {
         applicationId "com.ddmax.zjnucloud"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+    }
+    productFlavors {
+//        wandoujia {}
+//        baidu {}
+//        c360 {}
+//        uc {}
+//        yingyongbao {}
+//        xiaomi {}
+//        meizu {}
+        website {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
     }
     signingConfigs {
         debug {
@@ -26,10 +40,22 @@ android {
         }
     }
     buildTypes {
-        release {
+        debug {
+            versionNameSuffix " Beta"
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled false
+            shrinkResources false
         }
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    lintOptions {
+        disable 'InvalidPackage'
     }
 }
 
@@ -44,6 +70,7 @@ dependencies {
     compile files('libs/BmobSDK_V3.4.5_1111.jar')
     compile project(':calendarview')
     compile project(':courseview')
+    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:design:23.1.1'
@@ -56,11 +83,13 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.jiechic.library:xUtils:2.6.14'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'jp.wasabeef:recyclerview-animators:2.0.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    testCompile 'junit:junit:4.12'
 }

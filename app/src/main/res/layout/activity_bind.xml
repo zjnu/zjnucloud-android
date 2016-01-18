@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@color/material_blue"
+            android:background="@color/colorPrimary"
             android:text="@string/action_confirm_bind"
             android:textColor="@color/white"
             android:textSize="18sp"

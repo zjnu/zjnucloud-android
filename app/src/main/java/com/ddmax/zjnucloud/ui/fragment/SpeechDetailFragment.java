@@ -51,7 +51,7 @@ public class SpeechDetailFragment extends BaseWebFragment implements ResponseLis
         } else {
             Bundle args = getArguments();
             if (args != null) {
-                mUrl = getArguments().getString(URL);
+                mUrl = args.getString(URL);
             }
         }
 

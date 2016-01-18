@@ -2,15 +2,12 @@ package com.ddmax.zjnucloud.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +15,7 @@ import android.view.MenuItem;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.BaseFragmentPagerAdapter;
 import com.ddmax.zjnucloud.base.BaseActivity;
-import com.ddmax.zjnucloud.model.Page;
+import com.ddmax.zjnucloud.model.news.Page;
 import com.ddmax.zjnucloud.ui.fragment.NewsFragment;
 
 import butterknife.Bind;

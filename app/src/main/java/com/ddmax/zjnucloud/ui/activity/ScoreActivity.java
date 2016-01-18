@@ -28,9 +28,12 @@ import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.adapter.ScoreListAdapter;
 import com.ddmax.zjnucloud.base.BaseEmisActivity;
 import com.ddmax.zjnucloud.model.EmisUser;
+import com.ddmax.zjnucloud.model.score.Score;
 import com.ddmax.zjnucloud.model.score.ScoreList;
+import com.ddmax.zjnucloud.model.score.Semester;
 import com.ddmax.zjnucloud.task.BaseGetDataTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
+import com.ddmax.zjnucloud.util.EmisUtils;
 import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.util.RequestUtils;
 
@@ -77,28 +80,6 @@ public class ScoreActivity extends BaseEmisActivity implements ResponseListener<
     public void initView() {
         setContentView(R.layout.activity_score);
         ButterKnife.bind(this);
-        /**
-         * 设置CollapsingToolbarLayout折叠变化监听器，
-         * 只有当折叠时显示Toolbar标题
-         */
-//        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            boolean isShow = false;
-//            int scrollRange = -1;
-//
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                if (scrollRange == -1) {
-//                    scrollRange = appBarLayout.getTotalScrollRange();
-//                }
-//                if (scrollRange + verticalOffset == 0) {
-//                    findViewById(R.id.score_bar).setVisibility(View.GONE);
-//                    isShow = true;
-//                } else if (isShow) {
-//                    findViewById(R.id.score_bar).setVisibility(View.VISIBLE);
-//                    isShow = false;
-//                }
-//            }
-//        });
 
         mToolbar.setTitle(getString(R.string.title_activity_score));
         setSupportActionBar(mToolbar);
@@ -148,9 +129,9 @@ public class ScoreActivity extends BaseEmisActivity implements ResponseListener<
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         // 设置RecyclerView Animator
-        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(mAdapter);
-        alphaAdapter.setDuration(600);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
+//        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(mAdapter);
+//        alphaAdapter.setDuration(600);
+//        alphaAdapter.setInterpolator(new OvershootInterpolator());
         // TODO: 解决Recycler Animator卡顿
 //        mRecyclerView.addItemDecoration(new MyItemDecoration(1));
 //        mRecyclerView.setAdapter(alphaAdapter);
@@ -284,8 +265,9 @@ public class ScoreActivity extends BaseEmisActivity implements ResponseListener<
                     return;
                 }
                 this.scoreList = scoreList;
-                // 保存到数据库
+                // 若为刷新数据，则清空后保存到数据库
                 if (!isContentSame) {
+                    EmisUtils.clean(Score.class, Semester.class, ScoreList.class);
                     this.scoreList.save();
                 }
                 // 设置标题文字

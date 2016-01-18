@@ -23,6 +23,22 @@
     <!-- 考试安排考试时间 -->
     <color name="exam_time">#A52A2A</color>
 
+    <!-- 课表 -->
+    <color name="course">#efefef</color>
+    <color name="course_text">#8f000000</color>
+    <color name="course_yellow">#ffc107</color>
+    <color name="course_purple">#f48fb1</color>
+    <color name="course_forestgreen">#85D653</color>
+    <color name="course_mediumturquoise">#48D1CC</color>
+    <color name="course_indianred">#CD5C5C</color>
+    <color name="course_goldenrod">#DAA520</color>
+    <color name="course_salmon">#FA8072</color>
+    <color name="course_mediumrosybrown">#BC8F8F</color>
+    <color name="course_mediumorange">#FFA500</color>
+    <color name="course_chocolate">#D2691E</color>
+    <color name="course_cadetblue">#5F9EA0</color>
+    <color name="course_cornflowerblue">#6495ED</color>
+
     <!-- 线条颜色 -->
     <color name="line_color">#e7e7e7</color>
 

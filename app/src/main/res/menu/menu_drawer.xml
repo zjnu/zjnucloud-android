@@ -4,20 +4,20 @@
       tools:context=".MainActivity">
 
 	<group android:id="@+id/group_top"
-		android:checkableBehavior="single">
+		android:checkableBehavior="none">
 
-		<item android:id="@+id/my_profile"
-			android:title="@string/drawer_dynamics"
-		    android:icon="@drawable/ic_account_circle_black_48dp">
-		</item>
+		<!--<item android:id="@+id/my_profile"-->
+			<!--android:title="@string/drawer_dynamics"-->
+		    <!--android:icon="@drawable/ic_account_circle_black_48dp">-->
+		<!--</item>-->
 		<item android:id="@+id/explore"
 			android:title="@string/drawer_explore"
 		    android:icon="@drawable/ic_visibility_black_48dp">
 		</item>
-		<item android:id="@+id/notification"
-			android:title="@string/drawer_notification"
-		    android:icon="@drawable/ic_message_black_48dp">
-		</item>
+		<!--<item android:id="@+id/notification"-->
+			<!--android:title="@string/drawer_notification"-->
+		    <!--android:icon="@drawable/ic_message_black_48dp">-->
+		<!--</item>-->
 
 	</group>
 

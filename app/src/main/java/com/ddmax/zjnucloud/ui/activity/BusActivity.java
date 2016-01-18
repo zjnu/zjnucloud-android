@@ -33,7 +33,6 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.sharesdk.framework.ShareSDK;
 
 public class BusActivity extends BaseActivity implements BaiduMap.OnMarkerClickListener {
     public static final String TAG = "BusActivity";
@@ -170,8 +169,9 @@ public class BusActivity extends BaseActivity implements BaiduMap.OnMarkerClickL
         return super.onOptionsItemSelected(item);
     }
 
+    // TODO: ShareSDK分享模块 - 公交
     private void shareBySystem() {
-        ShareSDK.initSDK(this);
+
     }
 
     @Override

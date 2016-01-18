@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">云上浙师</string>
+    <string name="app_version">版本号：%s</string>
     <string name="title_activity_news">校园新闻</string>
     <string name="action_search">搜索</string>
     <string name="action_share">分享</string>
@@ -12,14 +13,16 @@
     <string name="exit_hint">再按一次退出</string>
     <string name="dialog_hint">提示</string>
     <string name="try_again">重试</string>
-    <string name="request_fail">网络请求超时或失败，请检查您的网络设置！</string>
-
+    <string name="success">成功</string>
+    <string name="network_fail">网络请求超时或失败，请检查您的网络设置！</string>
+    <string name="update_available">有新版本啦，赶快升级吧！</string>
+    <!--<string name="update_message">最新版本：%1$s\n安装包大小：%2$s</string>-->
     <string name="placeholder_for_navdrawer_item">item</string>
 
     <!-- 用户模块相关 -->
     <string name="login">登录</string>
     <string name="register">注册</string>
-    <string name="login_register">注册新帐号</string>
+    <string name="login_register">新用户注册</string>
     <string name="title_activity_login">登录</string>
     <string name="title_activity_register">注册新帐号</string>
     <string name="title_activity_bus">校园公交</string>
@@ -31,12 +34,20 @@
 
     <!-- 用户登录注册相关 -->
     <string name="register_success">注册成功！</string>
-    <string name="register_fail">注册失败！</string>
+    <string name="register_fail">注册失败，请重试！</string>
+    <string name="register_fail_username">用户名 %s 已被使用，请重新输入</string>
+    <string name="register_fail_email">邮箱 %s 已被注册，请更改</string>
     <string name="login_info">玩命登录中。。。</string>
     <string name="login_success">欢迎回来，%s！</string>
     <string name="login_fail">登录失败！</string>
+    <string name="login_fail_101">登录失败，用户名或密码错误！</string>
     <string name="logout_success">您已退出登录！</string>
     <string name="forgot_password">忘记密码？</string>
+    <string name="reset_password">找回密码</string>
+    <string name="reset_email">注册时的邮箱</string>
+    <string name="reset_back_login">返回账号登录</string>
+    <string name="reset_success">已向您的邮箱发送了一封密码重置邮件，请登录邮箱按提示操作</string>
+    <string name="reset_fail">找回密码失败，请重试！</string>
     <string name="error_invalid_username">用户名不能为空</string>
     <string name="error_invalid_email">邮箱地址格式不正确</string>
     <string name="error_incorrect_password">密码长度不能小于6位</string>
@@ -48,8 +59,8 @@
         <item>校园公交</item>
         <item>讲座预告</item>
         <item>成绩查询</item>
-        <item>考试安排</item>
         <item>课表</item>
+        <item>考试安排</item>
         <item>图书馆</item>
         <item>后勤中心</item>
     </string-array>
@@ -64,12 +75,11 @@
     <string name="drawer_footer_feedback">反馈</string>
 
     <!-- 校历模块相关 -->
-    <string name="title_activity_calendar">浙师大2015-2016学年校历</string>
+    <string name="title_activity_calendar">浙师大2015&#8211;2016学年校历</string>
     <string name="calendar_no_event">本月无校历活动</string>
 
     <!-- 讲座预告模块相关 -->
     <string name="title_activity_speech">讲座预告</string>
-    <string name="title_speech_detail">详情</string>
 
     <!-- Bmob相关 -->
     <string name="bmob_not_login">您需要登录后才能使用该功能，现在就去登录吧！</string>
@@ -141,13 +151,50 @@
     <string name="profile_item_bind_emis">绑定教务系统账号</string>
     <string name="profile_item_unbind_emis">解除绑定：%1$s</string>
     <string name="profile_item_avatar">修改头像</string>
+    <string name="profile_avatar_upload_failure">头像上传失败，请重试</string>
+    <string name="profile_avatar_upload_success">头像更新成功！</string>
     <string name="profile_item_password">修改密码</string>
+    <string name="profile_update_org_password_hint">原密码</string>
+    <string name="profile_update_new_password_hint">新密码</string>
+    <string name="profile_update_new_password_repeat_hint">重复新密码</string>
+    <string name="profile_update_password_not_match">两次输入的密码不一致，请检查！</string>
+    <string name="profile_update_password_success">密码修改成功！</string>
+    <string name="profile_update_password_failure">密码修改失败，请重试</string>
     <string name="profile_button_logout">退出登录</string>
+    <string name="profile_logout_confirm">退出登录后，您本地缓存信息包括教务数据将会被清空。确定要退出登录吗？</string>
 
     <!-- 关于界面 -->
     <string name="title_activity_about">关于我们</string>
+    <string name="about_contact">联系我们</string>
+    <string-array name="contacts">
+        <item>吴逸川</item>
+        <item>李建舜</item>
+        <item>朱丰</item>
+    </string-array>
+    <string name="about_words">&#160;&#160;&#160;&#160;我们是一群快乐的程序猿，致力于浙师大校内大学生的生活服务。秉承一切为学生，为了学生一切的原则，为大家带来方便快捷的服务。\n\n&#160;&#160;&#160;&#160;服务说明：
+云上浙师中“图书馆”的接口来自于“浙师图文”微信公众号，“后勤服务”的接口来自于“浙师微生活”微信公众号，更多服务资源请关注“浙师图文”和“浙师微生活”的微信公众号~~~</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- 反馈界面 -->
+    <string name="title_activity_feedback">反馈</string>
+    <string name="feedback_contact">联系方式</string>
+    <string name="feedback_content">反馈内容</string>
+    <string name="feedback_no_content">您还未填写反馈内容哦</string>
+    <string name="feedback_no_contact">我们希望留下您的联系方式(QQ、微信、邮箱等)以便进一步沟通，但您也可以不填写，确定要直接发送吗？</string>
+    <string name="feedback_action_send_direct">发送</string>
+    <string name="feedback_action_rewrite_contact">返回填写</string>
+    <string name="feedback_not_sent">您写了点宝贵意见，确定要放弃发送吗？</string>
+    <string name="feedback_success">提交成功，非常感谢您的反馈，我们会努力做得更好！</string>
+    <string name="feedback_failure">反馈发送失败，请检查您的网络设置</string>
+
+    <!-- 发现界面 -->
+    <string name="title_activity_explore">发现</string>
+
+    <!-- 设置相关 -->
+    <string name="title_activity_settings">设置</string>
+    <string name="settings_general">基本</string>
+    <string name="settings_user">用户</string>
+    <string name="settings_clean_cache">清空缓存</string>
+    <string name="settings_clean_cache_finish">缓存目录清空完毕！</string>
+
 
 </resources>

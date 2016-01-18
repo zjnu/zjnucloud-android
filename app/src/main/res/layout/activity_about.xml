@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@android:color/white"
     tools:context="com.ddmax.zjnucloud.ui.activity.AboutActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -21,15 +22,24 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_collapseMode="pin">
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/background"
+            <ImageView
+                android:id="@+id/toolbar_back"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/about"
-                android:background="@drawable/about"/>
+                android:scaleType="fitXY"
+                android:contentDescription="@string/title_activity_about"
+                android:fitsSystemWindows="true"/>
+            <!--<pl.droidsonroids.gif.GifImageView-->
+                <!--android:id="@+id/background"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:src="@drawable/about"-->
+                <!--android:background="@drawable/about"-->
+                <!--android:fitsSystemWindows="true"-->
+                <!--app:layout_collapseMode="parallax"/>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -37,7 +47,6 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/title_activity_about"
                 app:titleTextColor="@color/white"
-                app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -46,8 +55,48 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:textSize="16sp"
+                android:text="@string/about_words"
+                android:textColor="@android:color/black" />
+
+            <RelativeLayout
+                android:id="@+id/bottom_app_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_about"
+                android:layout_marginTop="8dp"
+                android:layout_alignParentBottom="false">
+
+                <ImageView
+                    android:id="@+id/bottom_logo"
+                    android:contentDescription="@string/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/bottom_logo"/>
+                <TextView
+                    android:id="@+id/bottom_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bottom_logo"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

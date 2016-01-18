@@ -20,13 +20,13 @@ public abstract class BaseActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         // 友盟session统计
-        MobclickAgent.onResume(this);
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         // 友盟session统计
-        MobclickAgent.onPause(this);
+        MobclickAgent.onResume(this);
     }
 }
