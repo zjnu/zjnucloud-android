@@ -472,11 +472,14 @@ public class MainActivity extends BaseActivity implements
         mNavigationHeader.findViewById(R.id.user_login_button).setVisibility(View.VISIBLE);
         mNavigationHeader.findViewById(R.id.user_register_button).setVisibility(View.VISIBLE);
         // 设置空头像
-        mAvatarView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.avatar_empty));
+        mAvatarView.setImageResource(R.drawable.avatar_empty);
+//        Picasso.with(this).load(R.drawable.avatar_empty).into(mAvatarView);
         mAvatarView.setOnClickListener(null);
         // 隐藏登录信息文字，去除背景
         mNavigationHeader.findViewById(R.id.user_account_view).setBackgroundResource(R.color.material_blue);
         mNavigationHeader.findViewById(R.id.welcome_message).setVisibility(View.GONE);
+        // 设置currentUser=null
+        currentUser = null;
         // 弹出成功Toast
         Toast.makeText(MainActivity.this, getString(R.string.logout_success), Toast.LENGTH_LONG).show();
     }
@@ -485,7 +488,7 @@ public class MainActivity extends BaseActivity implements
      * 更新左侧抽屉用户头像
      */
     private void updateAvatar() {
-        if (currentUser != null) {
+        if (BmobUser.getCurrentUser(this) != null) {
             Picasso.with(this).load(Constants.BMOB_FILE_LINK + currentUser.getAvatar().getUrl()).into(mAvatarView);
         }
     }
