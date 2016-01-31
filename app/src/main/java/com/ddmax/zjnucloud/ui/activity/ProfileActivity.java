@@ -342,10 +342,10 @@ public class ProfileActivity extends BaseActivity implements
                         BmobUser.logOut(ProfileActivity.this);
                         // 清除Emis数据
                         EmisUtils.clean(ProfileActivity.this);
-                        setResult(RESULT_OK);
-                        finish();
                         application.getLoginHandler().sendEmptyMessage(Constants.MSG_LOGOUT_SUCCESS);
                         dialog.cancel();
+                        setResult(RESULT_OK);
+                        finish();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
