@@ -7,11 +7,11 @@ import cn.bmob.v3.BmobObject;
  * @since 2016/1/12 20:52.
  */
 public class FeedBack extends BmobObject {
-    //·´À¡ÄÚÈİ
+    //åé¦ˆå†…å®¹
     private String message;
-    //ÓÃ»§Ãû
+    //ç”¨æˆ·å
     private String username;
-    //ÁªÏµ·½Ê½
+    //è”ç³»æ–¹å¼
     private String contact;
 
     public String getMessage() {
