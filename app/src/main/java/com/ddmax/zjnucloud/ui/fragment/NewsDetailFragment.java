@@ -1,17 +1,16 @@
 package com.ddmax.zjnucloud.ui.fragment;
 
-import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
+import android.webkit.WebViewClient;
 
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.R;
@@ -22,6 +21,7 @@ import com.ddmax.zjnucloud.task.GetNewsDetailTask;
 import com.ddmax.zjnucloud.task.GetSlxxDetailTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
 import com.ddmax.zjnucloud.util.AssetsUtils;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,12 +42,11 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
     public static final String TAG = "NewsDetailFragment";
 
     @Bind(R.id.webView) WebView mWebView;
-    @Bind(R.id.progressBar) ProgressBar mProgressBar;
+    @Bind(R.id.progress_wheel) ProgressWheel mProgressWheel;
 
     // 从Activity接收过来的新闻ID, isSlxx
     private long mArticleId = 0;
     private boolean isSlxx = false;
-    private ArrayList<String> mDetailImageList = new ArrayList<>();
 
     public NewsDetailFragment() {
     }
@@ -66,7 +65,6 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
         isSlxx = bundle.getBoolean("isSlxx");
 
         // TODO: 新闻详情缓存
-
         // TODO: 无图模式
 
         // 后台获取新闻详情
@@ -78,8 +76,6 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
         } else {
             new GetSlxxDetailTask(getActivity(), this).execute(String.valueOf(mArticleId));
         }
-
-
     }
 
     @Override
@@ -98,7 +94,7 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
 
     private void setupWebViewDefaults(WebView mWebView) {
 
-        mWebView.addJavascriptInterface(new JavaScriptObject(getActivity()), "injectedObject");
+//        mWebView.addJavascriptInterface(new JavaScriptObject(getActivity()), "injectedObject");
 
         // 设置缓存模式
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -113,38 +109,30 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
         // 支持通过js打开新的窗口
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-        mWebView.setWebChromeClient(new WebChromeClient() {
-
+        mWebView.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean onJsAlert(WebView view, String url, String message,
-                                     final JsResult result) {
-                result.cancel();
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("http:") || url.startsWith("https:")) {
+                    return false;
+                }
+
+                // Otherwise allow the OS to handle things like tel, mailto, etc.
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
                 return true;
             }
 
             @Override
-            public boolean onJsConfirm(WebView view, String url,
-                                       String message, final JsResult result) {
-
-                return true;
+            public void onPageFinished(WebView view, String url) {
+                setWebViewShown(true);
             }
         });
-    }
-
-    public static class JavaScriptObject {
-
-        private Activity mInstance;
-
-        public JavaScriptObject(Activity instance) {
-            mInstance = instance;
-        }
-
     }
 
     /**
      * 设置WebView内容
      *
-     * @param baseNewsDetail
+     * @param baseNewsDetail 新闻详情对象
      */
     private void setWebView(BaseNewsDetail baseNewsDetail) {
         if (!isAdded()) {
@@ -186,8 +174,8 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
     }
 
     private void setWebViewShown(boolean shown) {
-        mWebView.setVisibility(shown ? View.VISIBLE : View.GONE);
-        mProgressBar.setVisibility(shown ? View.GONE : View.VISIBLE);
+        mWebView.setVisibility(shown ? View.VISIBLE : View.INVISIBLE);
+        mProgressWheel.setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -199,18 +187,7 @@ public class NewsDetailFragment extends Fragment implements ResponseListener<Bas
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public void onPreExecute() {
-
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.ddmax.zjnucloud.base;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,10 +12,10 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.ddmax.zjnucloud.R;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.io.Serializable;
 
@@ -37,9 +36,7 @@ public class BaseWebFragment extends Fragment implements Serializable{
 
     @Bind(R.id.container) protected RelativeLayout mContainer;
     @Bind(R.id.webView) protected WebView mWebView;
-    @Bind(R.id.progressBar) protected ProgressBar mProgressBar;
-
-    private OnFragmentInteractionListener mListener;
+    @Bind(R.id.progress_wheel) protected ProgressWheel mProgressWheel;
 
     public BaseWebFragment() {
         // 保留空的构造器
@@ -63,8 +60,8 @@ public class BaseWebFragment extends Fragment implements Serializable{
         } else {
             Bundle args = getArguments();
             if (args != null) {
-                mUrl = getArguments().getString(URL);
-                isPadding = getArguments().getBoolean("isPadding", true);
+                mUrl = args.getString(URL);
+                isPadding = args.getBoolean("isPadding", true);
                 Log.d("isPadding", String.valueOf(isPadding));
             }
         }
@@ -120,43 +117,9 @@ public class BaseWebFragment extends Fragment implements Serializable{
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private void setWebViewShown(boolean shown) {
+        mWebView.setVisibility(shown ? View.VISIBLE : View.INVISIBLE);
+        mProgressWheel.setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
     private class MyWebViewClient extends WebViewClient {
@@ -170,6 +133,11 @@ public class BaseWebFragment extends Fragment implements Serializable{
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
             return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            setWebViewShown(true);
         }
     }
 }

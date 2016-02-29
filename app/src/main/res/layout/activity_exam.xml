@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/exam_layout"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -96,14 +96,48 @@
             android:text="@string/emis_server_error"/>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <LinearLayout
+        android:id="@+id/init_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="160dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progress_wheel"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="gone"
+            app:matProg_barColor="@color/progress_wheel"
+            app:matProg_progressIndeterminate="true" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_refresh_white_48dp"/>
+        app:layout_behavior="com.ddmax.zjnucloud.ui.widget.fab.FABAppBarBehavior" >
+
+        <com.github.jorgecastilloprz.FABProgressCircle
+            android:id="@+id/fabProgressCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:reusable="true" >
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_refresh_white_48dp" />
+        </com.github.jorgecastilloprz.FABProgressCircle>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
 

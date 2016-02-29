@@ -14,9 +14,10 @@
     <string name="dialog_hint">提示</string>
     <string name="try_again">重试</string>
     <string name="success">成功</string>
+    <string name="refresh_cancelled">刷新已取消</string>
     <string name="network_fail">网络请求超时或失败，请检查您的网络设置！</string>
-    <string name="update_available">有新版本啦，赶快升级吧！</string>
-    <!--<string name="update_message">最新版本：%1$s\n安装包大小：%2$s</string>-->
+    <string name="update_available">有新版本啦！</string>
+    <string name="update">更新</string>
     <string name="placeholder_for_navdrawer_item">item</string>
 
     <!-- 用户模块相关 -->
@@ -92,21 +93,23 @@
     <string name="prompt_emis_username">教务账号</string>
     <string name="prompt_emis_password">教务密码</string>
     <string name="action_confirm_bind">确认绑定</string>
+    <string name="action_confirm_rebind">重新绑定</string>
     <string name="binding_info">教务账号绑定中，请耐心等待！</string>
     <string name="bind_success">绑定成功！</string>
-    <string name="emis_request_timeout">请求超时，似乎您的网络不太好呢，再试一次吧！</string>
     <string name="unbind_warning_info">解绑教务账号后，您本地缓存的成绩、课表、考试安排等数据将会被清空。确定要解绑？</string>
     <string name="unbind_confirm">确定解绑</string>
     <string name="unbinding_info">正在解除绑定，请稍侯。。。</string>
     <string name="unbind_success">解绑成功</string>
     <string name="unbind_fail">解绑失败，重新试一下吧！</string>
     <string name="emis_token_invalid">用户认证失败，请到个人资料界面解绑后重新绑定教务账号</string>
-    <string name="action_confirm_rebind">重新绑定</string>
-    <string name="emis_server_error">我们的服务器出现了异常，程序员正玩命抢修中&#8230;</string>
+    <string name="emis_request_timeout">访问人数过多，服务器累了，稍后再试试吧！</string>
+    <string name="emis_offline">未能获取到数据，稍后再试试吧！</string>
+    <string name="emis_server_error">我们的服务器出现了异常，程序员正玩命抢修中，请稍后再试&#8230;</string>
     <string name="emis_error">教务系统暂时无法访问，过会儿再试吧&#8230;</string>
 
     <!-- 成绩查询模块 -->
     <string name="title_activity_score">成绩查询</string>
+    <string name="title_activity_score_additional">&#160;同学的成绩单</string>
     <string name="course_credit">学分：%1$s</string>
     <string name="course_mark_first">正考：%1$s</string>
     <string name="course_mark_second">补考：%1$s</string>
@@ -119,6 +122,7 @@
 
     <!-- 考试安排模块 -->
     <string name="title_activity_exam">考试安排</string>
+    <string name="title_activity_exam_additional">&#160;的考试安排</string>
     <string name="exam_empty_title">同学</string>
     <string name="exam_subtitle">您这学期的考试安排情况如下</string>
     <string name="exam_id">课程代码：%1$s</string>
@@ -195,6 +199,4 @@
     <string name="settings_user">用户</string>
     <string name="settings_clean_cache">清空缓存</string>
     <string name="settings_clean_cache_finish">缓存目录清空完毕！</string>
-
-
 </resources>

@@ -3,14 +3,26 @@ package com.ddmax.zjnucloud.base;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.ddmax.zjnucloud.R;
+import com.ddmax.zjnucloud.task.BaseGetDataTask;
 import com.ddmax.zjnucloud.ui.activity.BindActivity;
 import com.ddmax.zjnucloud.ui.activity.LoginActivity;
 import com.ddmax.zjnucloud.ui.activity.ProfileActivity;
 import com.ddmax.zjnucloud.util.EmisUtils;
+import com.github.jorgecastilloprz.FABProgressCircle;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
+import butterknife.Bind;
 import cn.bmob.v3.BmobUser;
 
 /**
@@ -22,6 +34,13 @@ public abstract class BaseEmisActivity extends BaseActivity {
 
     public static final int INTENT_LOGIN = 0x01;
     public static final int INTENT_BIND = 0x02;
+
+    @Bind(R.id.toolbar) protected Toolbar mToolbar;
+    @Bind(R.id.coordinator) protected CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.fab) protected FloatingActionButton mFab;
+    @Bind(R.id.fabProgressCircle) protected FABProgressCircle mFabProgressCircle;
+    @Bind(R.id.progress_wheel) ProgressWheel mInitProgress;
+    protected Snackbar refreshSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +111,14 @@ public abstract class BaseEmisActivity extends BaseActivity {
     }
 
     /**
+     * 第一次加载时的动画
+     */
+    protected void setInitAnimationShown(boolean isShown) {
+        mInitProgress.setVisibility(isShown ? View.VISIBLE : View.GONE);
+        mFabProgressCircle.setVisibility(isShown ? View.GONE : View.VISIBLE);
+    }
+
+    /**
      * 当Token不符合时，弹出提示框
      */
     protected void alertInvalidToken() {
@@ -114,6 +141,96 @@ public abstract class BaseEmisActivity extends BaseActivity {
                 .setCancelable(false)
                 .create();
         dialog.show();
+    }
+
+    /**
+     * 开始刷新状态动作：
+     * FAB动画 + Snackbar弹出消息
+     *
+     * @param task BaseGetDataTask子类
+     * @param resId 弹出消息资源id
+     */
+    protected void startRefreshStatus(final BaseGetDataTask task, int resId) {
+        // Android 5.0以后才使用FAB rotate animation
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        animation.setInterpolator(new AccelerateInterpolator());
+        mFab.startAnimation(animation);
+
+        // 显示Snackbar
+        refreshSnackbar = Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_LONG)
+                .setAction("Action", null);
+        refreshSnackbar.show();
+        // 设置FAB点击事件为取消刷新
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFabProgressCircle.hide();
+                cancelRefreshStatus(task, R.string.refresh_cancelled);
+            }
+        });
+    }
+
+    /**
+     * 取消刷新状态动作
+     * - 当用户手动取消刷新时调用
+     * - 当未能请求到数据时调用
+     * @param task BaseGetDataTask子类
+     * @param resId 提示消息
+     */
+    protected void cancelRefreshStatus(final BaseGetDataTask task, int resId) {
+        stopRefreshStatus(task);
+        refreshSnackbar = Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT)
+                .setAction("Action", null);
+        refreshSnackbar.show();
+    }
+
+    /**
+     * 停止刷新状态动作
+     * @param task BaseGetDataTask子类
+     */
+    protected void stopRefreshStatus(final BaseGetDataTask task) {
+        // 取消原来的Snackbar消息
+        if (refreshSnackbar != null) {
+            refreshSnackbar.dismiss();
+        }
+        if (task != null) {
+            task.cancel(true);
+        }
+        // 清除动画
+        if (mFabProgressCircle.getVisibility() != View.GONE) {
+            mFabProgressCircle.hide();
+        } else {
+            setInitAnimationShown(false);
+        }
+        mFab.clearAnimation();
+        // 重新设置点击刷新事件
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFabProgressCircle.show();
+                doRefresh();
+            }
+        });
+    }
+
+    protected void finishRefresh() {
+        if (refreshSnackbar != null) {
+            refreshSnackbar.dismiss();
+        }
+        // 判断是否第一次加载
+        if (mFabProgressCircle.getVisibility() == View.GONE) {
+            setInitAnimationShown(false);
+        } else {
+            mFabProgressCircle.beginFinalAnimation();
+        }
+        mFab.clearAnimation();
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFabProgressCircle.show();
+                doRefresh();
+            }
+        });
     }
 
     @Override

@@ -12,56 +12,83 @@
     <include android:id="@+id/toolbar"
         layout="@layout/top_toolbar" />
 
-    <com.ddmax.courseview.CourseView
-        android:id="@+id/course_view"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        app:columnGap="2dp"
-        app:eventTextColor="@android:color/white"
-        app:headerColumnBackground="#ffffffff"
-        app:headerColumnPadding="6dp"
-        app:headerColumnTextColor="@color/course_text"
-        app:headerRowBackgroundColor="@color/course"
-        app:headerRowPadding="12dp"
-        app:hourHeight="60dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:noOfVisibleDays="7"
-        app:textSize="12sp" />
-
-    <LinearLayout
-        android:id="@+id/error_message"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_below="@id/toolbar" >
 
-        <pl.droidsonroids.gif.GifImageView
+        <com.ddmax.courseview.CourseView
+            android:id="@+id/course_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            app:columnGap="2dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:eventTextColor="@android:color/white"
+            app:headerColumnBackground="#ffffffff"
+            app:headerColumnPadding="6dp"
+            app:headerColumnTextColor="@color/course_text"
+            app:headerRowBackgroundColor="@color/course"
+            app:headerRowPadding="12dp"
+            app:hourHeight="60dp"
+            app:noOfVisibleDays="7"
+            app:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/error_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:src="@drawable/tears" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/error_text"
+            <pl.droidsonroids.gif.GifImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/tears" />
+
+            <TextView
+                android:id="@+id/error_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/emis_server_error" />
+        </LinearLayout>
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progress_wheel"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:matProg_barColor="@color/progress_wheel"
+            app:matProg_progressIndeterminate="true" />
+
+        <com.github.jorgecastilloprz.FABProgressCircle
+            android:id="@+id/fabProgressCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/emis_server_error" />
-    </LinearLayout>
+            app:layout_anchor="@id/course_view"
+            app:layout_anchorGravity="bottom|end|right"
+            app:layout_behavior="com.ddmax.zjnucloud.ui.widget.fab.FABCourseBehavior"
+            app:reusable="true" >
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_refresh_white_48dp"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_refresh_white_48dp"
+                app:pressedTranslationZ="6dp"
+                app:borderWidth="0dp" />
+        </com.github.jorgecastilloprz.FABProgressCircle>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>
 

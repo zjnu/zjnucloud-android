@@ -24,6 +24,7 @@ import java.net.SocketTimeoutException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -43,6 +44,7 @@ public class RequestUtils {
 
     static {
         client = new OkHttpClient();
+        client.setReadTimeout(30, TimeUnit.SECONDS);
     }
 
     static Retrofit retrofit = new Retrofit.Builder()
@@ -52,7 +54,6 @@ public class RequestUtils {
 
     @Nullable
     public static String get(String url) throws IOException {
-
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
         return response.body().string();
@@ -60,7 +61,7 @@ public class RequestUtils {
 
     @Nullable
     public static String post(String url, Map data) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+//        OkHttpClient client = new OkHttpClient();
         FormEncodingBuilder builder = new FormEncodingBuilder();
         // 遍历data
         Set keys = data.keySet();
@@ -84,7 +85,7 @@ public class RequestUtils {
 
     @Nullable
     public static String post(String url, Map data, String token) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+//        OkHttpClient client = new OkHttpClient();
         FormEncodingBuilder builder = new FormEncodingBuilder();
         // 遍历data
         Set keys = data.keySet();

@@ -2,7 +2,6 @@ package com.ddmax.zjnucloud.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -51,7 +50,6 @@ public class ScoreListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      */
     public static class CourseViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.card_view) CardView cardView;
         @Bind(R.id.tv_name) TextView name;
         @Bind(R.id.tv_date) TextView credit;
         @Bind(R.id.tv_gp) TextView gradepoint;

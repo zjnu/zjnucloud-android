@@ -1,6 +1,5 @@
 package com.ddmax.zjnucloud.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,18 +30,13 @@ import com.ddmax.zjnucloud.adapter.BasePagerAdapter;
 import com.ddmax.zjnucloud.adapter.ModulesViewAdapter;
 import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.base.BaseWebActivity;
-import com.ddmax.zjnucloud.model.banner.Banner;
 import com.ddmax.zjnucloud.model.User;
-import com.ddmax.zjnucloud.model.banner.BannerDetail;
-import com.ddmax.zjnucloud.task.BaseGetDataTask;
-import com.ddmax.zjnucloud.task.ResponseListener;
+import com.ddmax.zjnucloud.model.banner.Banner;
 import com.ddmax.zjnucloud.ui.fragment.CommonDetailFragment;
 import com.ddmax.zjnucloud.util.DensityUtils;
-import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.util.RequestUtils;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,53 +137,27 @@ public class MainActivity extends BaseActivity implements
         initUpdate();
         // 初始化推送服务
         initPush();
-        Log.i(TAG, "deviceInfo:" + getDeviceInfo(this));
     }
-
-
-    public static String getDeviceInfo(Context context) {
-        try{
-            org.json.JSONObject json = new org.json.JSONObject();
-            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-
-            String device_id = tm.getDeviceId();
-
-            android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-
-            String mac = wifi.getConnectionInfo().getMacAddress();
-            json.put("mac", mac);
-
-            if( TextUtils.isEmpty(device_id) ){
-                device_id = mac;
-            }
-
-            if( TextUtils.isEmpty(device_id) ){
-                device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),android.provider.Settings.Secure.ANDROID_ID);
-            }
-
-            json.put("device_id", device_id);
-
-            return json.toString();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     // Bmob更新代理
     private void initUpdate() {
         BmobUpdateAgent.update(this);
         BmobUpdateAgent.setUpdateOnlyWifi(false);
 //        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
-//            @Override
-//            public void onUpdateReturned(int versionCode, UpdateResponse updateResponse) {
-//                if (versionCode > ZJNUApplication.getVersionCode(MainActivity.this)) {
-//                    new AlertDialog.Builder(MainActivity.this)
-//                            .setTitle(getString(R.string.update_available))
-//                            .setMessage(updateResponse.updateLog)
-//                            .
+//                @Override
+//            public void onUpdateReturned(int updateStatus, UpdateResponse updateResponse) {
+//                if (updateStatus == UpdateStatus.Yes) {
+//                    Toast.makeText(MainActivity.this, "有更新啦！！！", Toast.LENGTH_SHORT).show();
+//                } else if (updateStatus == UpdateStatus.No) {
+//                    Toast.makeText(MainActivity.this, "无更新", Toast.LENGTH_SHORT).show();
+//                } else if (updateStatus == UpdateStatus.EmptyField) {
+//                    Toast.makeText(MainActivity.this, "请检查你AppVersion表的必填项，1、target_size（文件大小）是否填写；2、path或者android_url两者必填其中一项。", Toast.LENGTH_SHORT).show();
+//                }else if(updateStatus==UpdateStatus.IGNORED){
+//                    Toast.makeText(MainActivity.this, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
+//                }else if(updateStatus==UpdateStatus.ErrorSizeFormat){
+//                    Toast.makeText(MainActivity.this, "请检查target_size填写的格式，请使用file.length()方法获取apk大小。", Toast.LENGTH_SHORT).show();
+//                }else if(updateStatus==UpdateStatus.TimeOut){
+//                    Toast.makeText(MainActivity.this, "查询出错或查询超时", Toast.LENGTH_SHORT).show();
 //                }
 //            }
 //        });
@@ -321,27 +288,8 @@ public class MainActivity extends BaseActivity implements
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 请求详情数据
-                        new GetBannerDetailTask(MainActivity.this, new ResponseListener<BannerDetail>() {
-                            @Override
-                            public void onPreExecute() {}
-                            @Override
-                            public void onPostExecute(BannerDetail result, boolean isRefreshSuccess, boolean isContentSame) {
-                                if (result != null) {
-                                    BaseWebActivity.actionStart(MainActivity.this,
-                                            getString(R.string.detail),
-                                            CommonDetailFragment.newInstance(result.page.content));
-                                }
-                            }
-                            @Override
-                            public void onProgressUpdate(Long value) {}
-                            @Override
-                            public void onFail(Exception e) {
-                                e.printStackTrace();
-                                Toast.makeText(MainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
-                            }
-                        }).execute(bannerImg.href + "?json=1");
-
+                        BaseWebActivity.actionStart(MainActivity.this, getString(R.string.detail),
+                                CommonDetailFragment.initWithUrl(bannerImg.href+"?json=1", "page", "content"));
                     }
                 });
                 Picasso.with(this).load(bannerImg.image).fit().centerInside().into(mImageView);
@@ -385,33 +333,33 @@ public class MainActivity extends BaseActivity implements
 
     }
 
-    /**
-     * 获取轮播图详情页任务
-     */
-    private static class GetBannerDetailTask extends BaseGetDataTask<BannerDetail> {
-
-        public GetBannerDetailTask(Context mContext, ResponseListener mResponseListener) {
-            super(mContext, mResponseListener);
-        }
-
-        @Override
-        protected BannerDetail doInBackground(String... params) {
-            if (params.length == 0) {
-                return null;
-            }
-            String newContent;
-            BannerDetail bannerDetail = null;
-            try {
-                newContent = RequestUtils.get(params[0]);
-                bannerDetail = GsonUtils.getBannerDetail(newContent);
-            } catch (IOException e) {
-                e.printStackTrace();
-                this.isRefreshSuccess = false;
-                this.e = e;
-            }
-            return bannerDetail == null ? null : bannerDetail;
-        }
-    }
+//    TODO/**
+//     * 获取轮播图详情页任务
+//     */
+//    private static class GetBannerDetailTask extends BaseGetDataTask<BannerDetail> {
+//
+//        public GetBannerDetailTask(Context mContext, ResponseListener mResponseListener) {
+//            super(mContext, mResponseListener);
+//        }
+//
+//        @Override
+//        protected BannerDetail doInBackground(String... params) {
+//            if (params.length == 0) {
+//                return null;
+//            }
+//            String newContent;
+//            BannerDetail bannerDetail = null;
+//            try {
+//                newContent = RequestUtils.get(params[0]);
+//                bannerDetail = GsonUtils.getBannerDetail(newContent);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                this.isRefreshSuccess = false;
+//                this.e = e;
+//            }
+//            return bannerDetail == null ? null : bannerDetail;
+//        }
+//    }
 
     // TODO: onStart()时更新用户信息
     private void updateUsername() {

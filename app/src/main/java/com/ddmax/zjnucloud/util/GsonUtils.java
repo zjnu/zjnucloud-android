@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.activeandroid.Model;
-import com.ddmax.zjnucloud.common.aa.ActiveAndroidExclusionStrategy;
+import com.ddmax.zjnucloud.database.aa.ActiveAndroidExclusionStrategy;
 import com.ddmax.zjnucloud.model.banner.BannerDetail;
 import com.ddmax.zjnucloud.model.course.CourseList;
 import com.ddmax.zjnucloud.model.exam.ExamList;

@@ -132,7 +132,7 @@ public class ExploreActivity extends BaseActivity {
                             exploreData.addAll(exploreListModel.posts);
                             page++;
                             // 取消刷新动画
-                            mRefreshLayout.setRefreshing(false);
+                            mRefreshLayout.setLoading(false);
                             setExploreListShown(true);
                             mAdapter.updateData(exploreData);
                         }
@@ -142,7 +142,7 @@ public class ExploreActivity extends BaseActivity {
                     public void onFailure(Throwable t) {
                         Toast.makeText(ExploreActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
                         // 取消刷新动画
-                        mRefreshLayout.setRefreshing(false);
+                        mRefreshLayout.setLoading(false);
                     }
                 });
             } else {
@@ -205,7 +205,7 @@ public class ExploreActivity extends BaseActivity {
                 public void onClick(View v) {
                     BaseWebActivity.actionStart(
                             context, explore.title_plain,
-                            CommonDetailFragment.newInstance(explore.content)
+                            CommonDetailFragment.initWithContent(explore.content)
                     );
                 }
             });

@@ -1,20 +1,13 @@
 package com.ddmax.zjnucloud.ui.activity;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
@@ -46,20 +39,18 @@ import butterknife.ButterKnife;
 /**
  * @author ddMax
  * @since 2015/11/13 14:15
- * 说明：成绩查询Activity
+ * 说明：课表Activity
  */
 public class CourseActivity extends BaseEmisActivity implements ResponseListener<CourseList> {
 
     private static final String TAG = CourseActivity.class.getSimpleName();
 
-    @Bind(R.id.course_layout) RelativeLayout mRelativeLayout;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.course_view) CourseView mCourseView;
-    @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.error_message) LinearLayout mErrorView;
     @Bind(R.id.error_text) TextView mErrorText;
 
     private CourseList courseList;
+    private GetCourseTask getCourseTask;
 //    private static final int[] courseColors = {
 //        R.color.material_blue, R.color.material_pink,
 //        R.color.material_green, R.color.material_orange,
@@ -75,13 +66,6 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
         R.color.course_salmon, R.color.course_yellow
     };
 
-    private Snackbar refreshSnackbar;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public void initView() {
         setContentView(R.layout.activity_course);
@@ -91,10 +75,12 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // 设置浮动按钮监听器
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mFabProgressCircle.show();
                 doRefresh();
             }
         });
@@ -105,10 +91,13 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
     @Override
     public void restoreData() {
         if (new Select().from(CourseList.class).exists()) {
+            // 本地数据库中已有数据
             CourseList courseList = new Select().from(CourseList.class).executeSingle();
             // 设置第3个参数isContentSame为true来区分是否从本地读取
             this.onPostExecute(courseList, true, true);
         } else {
+            // 此时为第一次加载数据
+            setInitAnimationShown(true);
             doRefresh();
         }
     }
@@ -122,9 +111,8 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
             EmisUser emisUser = new Select().from(EmisUser.class).executeSingle();
             String url = Constants.URL.EMIS.COURSE;
 
-            new GetCourseTask(this, this).execute(
-                    url, emisUser.username, emisUser.password, emisUser.token
-            );
+            getCourseTask = new GetCourseTask(this, this);
+            getCourseTask.execute(url, emisUser.username, emisUser.password, emisUser.token);
         }
     }
 
@@ -169,28 +157,6 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
         return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 
-    private void startRefreshStatus() {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-        animation.setInterpolator(new AccelerateInterpolator());
-        this.mFab.startAnimation(animation);
-        // 显示Snackbar
-        refreshSnackbar = Snackbar.make(mRelativeLayout, R.string.course_refreshing_course, Snackbar.LENGTH_LONG)
-                .setAction("Action", null);
-        refreshSnackbar.show();
-    }
-
-    private void stopRefreshStatus() {
-        this.mFab.clearAnimation();
-        // 取消Snackbar显示
-        if (refreshSnackbar != null) {
-            refreshSnackbar.dismiss();
-        }
-        // 取消Snackbar显示
-        if (refreshSnackbar != null) {
-            refreshSnackbar.dismiss();
-        }
-    }
-
     private void setVisibility(boolean isSuccess) {
         this.setVisibility(isSuccess, null);
     }
@@ -201,33 +167,7 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
         }
         mCourseView.setVisibility(isSuccess ? View.VISIBLE : View.GONE);
         mErrorView.setVisibility(isSuccess ? View.GONE : View.VISIBLE);
-    }
-
-    /**
-     * 异步任务载入成绩数据
-     */
-    public static class GetCourseTask extends BaseGetDataTask<CourseList> {
-
-        public GetCourseTask(Context mContext, ResponseListener mResponseListener) {
-            super(mContext, mResponseListener);
-        }
-
-        @Override
-        protected CourseList doInBackground(String... params) {
-            String content = null;
-            try {
-                HashMap<String, String> data = new HashMap<>();
-                data.put("username", params[1]);
-                data.put("password", params[2]);
-                content = RequestUtils.post(params[0], data, params[3]);
-                CourseList courseList = GsonUtils.getCourseList(content);
-                return courseList;
-            } catch (IOException e) {
-                mResponseListener.onFail(e);
-            }
-            return null;
-        }
-
+        setInitAnimationShown(!isSuccess);
     }
 
     @Override
@@ -247,23 +187,50 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 异步任务载入成绩数据
+     */
+    public static class GetCourseTask extends BaseGetDataTask<CourseList> {
+
+        public GetCourseTask(Context mContext, ResponseListener mResponseListener) {
+            super(mContext, mResponseListener);
+        }
+
+        @Override
+        protected CourseList doInBackground(String... params) {
+            String content;
+            try {
+                HashMap<String, String> data = new HashMap<>();
+                data.put("username", params[1]);
+                data.put("password", params[2]);
+                content = RequestUtils.post(params[0], data, params[3]);
+                CourseList courseList = GsonUtils.getCourseList(content);
+                return courseList;
+            } catch (IOException e) {
+                mResponseListener.onFail(e);
+            }
+            return null;
+        }
+    }
+
     // 以下为ResponseListener回调接口实现
     @Override
     public void onPreExecute() {
-        this.startRefreshStatus();
+        startRefreshStatus(getCourseTask, R.string.course_refreshing_course);
     }
 
     @Override
     public void onPostExecute(CourseList courseList, boolean isRefreshSuccess, boolean isContentSame) {
-        // 停止刷新状态
-        this.stopRefreshStatus();
+        // 未能返回数据
         if (courseList == null) {
+            // 取消刷新状态
+            cancelRefreshStatus(getCourseTask, R.string.emis_offline);
             return;
         }
         switch (courseList.status) {
             // 请求成功
             case 0:
-                Log.d(TAG, "课表请求成功！" + courseList.toString());
+                Log.d(TAG, "课表请求成功！");
                 setVisibility(true);
                 // 非法的Token，提示重新绑定
                 if (courseList.detail != null && !courseList.detail.isEmpty()) {
@@ -273,21 +240,23 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
                 this.courseList = courseList;
                 // 若为刷新数据，则清空后保存到数据库
                 if (!isContentSame) {
+                    // 完成刷新状态
+                    finishRefresh();
                     EmisUtils.clean(Course.class, CourseList.class);
                     this.courseList.save();
                 }
                 // 初始化CourseView
                 initCourseView();
                 break;
-            case 3:
-                // 未能请求到数据
-                setVisibility(false, getString(R.string.emis_server_error));
-                break;
-            case -1:
-                setVisibility(false, getString(R.string.emis_error));
-                break;
             default:
-                Snackbar.make(mRelativeLayout, courseList.message, Snackbar.LENGTH_LONG).show();
+                if (this.courseList.courses == null || this.courseList.courses.size() == 0) {
+                    mErrorText.setText(courseList.message);
+                    if (mErrorView.getVisibility() != View.VISIBLE) {
+                        mErrorView.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Snackbar.make(mCoordinatorLayout, courseList.message, Snackbar.LENGTH_LONG).show();
+                }
                 break;
         }
     }
@@ -298,8 +267,9 @@ public class CourseActivity extends BaseEmisActivity implements ResponseListener
     @Override
     public void onFail(Exception e) {
         Log.d(TAG, "课表数据刷新失败！");
+        stopRefreshStatus(getCourseTask);
         if (e instanceof SocketTimeoutException) {
-            Snackbar.make(mRelativeLayout, getString(R.string.emis_request_timeout), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mCoordinatorLayout, getString(R.string.emis_request_timeout), Snackbar.LENGTH_LONG).show();
         }
     }
 }

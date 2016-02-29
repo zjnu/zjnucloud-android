@@ -174,7 +174,7 @@ public class ProfileActivity extends BaseActivity implements
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
-                }
+            }
                 if (scrollRange + verticalOffset == 0) {
                     mCollapsingToolbarLayout.setTitle(getString(R.string.title_activity_profile, currentUser.getUsername())
                             + getString(R.string.title_activity_profile_additional));

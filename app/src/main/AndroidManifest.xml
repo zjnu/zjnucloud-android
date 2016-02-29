@@ -21,11 +21,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- <uses-permission android:name="android.permission.WRITE_SETTINGS" /> -->
     <!-- <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" /> -->
-    <!-- 允许锁屏后点亮屏幕 -->
-    <uses-permission android:name="cn.bmob.permission.push" />
 
     <!-- BmobPush SDK权限 -->
-    <!-- 添加自定义的权限 -->
+    <permission android:protectionLevel="normal" android:name="cn.bmob.permission.push">
+    </permission>
+    <uses-permission android:name="cn.bmob.permission.push"/><!-- 添加自定义的权限-->
+
     <application
         android:name=".ZJNUApplication"
         android:allowBackup="true"
@@ -41,7 +42,7 @@
         <!-- Bmob更新Channel -->
         <meta-data
             android:name="BMOB_CHANNEL"
-            android:value="Channel ID" />
+            android:value="push" />
 
         <!-- 友盟API key -->
         <meta-data
@@ -63,13 +64,14 @@
             android:value="com.ddmax.zjnucloud.model.EmisUser, com.ddmax.zjnucloud.model.score.ScoreList,                            com.ddmax.zjnucloud.model.score.Semester, com.ddmax.zjnucloud.model.score.Score,                            com.ddmax.zjnucloud.model.exam.Exam, com.ddmax.zjnucloud.model.exam.ExamList,                            com.ddmax.zjnucloud.model.course.Course, com.ddmax.zjnucloud.model.course.CourseList" />
         <meta-data
             android:name="AA_SERIALIZERS"
-            android:value="com.ddmax.zjnucloud.common.aa.ListSerializer" />
+            android:value="com.ddmax.zjnucloud.database.aa.ListSerializer" />
 
         <!-- 引导界面 -->
         <activity
             android:name=".ui.activity.GuideActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -82,6 +84,7 @@
             android:name=".ui.activity.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -93,7 +96,8 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -103,69 +107,86 @@
         <activity
             android:name=".ui.activity.NewsActivity"
             android:label="@string/title_activity_news"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.NewsDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.BusActivity"
             android:label="@string/title_activity_bus"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.ScoreActivity"
             android:label="@string/title_activity_score"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activity.ExamActivity"
             android:label="@string/title_activity_exam"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activity.CourseActivity"
             android:label="@string/title_activity_course"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activity.AboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.activity.BindActivity" />
         <activity
             android:name=".ui.activity.CalendarActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.SpeechActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.SpeechDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".base.BaseWebActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.FeedbackActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.ExploreActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" />
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
             android:name=".ui.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.ActionBar" />
         <!--&lt;!&ndash; Mob ShareSDK &ndash;&gt;-->
         <!--<activity-->
@@ -193,7 +214,7 @@
         <!-- Bmob更新Activity -->
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/AppTheme.Translucent" />
 
         <!-- Bmob消息推送服务 -->
         <service

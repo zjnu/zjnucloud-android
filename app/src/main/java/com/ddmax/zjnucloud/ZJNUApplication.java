@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import com.activeandroid.ActiveAndroid;
-import com.ddmax.zjnucloud.db.NewsDbHelper;
+import com.ddmax.zjnucloud.database.NewsDbHelper;
 import com.ddmax.zjnucloud.ui.activity.MainActivity;
 
 /**

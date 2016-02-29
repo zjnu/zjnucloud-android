@@ -39,6 +39,7 @@ import java.util.Locale;
 /**
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
  * Website: http://alamkanak.github.io/
+ * Modified by ddMax on 1/18/2015
  */
 public class CourseView extends View {
 

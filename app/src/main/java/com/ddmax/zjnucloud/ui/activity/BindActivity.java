@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -171,7 +172,7 @@ public class BindActivity extends BaseActivity {
             } else {
                 // bindInfo为空，请求超时
                 bindingDialog.cancel();
-                Toast.makeText(BindActivity.this, getString(R.string.emis_request_timeout), Toast.LENGTH_LONG).show();
+                Toast.makeText(BindActivity.this, getString(R.string.emis_server_error), Toast.LENGTH_LONG).show();
             }
         }
     }

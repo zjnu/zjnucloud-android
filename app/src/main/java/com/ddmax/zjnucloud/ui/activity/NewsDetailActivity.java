@@ -34,7 +34,7 @@ public class NewsDetailActivity extends BaseActivity {
     private boolean isSlxx; // 是否是数理信息新闻
 
     // Toolbar
-    @Bind(R.id.mDetailToolbar) Toolbar mToolbar;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class NewsDetailActivity extends BaseActivity {
         Fragment mFragment = getFragment();
         mFragment.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
     }
 
     @Override

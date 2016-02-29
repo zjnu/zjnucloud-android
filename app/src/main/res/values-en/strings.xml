@@ -14,14 +14,16 @@
     <string name="dialog_hint">Hint</string>
     <string name="try_again">Try again</string>
     <string name="success">Success</string>
+    <string name="refresh_cancelled">Refresh has been cancelled</string>
     <string name="network_fail">Request failed, please check your network connection!</string>
     <string name="update_available">Upgrade to new version!</string>
+    <string name="update">Update</string>
     <string name="placeholder_for_navdrawer_item">item</string>
 
     <!-- Strings related to login -->
     <string name="login">Login</string>
-    <string name="login_register">Register a new account</string>
     <string name="register">Register</string>
+    <string name="login_register">Register a new account</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_bus">School Bus</string>
@@ -64,6 +66,15 @@
         <item>Logistics</item>
     </string-array>
 
+    <!-- Left drawer related -->
+    <string name="drawer_dynamics">Dynamics</string>
+    <string name="drawer_explore">Explore</string>
+    <string name="drawer_notification">Notification</string>
+    <string name="drawer_setting">Settings</string>
+    <string name="drawer_footer_exit">Exit</string>
+    <string name="drawer_footer_about">About</string>
+    <string name="drawer_footer_feedback">Feedback</string>
+
     <!-- Calendar related -->
     <string name="title_activity_calendar">School Calendar 2015&#8211;2016</string>
     <string name="calendar_no_event">No school activity</string>
@@ -75,15 +86,6 @@
     <string name="bmob_not_login">You must login to continue using this function, login now!</string>
     <string name="action_to_bmob_login">Login now</string>
 
-    <!-- Left drawer related -->
-    <string name="drawer_dynamics">Dynamics</string>
-    <string name="drawer_explore">Explore</string>
-    <string name="drawer_notification">Notification</string>
-    <string name="drawer_setting">Settings</string>
-    <string name="drawer_footer_exit">Exit</string>
-    <string name="drawer_footer_about">About</string>
-    <string name="drawer_footer_feedback">Feedback</string>
-
     <!-- EMIS related  -->
     <string name="emis_not_bind">You are currently not associated with your EMIS account, turn to the bind page?</string>
     <string name="action_to_emis_bind">Bind now</string>
@@ -91,19 +93,23 @@
     <string name="prompt_emis_username">EMIS account</string>
     <string name="prompt_emis_password">EMIS password</string>
     <string name="action_confirm_bind">Confirm bind</string>
+    <string name="action_confirm_rebind">Goto rebind</string>
     <string name="binding_info">Please wait while connecting the bind server&#8230;</string>
     <string name="bind_success">Bind successfully!</string>
-    <string name="emis_request_timeout">Request timeout, please check your network and try again!</string>
     <string name="unbind_warning_info">The local cached data including your score, course table, exam schedule, etc. will be cleared after unbinding. Please confirm!</string>
     <string name="unbind_confirm">Continue</string>
     <string name="unbinding_info">Please wait while unbinding&#8230;</string>
     <string name="unbind_success">Unbind successfully!</string>
     <string name="unbind_fail">Unfind failed, please try again.</string>
     <string name="emis_token_invalid">Account authorization failed, please rebind!</string>
-    <string name="action_confirm_rebind">Goto rebind</string>
+    <string name="emis_request_timeout">Request failed, please try again later!</string>
+    <string name="emis_offline">Unable to fetch data, please try again later!</string>
+    <string name="emis_server_error">Our server is not available temporarily and is under recovering, please try again later&#8230;</string>
+    <string name="emis_error">The EMIS system is temporarily under maintenance, please try again later.</string>
 
     <!-- Score module related-->
     <string name="title_activity_score">EMIS Accomplishments</string>
+    <string name="title_activity_score_additional">\'s report</string>
     <string name="course_credit">Credits:%1$s</string>
     <string name="course_mark_first">Formal:%1$s</string>
     <string name="course_mark_second">Makeup:%1$s</string>
@@ -112,12 +118,11 @@
     <string name="score_subtitle">Your Accomplishments are as follows</string>
     <string name="score_credit">Credits</string>
     <string name="score_gpa">GPA</string>
-    <string name="emis_server_error">Our server is not available temporarily and is under recovering&#8230;</string>
-    <string name="emis_error">The EMIS system is temporarily under maintenance, please try again later.</string>
     <string name="score_refreshing_score">Please wait while refreshing your score data&#8230;</string>
 
     <!-- Exam module related -->
     <string name="title_activity_exam">Exam Schedule</string>
+    <string name="title_activity_exam_additional">\'s exam schedule</string>
     <string name="exam_empty_title">Dear,</string>
     <string name="exam_subtitle">Your exam schedule this semester are as follows</string>
     <string name="exam_id">Course ID:%1$s</string>

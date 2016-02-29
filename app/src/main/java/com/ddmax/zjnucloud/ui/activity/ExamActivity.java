@@ -2,23 +2,15 @@ package com.ddmax.zjnucloud.ui.activity;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +24,7 @@ import com.ddmax.zjnucloud.model.exam.Exam;
 import com.ddmax.zjnucloud.model.exam.ExamList;
 import com.ddmax.zjnucloud.task.BaseGetDataTask;
 import com.ddmax.zjnucloud.task.ResponseListener;
+import com.ddmax.zjnucloud.ui.view.DividerItemDecoration;
 import com.ddmax.zjnucloud.util.EmisUtils;
 import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.util.RequestUtils;
@@ -42,7 +35,6 @@ import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 /**
  * @author ddMax
@@ -53,25 +45,18 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
 
     private static final String TAG = ScoreActivity.class.getSimpleName();
 
-    @Bind(R.id.exam_layout) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.app_bar) AppBarLayout mAppBarLayout;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbarLayout;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.exam_subtitle) TextView mSubtitleView;
-    @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.exam_list) RecyclerView mRecyclerView;
     @Bind(R.id.error_message) LinearLayout mErrorView;
     @Bind(R.id.error_text) TextView mErrorText;
 
     private ExamList examList;
     private ExamListAdapter mAdapter;
+    private GetExamTask getExamTask;
 
     private Snackbar refreshSnackbar;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void initView() {
@@ -82,10 +67,12 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // 设置浮动按钮监听器
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mFabProgressCircle.show();
                 doRefresh();
             }
         });
@@ -96,10 +83,13 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
     @Override
     public void restoreData() {
         if (new Select().from(ExamList.class).exists()) {
+            // 本地数据库中已有数据
             ExamList examList = new Select().from(ExamList.class).executeSingle();
             // 设置第3个参数isContentSame为true来区分是否从本地读取
             this.onPostExecute(examList, true, true);
         } else {
+            // 此时为第一次加载数据
+            setInitAnimationShown(true);
             doRefresh();
         }
     }
@@ -115,9 +105,8 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
             refreshSnackbar = Snackbar.make(mCoordinatorLayout, R.string.exam_refreshing_exam, Snackbar.LENGTH_LONG)
                     .setAction("Action", null);
             refreshSnackbar.show();
-            new GetExamTask(this, this).execute(
-                    url, emisUser.username, emisUser.password, emisUser.token
-            );
+            getExamTask = new GetExamTask(this, this);
+            getExamTask.execute(url, emisUser.username, emisUser.password, emisUser.token);
         }
     }
 
@@ -125,28 +114,15 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
         mAdapter = new ExamListAdapter(examList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        // 设置分割线
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         // 设置RecyclerView Animator
-        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(mAdapter);
-        alphaAdapter.setDuration(600);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
-        // TODO: 解决Recycler Animator卡顿
+//        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(mAdapter);
+//        alphaAdapter.setDuration(600);
+//        alphaAdapter.setInterpolator(new OvershootInterpolator());
 //        mRecyclerView.addItemDecoration(new MyItemDecoration(1));
 //        mRecyclerView.setAdapter(alphaAdapter);
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void startRefreshStatus() {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-        animation.setInterpolator(new AccelerateInterpolator());
-        this.mFab.startAnimation(animation);
-    }
-
-    private void stopRefreshStatus() {
-        this.mFab.clearAnimation();
-        // 取消Snackbar显示
-        if (refreshSnackbar != null) {
-            refreshSnackbar.dismiss();
-        }
     }
 
     /**
@@ -161,9 +137,35 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
             Log.d(TAG, "info格式错误");
         }
         mCollapsingToolbarLayout.setTitle(title);
+        // 设置CollapsingToolbarLayout折叠变化监听器
+        setUpCollapsingListener(title);
         if (mSubtitleView.getVisibility() == View.GONE) {
             mSubtitleView.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * 设置CollapsingToolbarLayout折叠变化监听器
+     */
+    private void setUpCollapsingListener(final String title) {
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapsingToolbarLayout.setTitle(title + getString(R.string.title_activity_exam_additional));
+                    isShow = true;
+                } else if (isShow) {
+                    mCollapsingToolbarLayout.setTitle(title);
+                    isShow = false;
+                }
+            }
+        });
     }
 
     /**
@@ -197,7 +199,7 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
 
         @Override
         protected ExamList doInBackground(String... params) {
-            String content = null;
+            String content;
             try {
                 HashMap<String, String> data = new HashMap<>();
                 data.put("username", params[1]);
@@ -233,14 +235,15 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
     // 以下为ResponseListener回调接口实现
     @Override
     public void onPreExecute() {
-        this.startRefreshStatus();
+        startRefreshStatus(getExamTask, R.string.exam_refreshing_exam);
     }
 
     @Override
     public void onPostExecute(ExamList examList, boolean isRefreshSuccess, boolean isContentSame) {
-        // 停止刷新状态
-        this.stopRefreshStatus();
+        // 未能返回数据
         if (examList == null) {
+            // 取消刷新状态
+            cancelRefreshStatus(null, R.string.emis_offline);
             return;
         }
         switch (examList.status) {
@@ -258,6 +261,8 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
                 this.examList = examList;
                 // 若为刷新数据，则清空后保存到数据库
                 if (!isContentSame) {
+                    // 完成刷新状态
+                    finishRefresh();
                     EmisUtils.clean(Exam.class, ExamList.class);
                     this.examList.save();
                 }
@@ -266,21 +271,15 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
                 // 更新Adapter
                 mAdapter.updateData(examList);
                 break;
-            case 3:
-                // 未能请求到数据
-                mErrorText.setText(getString(R.string.emis_server_error));
-                if (mErrorView.getVisibility() == View.GONE) {
-                    mErrorView.setVisibility(View.VISIBLE);
-                }
-                break;
-            case -1:
-                mErrorText.setText(getString(R.string.emis_error));
-                if (mErrorView.getVisibility() == View.GONE) {
-                    mErrorView.setVisibility(View.VISIBLE);
-                }
-                break;
             default:
-                Snackbar.make(mCoordinatorLayout, examList.message, Snackbar.LENGTH_LONG).show();
+                if (this.examList.exams == null || this.examList.exams.size() == 0) {
+                    mErrorText.setText(examList.message);
+                    if (mErrorView.getVisibility() != View.VISIBLE) {
+                        mErrorView.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Snackbar.make(mCoordinatorLayout, examList.message, Snackbar.LENGTH_LONG).show();
+                }
                 break;
         }
     }
@@ -291,6 +290,7 @@ public class ExamActivity extends BaseEmisActivity implements ResponseListener<E
     @Override
     public void onFail(Exception e) {
         Log.d(TAG, "考试数据刷新失败！");
+        stopRefreshStatus(getExamTask);
         if (e instanceof SocketTimeoutException) {
             Snackbar.make(mCoordinatorLayout, getString(R.string.emis_request_timeout), Snackbar.LENGTH_LONG).show();
         }

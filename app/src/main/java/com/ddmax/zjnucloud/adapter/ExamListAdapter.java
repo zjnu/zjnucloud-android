@@ -1,7 +1,6 @@
 package com.ddmax.zjnucloud.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,6 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     public static class ExamViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.card_view) CardView cardView;
         @Bind(R.id.tv_name) TextView name;
         @Bind(R.id.tv_classno) TextView classno;
         @Bind(R.id.tv_teacher) TextView teacher;

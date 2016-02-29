@@ -23,7 +23,8 @@ public final class Constants {
     public static final class URL {
 
         // API服务器地址
-        public static final String BASE_URL = "http://api.ddmax.gq";
+        public static final String BASE_URL = "http://api.zjnucloud.com";
+//        public static final String BASE_URL = "http://apitest.zjnucloud.com";
 
         // 首页轮播图地址
         public static final String BANNER = BASE_URL + "/banner/?format=json";
@@ -62,6 +63,7 @@ public final class Constants {
 
         // ZJNU Intra API 地址
         public static final String BASE_INTRA_URL = "https://e.zjnucloud.com";
+//        public static final String BASE_INTRA_URL = "http://a.e.zjnucloud.com:8081";
         public static final class EMIS {
             // 教务绑定地址
             public static final String BIND = BASE_INTRA_URL + "/emis/binding/";
@@ -78,21 +80,15 @@ public final class Constants {
     // 首页轮播图比例
     public static final double DISPLAY_SCALE = 2.045;
 
-    // Activity请求状态码
-    public static final class REQUEST_CODE {
-        // EmisBaseActivity
-        public static final int BASE_EMIS_ACTIVITY = 10;
-    }
-
     // 浙师大坐标
     public static final double ZJNU_LONGITUDE = 119.64751;
     public static final double ZJNU_LATITUDE = 29.13876;
 
+    public static final String TEMPLATE_COMMON_DETAIL = "common-templates/template.html";
     public static final String TEMPLATE_NEWS_DETAIL = "news-templates/template.html";
-    public static final String TEMPLATE_SPEECH_DETAIL = "speech-templates/template.html";
-    public static final String TEMPLATE_EXPLORE_DETAIL = "explore-templates/template.html";
 
     // Bmob Application ID
+//    public static final String BMOB_APPID = "a23c4bcdcd1b1817e2abdcd83322c895";
     public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
     // Bmob Static link
     public static final String BMOB_FILE_LINK = "http://file.bmob.cn/";

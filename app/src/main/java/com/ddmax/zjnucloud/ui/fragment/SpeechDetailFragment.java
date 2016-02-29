@@ -17,8 +17,6 @@ import com.ddmax.zjnucloud.util.GsonUtils;
 import com.ddmax.zjnucloud.util.RequestUtils;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import butterknife.ButterKnife;
 
@@ -105,9 +103,10 @@ public class SpeechDetailFragment extends BaseWebFragment implements ResponseLis
         if (!isAdded()) {
             return;
         }
-        String finalHTML = AssetsUtils.loadText(getActivity(), Constants.TEMPLATE_SPEECH_DETAIL);
+        String finalHTML = AssetsUtils.loadText(getActivity(), Constants.TEMPLATE_COMMON_DETAIL);
         if (finalHTML != null) {
-            finalHTML = finalHTML.replace("{content}", speechDetail.content);
+            finalHTML = speechDetail.content == null ? "" :
+                    finalHTML.replace("{content}", speechDetail.content);
         }
         // 加载最终网页
         mWebView.loadDataWithBaseURL(null, finalHTML, "text/html", "UTF-8", null);
@@ -115,7 +114,7 @@ public class SpeechDetailFragment extends BaseWebFragment implements ResponseLis
 
     private void setWebViewShown(boolean shown) {
         mWebView.setVisibility(shown ? View.VISIBLE : View.GONE);
-        mProgressBar.setVisibility(shown ? View.GONE : View.VISIBLE);
+        mProgressWheel.setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
     @Override
