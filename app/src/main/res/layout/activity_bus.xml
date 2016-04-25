@@ -3,20 +3,20 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="activities.BusActivity">
+                tools:context=".ui.activity.BusActivity">
 
-	<include layout="@layout/top_toolbar"
-		android:id="@+id/mToolbar"
-		/>
+    <include layout="@layout/top_toolbar"
+        android:id="@+id/mToolbar"
+        />
 
 
-	<com.baidu.mapapi.map.MapView
-		android:id="@+id/bus_map"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_below="@id/mToolbar"
-		android:clickable="true"
-		>
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bus_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mToolbar"
+        android:clickable="true"
+        >
 
-	</com.baidu.mapapi.map.MapView>
+    </com.baidu.mapapi.map.MapView>
 </RelativeLayout>

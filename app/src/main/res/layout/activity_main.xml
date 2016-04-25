@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activities.MainActivity"
+    tools:context=".ui.activity.MainActivity"
     >
 
     <RelativeLayout
@@ -51,8 +51,10 @@
 
         </LinearLayout>
 
-
     </RelativeLayout>
+
+
+
     <!--左侧导航抽屉-->
     <include
         android:id="@+id/left_navdrawer"

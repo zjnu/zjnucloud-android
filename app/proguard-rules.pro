@@ -38,9 +38,14 @@
 -keep class pl.droidsonroids.gif.**
 
 # Keep bmob
+-libraryjars libs/*.jar
 -keep class cn.bmob.v3.** {*;}
 -keep class com.bmob.**
 -dontwarn cn.bmob.**
+# 保证继承自BmobObject、BmobUser类的JavaBean不被混淆
+-keep class * extends cn.bmob.v3.BmobObject {
+    *;
+}
 
 # Keep baidu
 -keep class com.baidu.** {*;}
@@ -130,4 +135,4 @@
 
 # for stacktrace
 -renamesourcefileattribute SourceFile
--keepattributes SourceFile,LineNumberTable,InnerClasses
+-keepattributes SourceFile,LineNumberTable,InnerClasses,Signature

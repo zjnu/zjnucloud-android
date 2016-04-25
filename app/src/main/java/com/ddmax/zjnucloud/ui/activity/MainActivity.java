@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements
     private void initPush() {
         // 使用推送服务时的初始化操作
         BmobInstallation.getCurrentInstallation(this).save();
-        BmobPush.startWork(this, Constants.BMOB_APPID);
+        BmobPush.startWork(this);
     }
 
     // 实现再按一次返回键退出的功能
