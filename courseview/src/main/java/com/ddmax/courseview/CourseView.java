@@ -1117,7 +1117,15 @@ public class CourseView extends View {
                 public String interpretDate(Calendar date) {
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
-                        return sdf.format(date.getTime()).toUpperCase();
+//                        Log.d("locale", Locale.getDefault().getLanguage());
+                        if(Locale.getDefault().getLanguage().equals("en"))
+                        {
+                            return sdf.format(date.getTime()).substring(0, 3).toUpperCase();
+                        }
+                        else
+                        {
+                            return sdf.format(date.getTime()).toUpperCase();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         return "";
