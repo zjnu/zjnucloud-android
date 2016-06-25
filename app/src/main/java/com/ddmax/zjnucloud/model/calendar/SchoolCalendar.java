@@ -46,7 +46,7 @@ public class SchoolCalendar implements Serializable{
             {2016, 6, new Event("端午节", "6月9日")},
             {2016, 6, new Event("毕业生离校", "6月16日")},
             {2016, 6, new Event("期末考试", "6月20-26日")},
-            {2016, 6, new Event("本专科生时间教学周", "6月27日-7月1日")},
+            {2016, 6, new Event("本专科生实践教学周", "6月27日-7月1日")},
             {2016, 7, new Event("暑假", "7月2日", true)},
     };
 

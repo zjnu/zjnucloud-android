@@ -38,18 +38,21 @@
 -keep class pl.droidsonroids.gif.**
 
 # Keep bmob
--libraryjars libs/*.jar
+#-libraryjars libs/BmobSDK_V3.4.6_0415.jar
+#-libraryjars libs/Bmob_Push_V0.8beta_20160420.jar
 -keep class cn.bmob.v3.** {*;}
--keep class com.bmob.**
--dontwarn cn.bmob.**
+-dontnote cn.bmob.v3.**
+-dontwarn cn.bmob.v3.**
+#-keep class com.bmob.**
+#-dontwarn cn.bmob.**
 # 保证继承自BmobObject、BmobUser类的JavaBean不被混淆
 -keep class * extends cn.bmob.v3.BmobObject {
     *;
 }
 
 # Keep baidu
--keep class com.baidu.** {*;}
--keep class vi.com.** {*;}
+-keep class com.baidu.** { *; }
+-keep class vi.com.gdi.bgl.android.**{*;}
 -dontwarn com.baidu.**
 
 # Keep annotation
@@ -79,7 +82,13 @@
 -dontnote org.joda.**
 -dontnote pl.droidsonroids.gif.**
 -dontnote retrofit.**
--dontnote com.ddmax.zjnucloud.ui.activity.**
+-dontnote android.net.http.**
+-dontnote org.apache.http.**
+-dontnote com.android.volley.**
+-dontnote sun.misc.**
+-dontnote com.ddmax.zjnucloud.**
+-dontnote com.pnikosis.materialishprogress.**
+-dontnote com.github.jorgecastilloprz.**
 
 # Keep retrofit
 -dontwarn retrofit.**
@@ -91,6 +100,7 @@
 -keep class com.squareup.okhttp.** { *;}
 -keep interface com.squareup.okhttp.** { *; }
 -dontwarn okio.**
+-dontnote okio.**
 
 -keep class com.rengwuxian.materialedittext.**
 -keep class com.lidroid.xutils.**
