@@ -3,9 +3,11 @@
 /build
 .DS_Store
 /captures
+projectFilesBackup/
+app/src/test/
 
 /local.properties
 /gradle.properties
 /signedkey.jks
 *.iml
-
+*.apk
