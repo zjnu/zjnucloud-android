@@ -66,6 +66,11 @@
         <item>后勤中心</item>
     </string-array>
 
+    <!-- 底部导航栏 -->
+    <string name="title_bottom_main">云上浙师</string>
+    <string name="title_bottom_explore">发现</string>
+    <string name="title_bottom_settings">设置</string>
+
     <!-- 左侧抽屉 -->
     <string name="drawer_dynamics">我的动态</string>
     <string name="drawer_explore">发现</string>
@@ -76,7 +81,7 @@
     <string name="drawer_footer_feedback">反馈</string>
 
     <!-- 校历模块相关 -->
-    <string name="title_activity_calendar">浙师大2015&#8211;2016学年校历</string>
+    <string name="title_activity_calendar">浙师大2016&#8211;2017学年校历</string>
     <string name="calendar_no_event">本月无校历活动</string>
 
     <!-- 讲座预告模块相关 -->

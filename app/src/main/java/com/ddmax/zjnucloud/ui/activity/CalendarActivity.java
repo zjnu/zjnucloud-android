@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.ddmax.zjnucloud.R;
 import com.ddmax.zjnucloud.base.BaseActivity;
 import com.ddmax.zjnucloud.model.calendar.Event;
-import com.ddmax.zjnucloud.model.calendar.SchoolCalendar;
+import com.ddmax.zjnucloud.model.calendar.KeyDates;
 import com.samsistemas.calendarview.widget.CalendarView;
 
 import java.util.Calendar;
@@ -33,7 +33,7 @@ public class CalendarActivity extends BaseActivity {
     @Bind(R.id.event_list) RecyclerView mEventList;
     @Bind(R.id.event_none) TextView mEventNoneView;
 
-    private List<SchoolCalendar> calendars = SchoolCalendar.ALL_CALENDARS;
+    private List<KeyDates> calendars = KeyDates.ALL_CALENDARS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,13 @@ public class CalendarActivity extends BaseActivity {
 
             @Override
             public void onMonthChanged(@NonNull Date monthDate) {
-                initEventList(SchoolCalendar.get(monthDate));
+                initEventList(KeyDates.get(monthDate));
             }
         });
         mCalendar.invalidate();
         // 设置当月校历事件
         Calendar cal = Calendar.getInstance();
-        initEventList(SchoolCalendar.get(
+        initEventList(KeyDates.get(
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH) + 1
         ));
@@ -70,17 +70,17 @@ public class CalendarActivity extends BaseActivity {
 
     /**
      * 初始化校历事件列表
-     * @param schoolCalendar
+     * @param keyDates
      */
-    private void initEventList(SchoolCalendar schoolCalendar) {
+    private void initEventList(KeyDates keyDates) {
         mEventList.setLayoutManager(new LinearLayoutManager(this));
-        if (schoolCalendar == null) {
+        if (keyDates == null) {
             mEventNoneView.setVisibility(View.VISIBLE);
             mEventList.setVisibility(View.GONE);
         } else {
             mEventNoneView.setVisibility(View.GONE);
             mEventList.setVisibility(View.VISIBLE);
-            mEventList.setAdapter(new CalendarEventAdapter(this,schoolCalendar.events));
+            mEventList.setAdapter(new CalendarEventAdapter(this, keyDates.events));
         }
     }
 

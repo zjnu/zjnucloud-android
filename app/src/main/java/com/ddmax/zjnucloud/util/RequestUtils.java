@@ -9,6 +9,7 @@ import android.util.Log;
 import com.ddmax.zjnucloud.Constants;
 import com.ddmax.zjnucloud.model.banner.Banner;
 import com.ddmax.zjnucloud.model.banner.BannerDetail;
+import com.ddmax.zjnucloud.model.calendar.KeyDates;
 import com.ddmax.zjnucloud.model.explore.ExploreList;
 import com.ddmax.zjnucloud.model.speech.SpeechList;
 import com.squareup.okhttp.Cache;
@@ -140,6 +141,16 @@ public class RequestUtils {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+    }
+
+    /**
+     * 获取校历服务
+     */
+    public interface KeyDatesService {
+        @GET(Constants.URL.KEYDATES)
+        Call<KeyDates> getAll();
+        @GET(Constants.URL.KEYDATES_VERSION)
+        Call<KeyDates> getVersion();
     }
 
     /**

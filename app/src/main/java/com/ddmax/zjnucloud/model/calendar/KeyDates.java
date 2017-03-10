@@ -1,7 +1,5 @@
 package com.ddmax.zjnucloud.model.calendar;
 
-import com.activeandroid.Model;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.Locale;
  * @author ddMax
  * @since 2015/12/17 21:07.
  */
-public class SchoolCalendar implements Serializable{
+public class KeyDates implements Serializable{
 
     public static final Object[][] CALENDAR_DATA = {
             {2015, 8, new Event("教师、学生报到", "8月31日")},
@@ -50,7 +48,7 @@ public class SchoolCalendar implements Serializable{
             {2016, 7, new Event("暑假", "7月2日", true)},
     };
 
-    public static final List<SchoolCalendar> ALL_CALENDARS;
+    public static final List<KeyDates> ALL_CALENDARS;
 
     static {
         ALL_CALENDARS = new ArrayList<>();
@@ -68,7 +66,7 @@ public class SchoolCalendar implements Serializable{
                 if (year == yearLast && month == monthLast) {
                     events.add((Event) CALENDAR_DATA[i][2]);
                 } else {
-                    ALL_CALENDARS.add(new SchoolCalendar(
+                    ALL_CALENDARS.add(new KeyDates(
                             yearLast, monthLast, events
                     ));
                     events = new ArrayList<>();
@@ -83,16 +81,16 @@ public class SchoolCalendar implements Serializable{
     public int month;
     public List<Event> events;
 
-    public SchoolCalendar() {}
+    public KeyDates() {}
 
-    public SchoolCalendar(int year, int month, List<Event> events) {
+    public KeyDates(int year, int month, List<Event> events) {
         this.year = year;
         this.month = month;
         this.events = events;
     }
 
-    public static SchoolCalendar get(int year, int month) {
-        for (SchoolCalendar calendar : ALL_CALENDARS) {
+    public static KeyDates get(int year, int month) {
+        for (KeyDates calendar : ALL_CALENDARS) {
             if (year == calendar.year && month == calendar.month) {
                 return calendar;
             }
@@ -100,7 +98,7 @@ public class SchoolCalendar implements Serializable{
         return null;
     }
 
-    public static SchoolCalendar get(Date date) {
+    public static KeyDates get(Date date) {
         int year = Integer.valueOf(
                 new SimpleDateFormat("yyyy", Locale.getDefault()).format(date));
         int month = Integer.valueOf(

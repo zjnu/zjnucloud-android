@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +36,8 @@ import com.ddmax.zjnucloud.model.banner.Banner;
 import com.ddmax.zjnucloud.ui.fragment.CommonDetailFragment;
 import com.ddmax.zjnucloud.util.DensityUtils;
 import com.ddmax.zjnucloud.util.RequestUtils;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
@@ -76,6 +79,7 @@ public class MainActivity extends BaseActivity implements
     @Bind(R.id.footer_exit) LinearLayout mDrawerExitBtn;
     @Bind(R.id.footer_about) LinearLayout mDrawerAboutBtn;
     @Bind(R.id.footer_feedback) LinearLayout mDrawerFeedbackBtn;
+    private BottomBar mBottomBar;
 
     // 轮播页视图集合
     private List<View> mDisplayViews = new ArrayList<>();
@@ -129,7 +133,7 @@ public class MainActivity extends BaseActivity implements
         Bmob.initialize(this, Constants.BMOB_APPID);
         Log.d(TAG, "Bmob SDK initialized!");
         // 初始化界面
-        initView();
+        initView(savedInstanceState);
         // 设置登录消息处理Handler
         ZJNUApplication application = ZJNUApplication.getInstance();
         application.setLoginHandler(new LoginHandler(this));
@@ -167,6 +171,7 @@ public class MainActivity extends BaseActivity implements
     private void initPush() {
         // 使用推送服务时的初始化操作
         BmobInstallation.getCurrentInstallation(this).save();
+        Log.d(TAG, "_InstallationId: " + BmobInstallation.getInstallationId(this));
         BmobPush.startWork(this);
     }
 
@@ -211,7 +216,7 @@ public class MainActivity extends BaseActivity implements
     /**
      * 初始化界面
      */
-    private void initView() {
+    private void initView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
 
         // 初始化Toolbar，设置Toolbar菜单
@@ -229,6 +234,9 @@ public class MainActivity extends BaseActivity implements
         // 初始化GridView
         mGridView.setAdapter(new ModulesViewAdapter(this));
         mGridView.setOnItemClickListener(this);
+
+        // 初始化底部栏
+        setUpBottomBar(savedInstanceState);
 
         // 设置左边抽屉图标
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
@@ -330,6 +338,23 @@ public class MainActivity extends BaseActivity implements
         mHandler.sendEmptyMessageDelayed(AutoRoundHandler.MSG_UPDATE_IMAGE, AutoRoundHandler.MSG_DELAY);
 
         // 设置ViewPager滑动动画效果
+
+    }
+
+    // 初始化BottomBar
+    private void setUpBottomBar(Bundle savedInstanceState) {
+        mBottomBar = BottomBar.attach(this, savedInstanceState);
+        mBottomBar.setItemsFromMenu(R.menu.menu_bottombar, new OnMenuTabClickListener() {
+            @Override
+            public void onMenuTabSelected(@IdRes int menuItemId) {
+
+            }
+
+            @Override
+            public void onMenuTabReSelected(@IdRes int menuItemId) {
+
+            }
+        });
 
     }
 

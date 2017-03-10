@@ -60,8 +60,8 @@
         <item>School Bus</item>
         <item>Speech</item>
         <item>Accomplishments</item>
-        <item>Exam Arrangements</item>
         <item>Course Table</item>
+        <item>Exam Arrangements</item>
         <item>Library</item>
         <item>Logistics</item>
     </string-array>
@@ -76,7 +76,7 @@
     <string name="drawer_footer_feedback">Feedback</string>
 
     <!-- Calendar related -->
-    <string name="title_activity_calendar">School Calendar 2015&#8211;2016</string>
+    <string name="title_activity_calendar">School Calendar 2016&#8211;2017</string>
     <string name="calendar_no_event">No school activity</string>
 
     <!-- Speech related -->

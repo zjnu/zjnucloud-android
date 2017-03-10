@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/bottomBarHome"
+        android:icon="@drawable/ic_send_white_24dp"
+        android:title="@string/title_bottom_main" />
+    <item android:id="@+id/bottomBarExplore"
+        android:icon="@drawable/ic_explore_white_24dp"
+        android:title="@string/title_bottom_explore" />
+    <item android:id="@+id/bottomBarSettings"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/title_bottom_settings" />
+</menu>

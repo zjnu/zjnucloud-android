@@ -49,6 +49,10 @@ public final class Constants {
             public static final String SLXX_DETAIL = "http://slxx.zjnu.edu.cn/xgb/showInfo.action?id=";
         }
 
+        // 校历数据地址
+        public static final String KEYDATES = BASE_URL + "/keydates/?format=json";
+        public static final String KEYDATES_VERSION = BASE_URL + "/keydates/version/?format=json";
+
         // 讲座预告地址
         public static final String SPEECH = BASE_URL + "/speech/?format=json";
 
@@ -88,8 +92,8 @@ public final class Constants {
     public static final String TEMPLATE_NEWS_DETAIL = "news-templates/template.html";
 
     // Bmob Application ID
-//    public static final String BMOB_APPID = "a23c4bcdcd1b1817e2abdcd83322c895";
-    public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
+    public static final String BMOB_APPID = "a23c4bcdcd1b1817e2abdcd83322c895";
+//    public static final String BMOB_APPID = "68b1340c9b81500e3fd31f1d14586dc7";
     // Bmob Static link
     public static final String BMOB_FILE_LINK = "http://file.bmob.cn/";
     // 登录、登出消息状态码
